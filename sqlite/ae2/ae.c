@@ -1,0 +1,65 @@
+/*
+  Very simple C program.
+
+   Compile:
+     gcc -o simplesqlite3 simplesqlite3.c  -Wall -W -O2 -Wl,-R/usr/local/lib -lsqlite3
+  
+   Note sqlite3 shared library, by default, installs in /usr/local/lib. 
+   The compile command above will directly link the full path of 
+   this library into this program.
+
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+
+typedef struct
+{
+	int x;
+	int y;
+}MyStruct;
+
+
+static int callback(void *data, int argc, char **argv, char **azColName){
+  int i;
+//  (MyStruct *) data;
+  printf ("%d, %d\n", ((MyStruct *) data)->x, ((MyStruct *) data)->y);
+
+  for(i=0; i<argc; i++){
+    printf("%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
+  }
+  printf("\n");
+  return 0;
+}
+
+int main(int argc, char **argv){
+  sqlite3 *db;
+  char *zErrMsg = 0;
+  int rc;
+  MyStruct *data;
+  data = (MyStruct *) malloc (sizeof (MyStruct));
+  data->x = 1;
+  data->y = 2;
+  
+
+  if( argc!=3 ){
+    fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", argv[0]);
+    exit(1);
+  }
+  rc = sqlite3_open(argv[1], &db);
+  if( rc != SQLITE_OK){
+    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+    sqlite3_close(db);
+    exit(1);
+  }
+  rc = sqlite3_exec(db, argv[2], callback, data, &zErrMsg);
+  if( rc!=SQLITE_OK ){
+    fprintf(stderr, "SQL error: %s\n", zErrMsg);
+	sqlite3_free(zErrMsg);
+  }
+  sqlite3_close(db);
+
+  free (data);
+  return 0;
+}

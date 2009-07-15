@@ -1,0 +1,12 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+LIST_ITEM	main.c	/^	LIST_ITEM = 0,$/;"	e	enum:__anon1	file:
+N_COLUMNS	main.c	/^	N_COLUMNS$/;"	e	enum:__anon1	file:
+add_to_list	main.c	/^static void add_to_list(GtkWidget *list, const gchar *str)$/;"	f	file:
+init_list	main.c	/^static void init_list(GtkWidget *list)$/;"	f	file:
+main	main.c	/^int main(int argc, char *argv[])$/;"	f
+on_changed	main.c	/^void on_changed(GtkWidget *widget, gpointer label)$/;"	f

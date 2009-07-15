@@ -1,0 +1,33 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+OBJ	Makefile	/^OBJ = main.o idsl_stack.o$/;"	m
+_IDSL_H	idsl.h	6;"	d
+_IDSL_STACK_DEFAULT_GROWING_FACTOR	idsl_stack.c	9;"	d	file:
+_IDSL_STACK_H	idsl_stack.h	2;"	d
+_IDSL_TYPES_H	idsl_types.h	2;"	d
+_idsl_stack	idsl_stack.c	/^struct _idsl_stack {$/;"	s	file:
+alloc_f	idsl_stack.c	/^	idsl_alloc_func_t	alloc_f;$/;"	m	struct:_idsl_stack	file:
+card	idsl_stack.c	/^	ulong				card;$/;"	m	struct:_idsl_stack	file:
+default_alloc	idsl_stack.c	/^static idsl_element_t default_alloc (void *e) {$/;"	f	file:
+default_free	idsl_stack.c	/^static void default_free (idsl_element_t e) {$/;"	f	file:
+free_f	idsl_stack.c	/^	idsl_free_func_t	free_f;$/;"	m	struct:_idsl_stack	file:
+growing_factor	idsl_stack.c	/^	ulong				growing_factor;$/;"	m	struct:_idsl_stack	file:
+idsl_alloc_func_t	idsl_types.h	/^(* idsl_alloc_func_t) (void *user_data);$/;"	t
+idsl_element_t	idsl_types.h	/^typedef void* idsl_element_t;$/;"	t
+idsl_free_func_t	idsl_types.h	/^(* idsl_free_func_t) (idsl_element_t E);$/;"	t
+idsl_stack_alloc	idsl_stack.c	/^idsl_stack_t idsl_stack_alloc (const char* name, idsl_alloc_func_t alloc_f, idsl_free_func_t free_f) {$/;"	f
+idsl_stack_flush	idsl_stack.c	/^void idsl_stack_flush (idsl_stack_t s) {$/;"	f
+idsl_stack_free	idsl_stack.c	/^void idsl_stack_free (idsl_stack_t s) {$/;"	f
+idsl_stack_is_empty	idsl_stack.c	/^int idsl_stack_is_empty (idsl_stack_t s) {$/;"	f
+idsl_stack_pop	idsl_stack.c	/^idsl_element_t idsl_stack_pop (idsl_stack_t s) {$/;"	f
+idsl_stack_push	idsl_stack.c	/^idsl_element_t idsl_stack_push (idsl_stack_t s, void* value) {$/;"	f
+idsl_stack_set_name	idsl_stack.c	/^idsl_stack_t idsl_stack_set_name (idsl_stack_t s, const char* name) {$/;"	f
+idsl_stack_t	idsl_stack.h	/^typedef struct _idsl_stack* idsl_stack_t;$/;"	t	typeref:struct:_idsl_stack
+main	main.c	/^int main(void) {$/;"	f
+name	idsl_stack.c	/^	char*				name;$/;"	m	struct:_idsl_stack	file:
+nodes	idsl_stack.c	/^	idsl_element_t*		nodes;$/;"	m	struct:_idsl_stack	file:
+size	idsl_stack.c	/^	ulong				size;$/;"	m	struct:_idsl_stack	file:

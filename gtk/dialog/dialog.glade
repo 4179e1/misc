@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--Generated with glade3 3.4.3 on Fri Jul 25 17:37:42 2008 -->
+<glade-interface>
+  <widget class="GtkWindow" id="window">
+    <property name="title" translatable="yes">Message dialogs</property>
+    <property name="default_width">220</property>
+    <property name="default_height">150</property>
+    <signal name="destroy" handler="gtk_main_quit"/>
+    <child>
+      <widget class="GtkTable" id="table">
+        <property name="visible">True</property>
+        <property name="border_width">15</property>
+        <property name="n_rows">2</property>
+        <property name="n_columns">2</property>
+        <property name="column_spacing">2</property>
+        <property name="row_spacing">2</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <widget class="GtkButton" id="info">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Info</property>
+            <property name="response_id">0</property>
+            <signal name="clicked" handler="show_info"/>
+          </widget>
+          <packing>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkButton" id="warn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Warning</property>
+            <property name="response_id">0</property>
+            <signal name="clicked" handler="show_warning"/>
+          </widget>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkButton" id="que">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Question</property>
+            <property name="response_id">0</property>
+            <signal name="clicked" handler="show_question"/>
+          </widget>
+          <packing>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkButton" id="err">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Error</property>
+            <property name="response_id">0</property>
+            <signal name="clicked" handler="show_error"/>
+          </widget>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</glade-interface>

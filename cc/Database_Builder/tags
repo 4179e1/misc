@@ -1,0 +1,141 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+ALIGNMENT	edit_menu.c	/^	ALIGNMENT,$/;"	e	enum:__anon3	file:
+ALIGNMENT_ALIGNMENT	tree.c	/^	ALIGNMENT_ALIGNMENT = 0,$/;"	e	enum:__anon5	file:
+ALIGNMENT_DESCRIPTION	tree.c	/^	ALIGNMENT_DESCRIPTION,$/;"	e	enum:__anon5	file:
+ALIGNMENT_N	tree.c	/^	ALIGNMENT_N$/;"	e	enum:__anon5	file:
+Alignment	edit_menu.c	/^} Alignment;$/;"	t	typeref:struct:__anon4	file:
+BUFFER_SIZE	handler.c	8;"	d	file:
+CC	Makefile	/^CC = gcc$/;"	m
+CLASS	edit_menu.c	/^	CLASS,$/;"	e	enum:__anon3	file:
+DEFAULT_DATABASE	new_file.c	10;"	d	file:
+DEFAULT_LOCATION	new_file.c	9;"	d	file:
+DEITIES	edit_menu.c	/^	DEITIES,$/;"	e	enum:__anon3	file:
+DatabaseBuilder	database_builder.h	/^}DatabaseBuilder;$/;"	t	typeref:struct:__anon2
+EQUIPMENT	edit_menu.c	/^	EQUIPMENT,$/;"	e	enum:__anon3	file:
+FEATS	edit_menu.c	/^	FEATS,$/;"	e	enum:__anon3	file:
+GTK_FLAGS	Makefile	/^GTK_FLAGS = $(shell pkg-config --libs --cflags gtk+-2.0)$/;"	m
+HDR_SIZE	handler.c	11;"	d	file:
+HEADER	Makefile	/^HEADER = database_builder.h$/;"	m
+LOAD_ALIGNMENT	database.c	8;"	d	file:
+MAX_SQL_STATMENT_LENGTH	debug_menu.c	9;"	d	file:
+NEW_ALIGNMENT	database.c	7;"	d	file:
+NewFileWindow	new_file.h	/^} NewFileWindow;$/;"	t	typeref:struct:__anon6
+O_FILE	Makefile	/^O_FILE = main.o handler.o file_menu.o new_file.o edit_menu.o debug_menu.o other.o database.o tree.o$/;"	m
+POWERS	edit_menu.c	/^	POWERS,$/;"	e	enum:__anon3	file:
+RACE	edit_menu.c	/^	RACE = 0,$/;"	e	enum:__anon3	file:
+SKILLS	edit_menu.c	/^	SKILLS,$/;"	e	enum:__anon3	file:
+SQLITE_HDR	handler.c	12;"	d	file:
+SQL_FLAGS	Makefile	/^SQL_FLAGS = -lsqlite3$/;"	m
+SQL_SH	debug_menu.c	8;"	d	file:
+SensitiveItem	database_builder.h	/^}SensitiveItem;$/;"	t	typeref:struct:__anon1
+_DATABASE_BUILDER_H_	database_builder.h	2;"	d
+_DATABASE_H_	database.h	2;"	d
+_DEBUG_MENU_H_	debug_menu.h	2;"	d
+_EDIT_MENU_H_	edit_menu.h	2;"	d
+_FILE_MENU_H_	file_menu.h	2;"	d
+_HANDLER_H_	handler.h	2;"	d
+_MAIN_H_	main.h	2;"	d
+_NEW_FILE_H_	new_file.h	2;"	d
+_OTHER_H_	other.h	2;"	d
+_TREE_H_	tree.h	2;"	d
+add_entry	edit_menu.c	/^static GtkWidget *add_entry(GtkWidget *vbox, const gchar *text)$/;"	f	file:
+add_page	main.c	/^static GtkWidget * add_page (GtkWidget *notebook, const gchar *text)$/;"	f	file:
+add_to_alignment	edit_menu.c	/^void add_to_alignment(DatabaseBuilder *builder, gboolean edit)$/;"	f
+append_to_alignment	tree.c	/^void append_to_alignment (GtkWidget *alignment, const gchar *str, const gchar *str2)$/;"	f
+buffer	debug_menu.c	/^static GtkTextBuffer *buffer;$/;"	v	file:
+builder	edit_menu.c	/^	DatabaseBuilder *builder;$/;"	m	struct:__anon4	file:
+button_browse	new_file.h	/^	GtkWidget	*button_browse;$/;"	m	struct:__anon6
+button_cancel	new_file.h	/^	GtkWidget	*button_cancel;$/;"	m	struct:__anon6
+button_save	new_file.h	/^	GtkWidget	*button_save;$/;"	m	struct:__anon6
+callback	debug_menu.c	/^static int callback(void *unused, int argc, char **argv, char **col_name)$/;"	f	file:
+callback_alignment	database.c	/^static int callback_alignment(void *builder, int argc, char **argv, char **col_name)$/;"	f	file:
+check	handler.c	/^gboolean check (const gchar *message)$/;"	f
+check_button_location	new_file.h	/^	GtkWidget	*check_button_location;$/;"	m	struct:__anon6
+check_button_source	new_file.h	/^	GtkWidget	*check_button_source;$/;"	m	struct:__anon6
+col_name_printed	debug_menu.c	/^static gboolean col_name_printed;$/;"	v	file:
+copy_file	handler.c	/^gboolean copy_file (char *destination_file, char *source_file)$/;"	f
+create_file	handler.c	/^gboolean create_file(const char *filename)$/;"	f
+database	database_builder.h	/^	sqlite3 *database;$/;"	m	struct:__anon2
+debug_exec_sql_command	database_builder.h	/^	GtkWidget *debug_exec_sql_command;$/;"	m	struct:__anon1
+default_source	new_file.h	/^	gboolean	default_source;$/;"	m	struct:__anon6
+edit	edit_menu.c	/^	gboolean edit;$/;"	m	struct:__anon4	file:
+edit_add	database_builder.h	/^	GtkWidget *edit_add;$/;"	m	struct:__anon1
+edit_delete	database_builder.h	/^	GtkWidget *edit_delete;$/;"	m	struct:__anon1
+edit_edit	database_builder.h	/^	GtkWidget *edit_edit;$/;"	m	struct:__anon1
+entry	debug_menu.c	/^static GtkWidget *entry;$/;"	v	file:
+entry_alignment	edit_menu.c	/^	GtkWidget *entry_alignment;$/;"	m	struct:__anon4	file:
+entry_description	edit_menu.c	/^	GtkWidget *entry_description;$/;"	m	struct:__anon4	file:
+entry_location	new_file.h	/^	GtkWidget	*entry_location;$/;"	m	struct:__anon6
+entry_name	new_file.h	/^	GtkWidget	*entry_name;$/;"	m	struct:__anon6
+error_message	handler.c	/^void error_message (const gchar *message)$/;"	f
+exec_sql	database.c	/^gboolean exec_sql (char *file, const char *sql)$/;"	f
+file_close	database_builder.h	/^	GtkWidget *file_close;$/;"	m	struct:__anon1
+file_exists	handler.c	/^gboolean file_exists(const char * filename)$/;"	f
+filename	database_builder.h	/^	gchar	*filename;$/;"	m	struct:__anon2
+filename	new_file.h	/^	gchar		*filename;$/;"	m	struct:__anon6
+get_entry	edit_menu.c	/^static gchar *get_entry (GtkEntry *entry)$/;"	f	file:
+get_filename	new_file.c	/^gchar *get_filename(DatabaseBuilder *builder)$/;"	f
+get_location	new_file.c	/^gchar *get_location(NewFileWindow *nf)$/;"	f
+get_open_filename	file_menu.c	/^static gchar *get_open_filename (void)$/;"	f	file:
+init_alignment	tree.c	/^void init_alignment (GtkWidget *list)$/;"	f
+init_app	main.c	/^gboolean init_app(DatabaseBuilder *builder)$/;"	f
+init_database	database.c	/^gboolean init_database(gchar *file)$/;"	f
+iter	debug_menu.c	/^static GtkTextIter iter;$/;"	v	file:
+load_alignment	database.c	/^gboolean load_alignment (DatabaseBuilder *builder)$/;"	f
+load_data	database.c	/^void load_data (DatabaseBuilder *builder)$/;"	f
+load_file	file_menu.c	/^static void load_file(DatabaseBuilder *builder)$/;"	f	file:
+main	main.c	/^int main(int argc, char *argv[])$/;"	f
+new_file_window	new_file.h	/^	GtkWidget	*new_file_window;$/;"	m	struct:__anon6
+on_alignment_button_clicked	edit_menu.c	/^static void on_alignment_button_clicked (GtkButton *button, Alignment *data)$/;"	f	file:
+on_alignment_destroy	edit_menu.c	/^static void on_alignment_destroy (GtkObject *window, Alignment *data)$/;"	f	file:
+on_button_browse_clicked	new_file.c	/^void on_button_browse_clicked (GtkButton *button_browse, NewFileWindow *nf)$/;"	f
+on_button_cancel_clicked	new_file.c	/^void on_button_cancel_clicked (GtkButton *button_cancel, NewFileWindow *nf)$/;"	f
+on_button_clicked	debug_menu.c	/^static void on_button_clicked(GtkButton *button, DatabaseBuilder *builder)$/;"	f	file:
+on_button_save_clicked	new_file.c	/^void on_button_save_clicked (GtkButton *button_save, NewFileWindow *nf)$/;"	f
+on_check_button_location_clicked	new_file.c	/^void on_check_button_location_clicked (GtkButton *button_location, NewFileWindow *nf)$/;"	f
+on_command_window_delete_event	debug_menu.c	/^static gboolean on_command_window_delete_event (GtkWidget *command_window, GdkEvent *event, sqlite3 *database)$/;"	f	file:
+on_debug_exec_sql_command_activate	debug_menu.c	/^void on_debug_exec_sql_command_activate(GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_edit_add_activate	edit_menu.c	/^void on_edit_add_activate(GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_edit_delete_activate	edit_menu.c	/^void on_edit_delete_activate(GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_edit_edit_activate	edit_menu.c	/^void on_edit_edit_activate(GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_entry_name_changed	new_file.c	/^void on_entry_name_changed (GtkEditable *entry_name, NewFileWindow *nf)$/;"	f
+on_file_close_activate	file_menu.c	/^void on_file_close_activate(GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_file_new_activate	file_menu.c	/^void on_file_new_activate(GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_file_open_activate	file_menu.c	/^void on_file_open_activate (GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_file_quit_activate	file_menu.c	/^void on_file_quit_activate (GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_help_about_activate	other.c	/^void on_help_about_activate (GtkMenuItem *menuitem, DatabaseBuilder *builder)$/;"	f
+on_switch_page	edit_menu.c	/^void on_switch_page (GtkNotebook *notebook, GtkNotebookPage *page, guint page_num, DatabaseBuilder *builder)$/;"	f
+on_tool_button_add_clicked	other.c	/^void on_tool_button_add_clicked(GtkToolButton *button, DatabaseBuilder *dbb)$/;"	f
+on_tool_button_delete_clicked	other.c	/^void on_tool_button_delete_clicked(GtkToolButton *button, DatabaseBuilder *dbb)$/;"	f
+on_tool_button_edit_clicked	other.c	/^void on_tool_button_edit_clicked(GtkToolButton *button, DatabaseBuilder *dbb)$/;"	f
+open_file	new_file.c	/^gchar *open_file(DatabaseBuilder *builder)$/;"	f
+page_index	database_builder.h	/^	gint	page_index;$/;"	m	struct:__anon2
+remove_item	tree.c	/^void remove_item(GtkWidget *tree, GtkTreeSelection *selection)$/;"	f
+remove_tree_view	tree.c	/^void remove_tree_view(GtkTreeView *tree)$/;"	f
+selection	database_builder.h	/^	GtkTreeSelection *selection;$/;"	m	struct:__anon2
+set_sensitive	handler.c	/^void set_sensitive (SensitiveItem *si, gboolean sensitive)$/;"	f
+set_statusbar	handler.c	/^void set_statusbar (DatabaseBuilder *builder)$/;"	f
+si	database_builder.h	/^	SensitiveItem *si;$/;"	m	struct:__anon2
+statusbar	database_builder.h	/^	GtkWidget *statusbar;$/;"	m	struct:__anon2
+statusbar_context_id	database_builder.h	/^	gint	statusbar_context_id;$/;"	m	struct:__anon2
+tool_button_add	database_builder.h	/^	GtkToolItem *tool_button_add;$/;"	m	struct:__anon1
+tool_button_delete	database_builder.h	/^	GtkToolItem *tool_button_delete;$/;"	m	struct:__anon1
+tool_button_edit	database_builder.h	/^	GtkToolItem *tool_button_edit;$/;"	m	struct:__anon1
+tree_view_alignment	database_builder.h	/^	GtkWidget *tree_view_alignment;$/;"	m	struct:__anon2
+tree_view_class	database_builder.h	/^	GtkWidget *tree_view_class;$/;"	m	struct:__anon2
+tree_view_cur	database_builder.h	/^	GtkWidget *tree_view_cur;$/;"	m	struct:__anon2
+tree_view_deities	database_builder.h	/^	GtkWidget *tree_view_deities;$/;"	m	struct:__anon2
+tree_view_equipment	database_builder.h	/^	GtkWidget *tree_view_equipment;$/;"	m	struct:__anon2
+tree_view_feats	database_builder.h	/^	GtkWidget *tree_view_feats;$/;"	m	struct:__anon2
+tree_view_powers	database_builder.h	/^	GtkWidget *tree_view_powers;$/;"	m	struct:__anon2
+tree_view_race	database_builder.h	/^	GtkWidget *tree_view_race;$/;"	m	struct:__anon2
+tree_view_skills	database_builder.h	/^	GtkWidget *tree_view_skills;$/;"	m	struct:__anon2
+value	edit_menu.c	/^	gchar *value;$/;"	m	struct:__anon4	file:
+verify_database	handler.c	/^gboolean verify_database(char *filename)$/;"	f
+window	database_builder.h	/^	GtkWidget *window;$/;"	m	struct:__anon2
+window	edit_menu.c	/^	GtkWidget *window;$/;"	m	struct:__anon4	file:

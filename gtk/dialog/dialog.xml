@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--Generated with glade3 3.4.3 on Fri Jul 25 17:37:42 2008 -->
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">Message dialogs</property>
+    <property name="default_width">220</property>
+    <property name="default_height">150</property>
+    <signal handler="gtk_main_quit" name="destroy"/>
+    <child>
+      <object class="GtkTable" id="table">
+        <property name="visible">True</property>
+        <property name="border_width">15</property>
+        <property name="n_rows">2</property>
+        <property name="n_columns">2</property>
+        <property name="column_spacing">2</property>
+        <property name="row_spacing">2</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="info">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Info</property>
+            <signal handler="show_info" name="clicked"/>
+          </object>
+          <packing>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="warn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Warning</property>
+            <signal handler="show_warning" name="clicked"/>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="que">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Question</property>
+            <signal handler="show_question" name="clicked"/>
+          </object>
+          <packing>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="err">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="label" translatable="yes">Error</property>
+            <signal handler="show_error" name="clicked"/>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options">GTK_FILL</property>
+            <property name="x_padding">3</property>
+            <property name="y_padding">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
