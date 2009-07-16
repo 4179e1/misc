@@ -14,7 +14,7 @@ typedef void (* _idsl_bstree_write_func_t) (_idsl_bstree_t TREE, FILE* OUTPUT_FI
 _idsl_bstree_t _idsl_bstree_alloc (const idsl_element_t E);
 void _idsl_bstree_free (_idsl_bstree_t T, const idsl_free_func_t FREE_F);
 
-_idsl_bstree_t _idsl_bstree_copy (const _idsl_bstree_t T, const idsl_copy_copy_func_t COPY_F);
+_idsl_bstree_t _idsl_bstree_copy (const _idsl_bstree_t T, const idsl_copy_func_t COPY_F);
 
 bool _idsl_bstree_is_empty (const _idsl_bstree_t T);
 bool _idsl_bstree_is_leaf (const _idsl_bstree_t T);
@@ -32,7 +32,7 @@ _idsl_bstree_t _idsl_bstree_insert (_idsl_bstree_t* T, const idsl_compare_func_t
 idsl_element_t _idsl_bstree_remove (_idsl_bstree_t* T, const idsl_compare_func_t COMP_F, const idsl_element_t VALUE);
 
 _idsl_bstree_t _idsl_bstree_search (const _idsl_bstree_t T, const idsl_compare_func_t COMP_F, const idsl_element_t VALUE);
-_idsl_bstree_t _idsl_bstree_search_nex (const _idsl_bstree_t T, const idsl_compare_func_t COMP_F, const idsl_element_t VALUE);
+_idsl_bstree_t _idsl_bstree_search_next (const _idsl_bstree_t T, const idsl_compare_func_t COMP_F, const idsl_element_t VALUE);
 
 _idsl_bstree_t _idsl_bstree_map_prefix (const _idsl_bstree_t T, const _idsl_bstree_map_func_t MAP_F, void* USER_DATA);
 _idsl_bstree_t _idsl_bstree_map_infix (const _idsl_bstree_t T, const _idsl_bstree_map_func_t MAP_F, void* USER_DATA);

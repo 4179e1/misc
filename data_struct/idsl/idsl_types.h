@@ -1,6 +1,8 @@
 #ifndef _IDSL_TYPES_H
 #define _IDSL_TYPES_H
 
+#include <stdio.h>
+
 typedef void* idsl_element_t;
 
 typedef enum

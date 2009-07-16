@@ -1,5 +1,3 @@
-#include <config.h>
-
 #include <stdlib.h>
 #include <assert.h>
 
@@ -14,11 +12,11 @@
 #define IS_LEAF(t) ( _idsl_bintree_is_leaf ((_idsl_bintree_t) (t)) )
 #define IS_EMPTY(t) ( _idsl_bintree_is_empty ((_idsl_bintree_t) (t)) )
 
-static idsl_elemnet_t destroy_max (_idsl_bstree_t* t);
+static idsl_element_t destroy_max (_idsl_bstree_t* t);
 
 static idsl_element_t destroy_min (_idsl_bstree_t* t);
 
-static void bstree_write (const _idsl_bstree_t t, const _idsl_bstree_write_func_ writf_f, FILE* file, void* user_data, bool dump);
+static void bstree_write (const _idsl_bstree_t t, const _idsl_bstree_write_func_t writf_f, FILE* file, void* user_data, bool dump);
 
 _idsl_bstree_t _idsl_bstree_alloc (const idsl_element_t e) {
 	return (_idsl_bstree_t) _idsl_bintree_alloc (e, NULL, NULL);
@@ -86,7 +84,7 @@ _idsl_bstree_t _idsl_bstree_insert (_idsl_bstree_t* t, const idsl_compare_func_t
 	int comp = 0;
 	_idsl_bintree_t parent = NULL;
 	_idsl_bintree_t root = (_idsl_bintree_t) *t;
-	_idsl_bstree n = NULL;
+	_idsl_bstree_t n = NULL;
 
 	assert (comp_f != NULL);
 	assert (rc != NULL);
@@ -109,7 +107,7 @@ _idsl_bstree_t _idsl_bstree_insert (_idsl_bstree_t* t, const idsl_compare_func_t
 	/* not found */
 	n = (_idsl_bstree_t) _idsl_bintree_alloc (v, NULL, NULL);
 	if (n == NULL) {
-		*rc = IDSL_ERR_MEN_ALLOC;
+		*rc = IDSL_ERR_MEM_ALLOC;
 		return NULL;
 	}
 
@@ -131,7 +129,7 @@ _idsl_bstree_t _idsl_bstree_insert (_idsl_bstree_t* t, const idsl_compare_func_t
 }
 
 idsl_element_t _idsl_bstree_remove (_idsl_bstree_t* t, const idsl_compare_func_t comp_f, const idsl_element_t v) {
-	idsl_elemnet_t e;
+	idsl_element_t e;
 	_idsl_bstree_t l;
 	_idsl_bstree_t r;
 
@@ -148,8 +146,8 @@ idsl_element_t _idsl_bstree_remove (_idsl_bstree_t* t, const idsl_compare_func_t
 
 		if (comp < 0) {
 			return _idsl_bstree_remove (_idsl_bintree_get_left_ref (*t), comp_f, v);
-		} else if (cmp > 0) {
-			return _idsl_bstree_remove (_idsl_bintree_get_right_ref (*t), comp_f, v)
+		} else if (comp > 0) {
+			return _idsl_bstree_remove (_idsl_bintree_get_right_ref (*t), comp_f, v);
 		}
 	}
 
@@ -242,6 +240,77 @@ _idsl_bstree_t _idsl_bstree_search_next (const _idsl_bstree_t t, const idsl_comp
 	return NULL;
 }
 
+_idsl_bstree_t _idsl_bstree_map_prefix (const _idsl_bstree_t t, const _idsl_bstree_map_func_t map_f, void* user_data) {
+	assert (map_f != NULL);
+
+	if (!IS_EMPTY (t)) {
+		if (map_f (t, user_data) == IDSL_MAP_STOP) {
+			return t;
+		}
+
+		_idsl_bstree_map_prefix ((_idsl_bstree_t) _idsl_bintree_get_left ((_idsl_bintree_t) t), map_f, user_data);
+		_idsl_bstree_map_prefix ((_idsl_bstree_t) _idsl_bintree_get_right ((_idsl_bintree_t) t), map_f, user_data);
+	}
+
+	return NULL;
+}
+
+_idsl_bstree_t _idsl_bstree_map_infix (const _idsl_bstree_t t, const _idsl_bstree_map_func_t map_f, void* user_data) {
+	assert (map_f != NULL);
+
+	if (!IS_EMPTY(t)) {
+		_idsl_bstree_map_infix ((_idsl_bstree_t) _idsl_bintree_get_left ((_idsl_bintree_t) t), map_f, user_data);
+
+		if (map_f (t, user_data) == IDSL_MAP_STOP) {
+			return t;
+		}
+
+		_idsl_bstree_map_infix ((_idsl_bstree_t) _idsl_bintree_get_right ((_idsl_bintree_t) t), map_f, user_data);
+	}
+
+	return NULL;
+}
+
+_idsl_bstree_t _idsl_bstree_map_postfix (const _idsl_bstree_t t, const _idsl_bstree_map_func_t map_f, void* user_data) {
+	assert (map_f != NULL);
+
+	if (!IS_EMPTY(t)) {
+		_idsl_bstree_map_postfix ((_idsl_bstree_t) _idsl_bintree_get_left ((_idsl_bintree_t) t), map_f, user_data);
+		_idsl_bstree_map_postfix ((_idsl_bstree_t) _idsl_bintree_get_right ((_idsl_bintree_t) t), map_f, user_data);
+
+		if (map_f (t, user_data) == IDSL_MAP_STOP) {
+			return t;
+		}
+
+	}
+
+	return NULL;
+}
+
+void _idsl_bstree_write (const _idsl_bstree_t t, const _idsl_bstree_write_func_t write_f, FILE* file, void* user_data) {
+	assert (write_f != NULL);
+	assert (file != NULL);
+
+	_idsl_bintree_write ((_idsl_bintree_t) t, write_f, file, user_data);
+}
+
+void _idsl_bstree_write_xml (const _idsl_bstree_t t, const _idsl_bstree_write_func_t write_f, FILE* file, void* user_data) {
+	assert (file != NULL);
+
+	fprintf (file, "<_IDSL_BSTREE>\n");
+	bstree_write (t, write_f, file, user_data, FALSE);
+	fprintf (file, "</_IDSL_BSTREE>\n");
+}
+
+void _idsl_bstree_dump (const _idsl_bstree_t t, const _idsl_bstree_write_func_t write_f, FILE* file, void *user_data) {
+	assert (file != NULL);
+
+	fprintf (file, "<_IDSL_BSTREE REF=\"%p\">\n", (void*) t);
+	bstree_write (t, write_f, file, user_data, TRUE);
+	fprintf (file, "</_IDSL_BSTREE>\n");
+}
+	
+
 /****************
  * private func
  * *************/
@@ -269,3 +338,53 @@ static idsl_element_t destroy_min (_idsl_bstree_t* tree) {
 
 	return destroy_min (_idsl_bintree_get_left_ref (*tree));
 }
+
+void bstree_write (const _idsl_bstree_t t, const _idsl_bstree_write_func_t write_f, FILE* file, void* user_data, bool dump) {
+	if (!IS_EMPTY(t)) {
+		bstree_write (LEFT (t), write_f, file, user_data, dump);
+
+		if (IS_LEAF (t)) {
+			fprintf (file, "<_IDSL_BSTREE_LEAF REF=\"%p\"", (void*) t);
+		} else {
+			fprintf (file, "<_IDSL_BSTREE_NODE REF=\"%p\"", (void*) t);
+		}
+
+		if (dump == TRUE) {
+			if (CONTENT (t) != NULL) {
+				fprintf (file, " CONTENT=\"%p\"", (void*) CONTENT(t));
+			} else {
+				fprintf (file, " CONTENT=\"\"");
+			}
+		}
+
+		if (!IS_LEAF(t)) {
+			if ( LEFT(t) != NULL) {
+				fprintf (file, " LEFT=\"%p\"", (void*) LEFT(t));
+			} else {
+				fprintf (file, " LEFT=\"\"");
+			}
+
+			if ( RIGHT(t) != NULL) {
+				fprintf (file, " RIGHT=\"%p\"", (void*) RIGHT(t));
+			} else {
+				fprintf (file, " RIGHT=\"\"");
+			}
+		}
+
+		fprintf (file, " PARENT=\"%p\"", (void*) PARENT(t));
+
+		if (write_f != NULL) {
+			write_f (t, file, user_data);
+		}
+
+		if (IS_LEAF (t)) {
+			fprintf (file, "</_IDSL_BSTREE_LEAF>\n");
+		} else {
+			fprintf (file, "</_IDSL_BSTREE_NODE>\n");
+		}
+
+		bstree_write (RIGHT(t), write_f, file, user_data, dump);
+	}
+}
+
+

@@ -83,6 +83,10 @@ bool _idsl_bintree_is_empty (const _idsl_bintree_t t) {
 	return (bool) IS_EMPTY(t);
 }
 
+bool _idsl_bintree_is_leaf (const _idsl_bintree_t t) {
+	return (bool) IS_LEAF(t);
+}
+
 bool _idsl_bintree_is_root (const _idsl_bintree_t t) {
 	assert (!IS_EMPTY(t));
 
@@ -93,6 +97,12 @@ idsl_element_t _idsl_bintree_get_content (const _idsl_bintree_t t) {
 	assert (!IS_EMPTY(t));
 
 	return CONTENT(t);
+}
+
+_idsl_bintree_t _idsl_bintree_get_parent (const _idsl_bintree_t t) {
+	assert (!IS_EMPTY(t));
+
+	return PARENT(t);
 }
 
 _idsl_bintree_t _idsl_bintree_get_left (const _idsl_bintree_t t) {
