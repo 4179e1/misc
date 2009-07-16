@@ -1,0 +1,8 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\oledb.Form1.resources
+obj\Debug\oledb.Properties.Resources.resources
+obj\Debug\oledb.csproj.GenerateResource.Cache
+bin\Debug\oledb.exe
+bin\Debug\oledb.pdb
+obj\Debug\oledb.exe
+obj\Debug\oledb.pdb
