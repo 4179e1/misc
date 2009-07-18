@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <string.h>
+#include <unistd.h>
+
+#include "unp.h"
 
 #define DEBUG
 #include "debug_macro.h"
-
-#define MAXLINE 1024
 
 
 int main(int argc, char* argv[]) {
@@ -16,13 +15,11 @@ int main(int argc, char* argv[]) {
 	struct sockaddr_in servaddr;
 
 	if (argc != 2) {
-		printf ("USAGE: a.out <IPaddress>\n");
-		exit (1);
+		err_quit ("USAGE: a.out <IPaddress>");
 	}
 
 	if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		printf ("socket error\n");
-		exit (2);
+		err_sys ("socket error");
 	}
 
 	memset (&servaddr, 0, sizeof(servaddr));
@@ -31,26 +28,22 @@ int main(int argc, char* argv[]) {
 	servaddr.sin_port = htons(13);
 
 	if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0) {
-		printf ("inet_pton error for %s\n", argv[1]);
-		exit (3);
+		err_quit ("inet_pton error for %s", argv[1]);
 	}
 
 	if (connect(sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0) {
-		printf ("connect error\n");
-		exit (4);
+		err_sys ("connect error");
 	}
 
 	while ((n = read(sockfd, recvline, MAXLINE)) > 0) {
 		recvline[n] = 0;
 		if (fputs (recvline, stdout) == EOF) {
-			printf ("fputs error\n");
-			exit(5);
+			err_sys ("fputs error");
 		}
 	}
 
 	if (n < 0) {
-		printf ("read error");
-		exit(6);
+		err_sys ("read error");
 	}
 
 	exit(0);
