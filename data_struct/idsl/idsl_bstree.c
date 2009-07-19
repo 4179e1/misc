@@ -11,7 +11,7 @@
 #define CONTENT(t)	( _idsl_bintree_get_content ((t)) )
 #define PARENT(t)	( _idsl_bintree_get_parent ((t)) )
 #define SENT(t)		( (t)->sent )
-#define ROOT(t)		( _idsl_bintree_get_RIGHT (SENT(t)))
+#define ROOT(t)		( _idsl_bintree_get_right (SENT(t)))
 
 struct idsl_bstree {
 	char* name;
@@ -100,3 +100,90 @@ idsl_bstree_t idsl_bstree_alloc (const char* name, const idsl_alloc_func_t alloc
 
 	return t;
 }
+
+void
+idsl_bstree_free (idsl_bstree_t t) {
+	assert (t != NULL);
+
+	bstree_free (ROOT(t), SENT(t), t->free_f);
+
+	_idsl_bintree_set_left ((_idsl_bintree_t) SENT(t), NULL);
+	_idsl_bintree_set_right ((_idsl_bintree_t) SENT(t), NULL);
+	_idsl_bintree_free (SENT(t), NULL);
+
+	if (t->name != NULL) {
+		free (t->name);
+	}
+
+	free (t);
+}
+
+void idsl_bstree_flush (idsl_bstree_t t) {
+	assert (t != NULL);
+
+	bstree_free (ROOT(t), SENT(t), t->free_f);
+	_idsl_bintree_set_left ((_idsl_bintree_t) SENT(t), (_idsl_bintree_t) SENT(t));
+	_idsl_bintree_set_right ((_idsl_bintree_t) SENT(t), (_idsl_bintree_t) SENT(t));
+	t->card = 0UL;
+}
+
+const char* 
+idsl_bstree_get_name (const idsl_bstree_t t) {
+	assert (t != NULL);
+
+	return t->name;
+}
+
+bool 
+idsl_bstree_is_empty (const idsl_bstree_t ) {
+	assert (t != NULL);
+
+	return (bool) (t->card == 0);
+}
+
+idsl_element_t
+idsl_bstree_get_root (const idsl_bstree_t t) {
+	assert (t != NULL);
+
+	return CONTENT (ROOT(t));
+}
+
+ulong idsl_bstree_get_size (const idsl_bstree_t t) {
+	assert (t != NULL);
+
+	return t->card;
+}
+
+ulong idsl_bstree_get_height (const idsl_bstree_t t) {
+	assert (t != NULL);
+
+	return bstree_height (ROOT (t), SENT(t));
+}
+
+/**************
+*  private func
+**************/
+static void
+bstree_free (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_free_func_t f) {
+	if (n != sent) {
+		bstree_free (LEFT(n), sent, f);
+		bstree_free (RIGHT(n), sent, f);
+		f (CONTENT(n));
+		free(n);
+	}
+}
+
+ulong bstree_height (_idsl_bintree_t n, _idsl_bintree_t sent) {
+	if (n == sent) {
+		return 0UL;
+	}
+
+	if (LEFT (n) == sent && RIGHT (n) == sent) {
+		return 0UL;
+	}
+
+	return (ulong) (1UL +
+			IDSL_MAX (bstree_height (LEFT(n), sent),
+				bstree_height (RIGHT(n), sent)));
+}
+			
