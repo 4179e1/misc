@@ -1,12 +1,16 @@
 #ifndef _UNP_H
 #define _UNP_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
 
 #define MAXLINE 4096
+#define LISTENQ 1024
 
 /**
  * error
@@ -33,4 +37,10 @@ void Close (int fd);
 int Open (const char* pathname, int oflag, mode_t mode);
 ssize_t Read (int fd, void* ptr, size_t nbytes);
 void Write (int fd, void* ptr, size_t nbytes);
+
+/**
+ * wraplib
+ */
+const char* Inet_ntop (int family, const void* addrptr, char* strptr, size_t len);
+void Inet_pton (int family, const char* strptr, void* addrptr);
 #endif /* _UNP_H */
