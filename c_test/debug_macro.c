@@ -1,5 +1,7 @@
+/**
+ *@compile gcc debug_macro.c -o debug_macro -DDEBUG
+ */
 #include <stdio.h>
-#define DEBUG
 #include "debug_macro.h"
 
 int main(void) {

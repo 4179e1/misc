@@ -160,9 +160,204 @@ ulong idsl_bstree_get_height (const idsl_bstree_t t) {
 	return bstree_height (ROOT (t), SENT(t));
 }
 
+idsl_bstree_t idsl_bstree_set_name (idsl_bstree_t t, const char* name) {
+	assert (t != NULL);
+
+	if (t->name != NULL) {
+		free (t->name);
+		t->name = NULL;
+	}
+
+	if (name != NULL) {
+		t->name = (char*) malloc ((strlen (name) + 1) * sizeof (char));
+
+		if (t->name == NULL) {
+			return NULL;
+		}
+		strcpy (t->name, name);
+	}
+
+	return t;
+}
+
+idsl_element_t idsl_bstree_insert (idsl_bstree_t t, void* v, int* rc) {
+	int comp = 0;
+	idsl_element_t e;
+	_idsl_bintree_t root;
+	_idsl_bintree_t parent;
+	_idsl_bintree_t n;
+
+	assert (t != NULL);
+	assert (rc != NULL);
+
+	*rc = IDSL_INSERTED;
+
+	root = ROOT (t);
+	parent = SENT (t);
+	while (root != SENT (t)) {
+		parent = root;
+		comp = t->comp_f (CONTENT (root), v);
+
+		if (comp == 0) {
+			*rc = IDSL_FOUND;
+			return CONTENT(root);
+		}
+
+		root = (comp > 0) ? LEFT (root) : RIGHT (root);
+	}
+
+	e = (t->alloc_f) (v);
+	if (e == NULL) {
+		*rc = IDSL_ERR_MEM_ALLOC;
+		return NULL;
+	}
+
+	n = _idsl_bintree_alloc (e, NULL, NULL);
+	if (n == NULL) {
+		t->free_f (e);
+		*rc = IDSL_ERR_MEM_ALLOC;
+		return NULL;
+	}
+
+	_idsl_bintree_set_parent ((_idsl_bintree_t) n, (_idsl_bintree_t) parent);
+	_idsl_bintree_set_left ((_idsl_bintree_t) n, (_idsl_bintree_t) SENT(t));
+	_idsl_bintree_set_right ((_idsl_bintree_t) n, (_idsl_bintree_T) SENT(t));
+
+	if (parent == SENT(t) || comp < 0) {
+		_idsl_bintree_set_right ((_idsl_bintree_t) parent, (_idsl_bintree_t) n);
+	} else { /* if comp > 0*/
+		_idsl_bintree_set_left ((_idsl_bintree_t) parent, (_idsl_bintree_t) N);
+	}
+
+	t->card++;
+
+	return e;
+}
+
+idsl_element_t idsl_bstree_remove (idsl_bstree_t t, void* v) {
+	idsl_element_t e;
+	_idsl_bintree_t n;
+	_idsl_bintree_t child;
+
+	assert (t != NULL);
+
+	n = bstree_search (ROOT(t), SENT(t), t->comp_f);
+	if ( n == NULL) {
+		return NULL;
+	}
+
+	if (LEFT(n) != SENT (t) && RIGHT(t) != SENT(t)) { /* not leaf */
+		_idsl_bintree_t next = bstree_next (t, n);
+		_idsl_bintree_t nextparent = PARENT (next);
+
+		child = RIGHT(next);
+		_idsl_bintree_set_parent (child, nextparent);
+
+		if (LEFT (nextparent) == next) {
+			_idsl_bintree_set_left (nextparent, child);
+		} else {
+			_idsl_bintree_set_right (nextparent, child);
+		}
+
+		_idsl_bintree_set_parent (next, PARENT(n));
+		_idsl_bintree_set_left (next, LEFT(n));
+		_idsl_bintree_set_parent (next, RIGHT(n));
+		_idsl_bintree_set_parent (LEFT(next), next);
+		_idsl_bintree_set_parent (RIGHT(next), next);
+
+		if (LEFT( PARENT (n)) == n) {
+			_idsl_bintree_set_left (PARENT (n), next);
+		} else {
+			_idsl_bintree_set_right (PARENT (n), next);
+		}
+	} else { /* leaf */
+		child = LEFT (n) != SENT (t) ? LEFT(n) : RIGHT(n);
+
+		if (n == LEFT (PARENT(n))) {
+			_idsl_bintree_set_left (PARNET(n), child);
+		} else {
+			_idsl_bintree_set_right (PARENT(n), child);
+		}
+	}
+
+	t->card--;
+
+	e = CONTENT(n);
+	_idsl_bintree_set_left ((_idsl_bintree_t) n, NULL);
+	_idsl_bintree_set_right ((_idsl_bintree_t) n, NULL);
+	_idsl_bintree_free (n, NULL);
+
+	return e;
+}
+
+idsl_bstree_t idsl_bstree_delete (idsl_bstree_t t, void* v) {
+	idsl_element_t e;
+
+	assert (t != NULL);
+
+	e = idsl_bstree_remove (t, v);
+
+	if (e == NULL) {
+		return NULL;
+	}
+
+	t->free_f (e);
+
+	return t;
+}
+
+idsl_element_t 
+idsl_bstree_search (const idsl_bstree_ t, idsl_compare_func_t f, void* v) {
+	_idsl_bintree_t n;
+
+	assert (t != NULL);
+
+	n = bstree_search (ROOT(t), SENT(t), f ? f : t->comp_f, v);
+
+	return (n == NULL) ? NULL : CONTENT (n);
+}
+
+idsl_element_t
+idsl_bstree_map_prefix (const idsl_bstree_t t, idsl_map_func_t map_f, void* d) {
+	assert (t != NULL);
+	assert (map_f != NULL);
+
+	return bstree_prefix_parse (ROOT(t), SENT(t), map_f, d);
+}
+
+idsl_element_t
+idsl_bstree_map_infix (const idsl_bstree_t t, idsl_map_func_t map_f, void* d) {
+	assert (t != NULL);
+	assert (map_f != NULL);
+
+	return bstree_infix_parse (ROOT(t), SENT(t), map_f, d);
+}
+
+idsl_element_t
+idsl_bstree_map_postfix (const idsl_bstree_t t, idsl_map_func_t map_f, void* d) {
+	assert (t != NULL);
+	assert (map_f != NULL);
+
+	return bstree_postfix_parse (ROOT(t), SENT(t), map_f, d);
+}
+
 /**************
 *  private func
 **************/
+static idsl_element_t
+default_alloc (void *e) {
+	return e;
+}
+
+static void
+default_free (idsl_element_t e) {
+	;
+}
+
+static long int default_comp (idsl_element_t e, void* key) {
+	return 0;
+}
+
 static void
 bstree_free (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_free_func_t f) {
 	if (n != sent) {
@@ -173,7 +368,8 @@ bstree_free (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_free_func_t f) {
 	}
 }
 
-ulong bstree_height (_idsl_bintree_t n, _idsl_bintree_t sent) {
+static ulong 
+bstree_height (_idsl_bintree_t n, _idsl_bintree_t sent) {
 	if (n == sent) {
 		return 0UL;
 	}
@@ -186,4 +382,101 @@ ulong bstree_height (_idsl_bintree_t n, _idsl_bintree_t sent) {
 			IDSL_MAX (bstree_height (LEFT(n), sent),
 				bstree_height (RIGHT(n), sent)));
 }
+
+static _idsl_bintree_t
+bstree_search (_idsl_bintree_t root, idsl_bintree_t sent, idsl_compare_func_t f, void* v) {
+	int comp;
+
+	while (root != sent) {
+		comp = f(CONTENT(root), v);
+
+		if (comp == 0) {
+			return root;
+		}
+
+		if (comp > 0) {
+			root = LEFT (root);
+		} else {
+			root = RIGHT (root);
+		}
+	}
+
+	return NULL;
+}
+
+static _idsl_bintree_t
+bstree_next (idsl_bstree_t t, _idsl_bintree_t n) {
+	n = RIGHT(n);
+
+	while (LEFT(n) != SENT(t)) {
+		n = LEFT(n);
+	}
+
+	return n;
+}
 			
+static idsl_element_t
+bstree_prefix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
+	if (root != sent) {
+		idsl_element_t e = CONTENT (root);
+		if (map_f (e, get_location (root, sent), user_data) == IDSL_MAP_STOP) {
+			return e;
+		}
+
+		bstree_prefix_parse (LEFT(root), sent, map_f, user_data);
+		bstree_prefix_parse (RIGHT(root), sent, map_f, user_data);
+	}
+
+	return NULL;
+}
+
+static idsl_element_t
+bstree_infix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
+	if (root != sent) {
+		idsl_element_t e;
+
+		bstree_infix_parse (LEFT(root), sent, map_f, user_data);
+
+		e = CONTENT (root);
+		if (map_f (e, get_location (root, sent), user_data) == IDSL_MAP_STOP) {
+			return e;
+		}
+
+		bstree_infix_parse (RIGHT(root), sent, map_f, user_data);
+	}
+
+	return NULL;
+}
+
+static idsl_element_t
+bstree_postfix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
+	if (root != sent) {
+		idsl_element_t e;
+
+		bstree_postfix_parse (LEFT(root), sent, map_f, user_data);
+		bstree_postfix_parse (RIGHT(root), sent, map_f, user_data);
+
+		e = CONTENT (root);
+		if (map_f (e, get_location(root, sent), user_data) == IDSL_MAP_STOP) {
+			return e;
+		}
+	}
+
+	return NULL;
+}
+
+
+static idsl_location_t
+get_location (_idsl_bintree_t n, _idsl_bintree_t s) {
+	idsl_location_t location = IDSL_LOCATION_UNDEF;
+
+	if (PARENT (n) == s) {
+		location |= IDSL_LOCATION_ROOT;
+	}
+
+	if (LEFT(n) == s && RIGHT(n) == s) {
+		location |= IDSL_LOCATION_LEAF;
+	}
+
+	return location;
+}
