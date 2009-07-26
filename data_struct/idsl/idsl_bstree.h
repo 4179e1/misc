@@ -21,7 +21,7 @@ idsl_bstree_t idsl_bstree_set_name (idsl_bstree_t T, const char* NEW_NAME);
 idsl_element_t idsl_bstree_insert (idsl_bstree_t T, void* VALUE, int* RESULT);
 idsl_element_t idsl_bstree_remove (idsl_bstree_t T, void* VALUE); /* the element need to be freed */
 idsl_bstree_t idsl_bstree_delete (idsl_bstree_t T, void* VALUE);
-idsl_element_t idsl_bstree_search (const idsl_bstree_t T, idsl_conmpare_func_t COMP_F, void* VALUE);
+idsl_element_t idsl_bstree_search (const idsl_bstree_t T, idsl_compare_func_t COMP_F, void* VALUE);
 
 idsl_element_t idsl_bstree_map_prefix (const idsl_bstree_t T, idsl_map_func_t MAP_F, void* USER_DATA);
 idsl_element_t idsl_bstree_map_infix (const idsl_bstree_t T, idsl_map_func_t MAP_F, void* USER_DATA);

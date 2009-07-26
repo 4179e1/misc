@@ -5,6 +5,7 @@
 #include "idsl_types.h"
 #include "_idsl_bintree.h"
 #include "idsl_bstree.h"
+#include "idsl_macros.h"
 
 #define LEFT(t)		( _idsl_bintree_get_left ((t)) )
 #define RIGHT(t)	( _idsl_bintree_get_right ((t)) )
@@ -43,7 +44,7 @@ static _idsl_bintree_t
 bstree_search (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_compare_func_t f, void* v);
 
 static _idsl_bintree_t 
-bstree_next (_idsl_bintree_t t, _idsl_bintree_t n);
+bstree_next (idsl_bstree_t t, _idsl_bintree_t n);
 
 static idsl_element_t 
 bstree_prefix_parse (_idsl_bintree_t t, _idsl_bintree_t sent, idsl_map_func_t f, void* d);
@@ -61,7 +62,7 @@ static void
 bstree_write_xml (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_write_func_t f, FILE* file, void* d);
 
 static void
-bstree_dump (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_wirte_func_t f, FILE* file, void* d);
+bstree_dump (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_write_func_t f, FILE* file, void* d);
 
 static idsl_location_t
 get_location (_idsl_bintree_t t, _idsl_bintree_t n);
@@ -135,7 +136,7 @@ idsl_bstree_get_name (const idsl_bstree_t t) {
 }
 
 bool 
-idsl_bstree_is_empty (const idsl_bstree_t ) {
+idsl_bstree_is_empty (const idsl_bstree_t t) {
 	assert (t != NULL);
 
 	return (bool) (t->card == 0);
@@ -221,12 +222,12 @@ idsl_element_t idsl_bstree_insert (idsl_bstree_t t, void* v, int* rc) {
 
 	_idsl_bintree_set_parent ((_idsl_bintree_t) n, (_idsl_bintree_t) parent);
 	_idsl_bintree_set_left ((_idsl_bintree_t) n, (_idsl_bintree_t) SENT(t));
-	_idsl_bintree_set_right ((_idsl_bintree_t) n, (_idsl_bintree_T) SENT(t));
+	_idsl_bintree_set_right ((_idsl_bintree_t) n, (_idsl_bintree_t) SENT(t));
 
 	if (parent == SENT(t) || comp < 0) {
 		_idsl_bintree_set_right ((_idsl_bintree_t) parent, (_idsl_bintree_t) n);
 	} else { /* if comp > 0*/
-		_idsl_bintree_set_left ((_idsl_bintree_t) parent, (_idsl_bintree_t) N);
+		_idsl_bintree_set_left ((_idsl_bintree_t) parent, (_idsl_bintree_t) n);
 	}
 
 	t->card++;
@@ -241,12 +242,12 @@ idsl_element_t idsl_bstree_remove (idsl_bstree_t t, void* v) {
 
 	assert (t != NULL);
 
-	n = bstree_search (ROOT(t), SENT(t), t->comp_f);
+	n = bstree_search (ROOT(t), SENT(t), t->comp_f, v);
 	if ( n == NULL) {
 		return NULL;
 	}
 
-	if (LEFT(n) != SENT (t) && RIGHT(t) != SENT(t)) { /* not leaf */
+	if (LEFT(n) != SENT (t) && RIGHT(n) != SENT(t)) { /* not leaf */
 		_idsl_bintree_t next = bstree_next (t, n);
 		_idsl_bintree_t nextparent = PARENT (next);
 
@@ -274,7 +275,7 @@ idsl_element_t idsl_bstree_remove (idsl_bstree_t t, void* v) {
 		child = LEFT (n) != SENT (t) ? LEFT(n) : RIGHT(n);
 
 		if (n == LEFT (PARENT(n))) {
-			_idsl_bintree_set_left (PARNET(n), child);
+			_idsl_bintree_set_left (PARENT(n), child);
 		} else {
 			_idsl_bintree_set_right (PARENT(n), child);
 		}
@@ -307,7 +308,7 @@ idsl_bstree_t idsl_bstree_delete (idsl_bstree_t t, void* v) {
 }
 
 idsl_element_t 
-idsl_bstree_search (const idsl_bstree_ t, idsl_compare_func_t f, void* v) {
+idsl_bstree_search (const idsl_bstree_t t, idsl_compare_func_t f, void* v) {
 	_idsl_bintree_t n;
 
 	assert (t != NULL);
@@ -339,6 +340,40 @@ idsl_bstree_map_postfix (const idsl_bstree_t t, idsl_map_func_t map_f, void* d) 
 	assert (map_f != NULL);
 
 	return bstree_postfix_parse (ROOT(t), SENT(t), map_f, d);
+}
+
+void
+idsl_bstree_wirte (const idsl_bstree_t t, idsl_write_func_t write_f, FILE* file, void* d) {
+	assert (t != NULL);
+	assert (write_f != NULL);
+	assert (file != NULL);
+
+	bstree_write (ROOT(t), SENT(t), write_f, file, d);
+}
+
+void
+idsl_bstree_write_xml (const idsl_bstree_t t, idsl_write_func_t write_f, FILE* file, void* d) {
+	assert (t != NULL);
+	assert (file != NULL);
+
+	fprintf (file, "<IDSL_BSTREE REF=\"%p\" NAME=\"%s\" CARD=\"%ld\">\n", (void *)t, t->name, t->card);
+
+	bstree_write_xml (ROOT(t), SENT(t), write_f, file, d);
+
+	fprintf (file, "</IDSL_BSTREE>\n");
+}
+
+void
+idsl_bstree_dump (const idsl_bstree_t t, idsl_write_func_t write_f, FILE* file, void* d) {
+	assert (t != NULL);
+	assert (file != NULL);
+
+	fprintf (file, "<IDSL_BSTREE REF=\"%p\" NAME=\"%s\" CARD=\"%ld\">\n", (void*)t, t->name, t->card);
+	fprintf (file, "<IDSL_BSTREE_SENT REF=\"%p\" LEFT=\"%p\" RIGHT=\"%p\" PARENT=\"%p\"/>\n", (void*)SENT(t), (void*)LEFT(SENT(t)), (void*)RIGHT(SENT(t)), (void*)PARENT(SENT(t)));
+
+	bstree_dump (ROOT(t), SENT(t), write_f, file, d);
+
+	fprintf (file, "</IDSL_BSTREE>\n");
 }
 
 /**************
@@ -384,7 +419,7 @@ bstree_height (_idsl_bintree_t n, _idsl_bintree_t sent) {
 }
 
 static _idsl_bintree_t
-bstree_search (_idsl_bintree_t root, idsl_bintree_t sent, idsl_compare_func_t f, void* v) {
+bstree_search (_idsl_bintree_t root, _idsl_bintree_t sent, idsl_compare_func_t f, void* v) {
 	int comp;
 
 	while (root != sent) {
@@ -416,7 +451,7 @@ bstree_next (idsl_bstree_t t, _idsl_bintree_t n) {
 }
 			
 static idsl_element_t
-bstree_prefix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
+bstree_prefix_parse (_idsl_bintree_t root, _idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
 	if (root != sent) {
 		idsl_element_t e = CONTENT (root);
 		if (map_f (e, get_location (root, sent), user_data) == IDSL_MAP_STOP) {
@@ -431,7 +466,7 @@ bstree_prefix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t 
 }
 
 static idsl_element_t
-bstree_infix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
+bstree_infix_parse (_idsl_bintree_t root, _idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
 	if (root != sent) {
 		idsl_element_t e;
 
@@ -449,7 +484,7 @@ bstree_infix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t m
 }
 
 static idsl_element_t
-bstree_postfix_parse (_idsl_bintree_t root, idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
+bstree_postfix_parse (_idsl_bintree_t root, _idsl_bintree_t sent, idsl_map_func_t map_f, void* user_data) {
 	if (root != sent) {
 		idsl_element_t e;
 
@@ -479,4 +514,97 @@ get_location (_idsl_bintree_t n, _idsl_bintree_t s) {
 	}
 
 	return location;
+}
+
+static void
+bstree_write (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_write_func_t write_f, FILE* file, void* d) {
+	if (n != sent) {
+		bstree_write (LEFT(n), sent, write_f, file, d);
+		write_f (CONTENT(n), file, get_location(n, sent), d);
+		bstree_write (RIGHT(n), sent, write_f, file, d);
+	}
+}
+
+static void
+bstree_write_xml (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_write_func_t write_f, FILE* file, void* d) {
+	if (n != sent) {
+		bstree_write_xml (LEFT(n), sent, write_f, file, d);
+
+		if (LEFT(n) == sent && RIGHT(n) == sent) {
+			fprintf (file, "<IDSL_BSTREE_LEAF REF=\"%p\"", (void*) n);
+		} else {
+			fprintf (file, "<IDSL_BSTREE_NODE REF=\"%p\"", (void*) n);
+		}
+
+		if (LEFT(n) != sent || RIGHT(n) != sent) {
+			if (LEFT (n) != sent) {
+				fprintf (file, " LEFT=\"%p\"", (void*) LEFT(n));
+			} else {
+				fprintf (file, " LEFT=\"\"");
+			}
+
+			if (RIGHT (n) != sent) {
+				fprintf (file, " RIGHT=\"%p\"", (void*) RIGHT(n));
+			} else {
+				fprintf (file, " RIGHT=\"\"");
+			}
+		}
+
+		if (PARENT (n) != sent) {
+			fprintf (file, " PARENT=\"%p\">", (void*) PARENT(n));
+		} else {
+			fprintf (file, " PARENT=\"\">");
+		}
+
+		if (write_f != NULL) {
+			write_f (CONTENT(n), file, get_location (n, sent), d);
+		}
+
+		if (LEFT (n) == sent && RIGHT (n) == sent) {
+			fprintf (file, "</IDSL_BSTREE_LEAF>\n");
+		} else {
+			fprintf (file, "</IDSL_BSTREE_NODE>\n");
+		}
+
+		bstree_write_xml (RIGHT(n), sent, write_f, file, d);
+	}
+}
+
+static void
+bstree_dump (_idsl_bintree_t n, _idsl_bintree_t sent, idsl_write_func_t write_f, FILE* file, void* d) {
+	if (n != sent) {
+		bstree_dump (LEFT(n), sent, write_f, file, d);
+
+		if (LEFT(n) == sent && RIGHT(n) == sent) {
+			fprintf (file, "</IDSL_BSTREE_LEAF REF=\"%p\"", (void*)n);
+		} else {
+			fprintf (file, "</IDSL_BSTREE_NODE REF=\"%p\"", (void*)n);
+		}
+
+		if (CONTENT(n) != NULL) {
+			fprintf (file, " CONTENT=\"%p\"", (void*) CONTENT(n));
+		} else {
+			fprintf (file, " CONTENT=\"\"");
+		}
+
+		fprintf (file, " LEFT=\"%p\" RIGHT=\"%p\"", (void*) LEFT(n), (void*) RIGHT(n));
+
+		if (PARENT(n) != NULL) {
+			fprintf (file, " PARENT=\"%p\">", (void*)PARENT(n));
+		} else {
+			fprintf (file, " PARENT=\"\">");
+		}
+
+		if (write_f != NULL) {
+			write_f (CONTENT(n), file, get_location (n, sent), d);
+		}
+
+		if (LEFT (n) == sent && RIGHT (n) == sent) {
+			fprintf (file, "</IDSL_BSTREE_LEAF>\n");
+		} else {
+			fprintf (file, "</IDSL_BSTREE_NODE>\n");
+		}
+
+		bstree_dump (RIGHT(n), sent, write_f, file, d);
+	}
 }
