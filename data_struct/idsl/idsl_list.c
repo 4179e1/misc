@@ -517,3 +517,119 @@ idsl_list_write_xml (const idsl_list_t list, idsl_write_func_t write_f, FILE* fi
 
 	fpritf (file, "</IDSL_LIST>\n");
 }
+
+void
+idsl_list_dump (const idsl_list_t list, idsl_write_func_t write_f, FILE* file, void* user_data) {
+	_idsl_node_t tmp;
+
+	assert (list != NULL);
+	assert (file != NULL);
+
+	tmp = _idsl_node_get_succ (list->d);
+
+	fprintf (file, "<IDSL_LIST REF=\"%p\" NAME=\"%s\" CARD=\"%ld\" HEAD=\"%p\" TAIL=\"%p\">\n", (void*) list, list->name ? list->name : "", list->card, (void*)list->d, (void*)list->z);
+
+	if (_idsl_node_get_content (list->d)) {
+		fprintf (file, "<IDSL_LIST_HEAD REF=\"%p\" CONTENT=\"%p\" SUCC=\"%p\" PRED=\"%p\"/>\n", (void*)list->d, (void*) _idsl_node_get_content (list->d), (void*) _idsl_node_get_succ(list->d), (void*) _idsl_node_get_pred (list->d));
+	} else {
+		fprintf (file, "<IDSL_LIST_HEAD REF=\"%p\" CONTENT=\"\" SUCC=\"%p\" PRED=\"%p\"/>\n", (void*)list->d, (void*) _idsl_node_get_succ (list->d), (void*) _idsl_node_get_pred (list->d));
+	}
+
+	while (tmp != list->z) {
+		if (_idsl_node_get_content (tmp)) {
+			fprintf (file, "<IDSL_LIST_NODE REF=\"%p\" CONTENT=\"%p\" SUCC=\"%p\" PRED=\"%p\">", (void*)tmp, (void*) _idsl_node_get_content (tmp), (void*) _idsl_node_get_succ (tmp), (void*) _idsl_node_get_pred(tmp));
+		} else {
+			fprintf (file, "<IDSL_LIST_NODE REF=\"%p\" CONTENT=\"\" SUCC=\"%p\" PRED=\"%p\">", (void*) tmp, (void*) _idsl_node_get_succ (tmp), (void*) _idsl_node_get_pred (tmp));
+		}
+
+		if (write_f != NULL) {
+			write_f (_idsl_node_get_content (tmp), file, get_location (list, tmp), user_data);
+		}
+
+		fprintf (file, "</IDSL_LIST_NODE>\n");
+
+		tmp = _idsl_node_get_succ (tmp);
+	}
+
+	if (_idsl_node_get_content (list->z)) {
+		fprintf (file, "<IDSL_LIST_TAIL REF=\"%p\" CONTENT=\"%p\" SUCC=\"%p\" PRED=\"%p\"/>\n</IDSL_LIST>\n", (void*) list->z, (void*) _idsl_node_get_content (list->z), (void*)_idsl_node_get_succ (list->z), (void*)_idsl_node_get_pred (list->z));
+	} else {
+		fprintf (file, "<IDSL_LIST_TAIL REF=\"%p\" CONTENT=\"\" SUCC=\"%p\" PRED=\"%p\"/>\n<?IDSL_LIST>\n", (void*)list->z, (void*) _idsl_node_get_succ(list->z), (void*) _idsl_node_get_pred (list->z));
+	}
+}
+
+/******************************************/
+/* private func                           */
+/******************************************/
+
+static idsl_element_t
+default_alloc (void* e) {
+	return e;
+}
+
+static void
+default_free (idsl_element_t e) {
+	;
+}
+
+static _idsl_node_t 
+search_by_function (idsl_list_t l, idsl_compare_func_t comp_f, const void* value) {
+	_idsl_node_t left;
+	_idsl_node_t right;
+
+	left = _idsl_node_get_succ (l->d);
+	right = _idsl_node_get_pred (l->z);
+
+	while (left != _idsl_node_get_succ (right)) {
+		if (comp_f (idsl_node_get_content (left), (void*) value) == 0) {
+			return left;
+		}
+
+		if (left == right) {
+			return NULL;
+		}
+
+		if (comp_f (_idsl_node_get_content (right), (void*) value) == 0) {
+			return right;
+		}
+
+		left = _idsl_node_get_succ (left);
+		right = _idsl_node_get_pred (right);
+	}
+
+	return NULL;
+}
+
+static _idsl_node_t
+search_by_position (idsl_list_t l, ulong pos) {
+	ulong m;
+	_idsl_node_t tmp;
+
+	if (pos < 0 || pos > l->card) {
+		return NULL;
+	}
+
+	m = (l->card / 2) + 1;
+
+	if (pos < m) {
+		tmp = _idsl_node_get_succ (l->d);
+
+		while (pos > 1) {
+			tmp =_idsl_node_get_succ (tmp);
+			pos--;
+		}
+	} else {
+		pos = l->card - pos;
+		tmp = _idsl_node_get_pred (list->z);
+
+		while (pos > 0) {
+			tmp = idsl_node_get_pred (tmp);
+			pos--;
+		}
+	}
+
+	return tmp;
+}
+
+
+	
