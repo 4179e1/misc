@@ -1,4 +1,4 @@
-OBJ = main.o idsl_stack.o _idsl_bintree.o _idsl_bstree.o idsl_bstree.o _idsl_node.o _idsl_list.o idsl_list.o
+OBJ = main.o idsl_stack.o _idsl_bintree.o _idsl_bstree.o idsl_bstree.o _idsl_node.o _idsl_list.o idsl_list.o idsl_hash.o
 CC = gcc
 OPT = -Wall
 
@@ -19,6 +19,8 @@ _idsl_node.o: _idsl_node.c _idsl_node.h
 _idsl_list.o: _idsl_list.c _idsl_list.h
 	$(CC) -c $< -o $@ $(OPT)
 idsl_list.o: idsl_list.c idsl_list.h
+	$(CC) -c $< -o $@ $(OPT)
+idsl_hash.o: idsl_hash.c idsl_hash.h
 	$(CC) -c $< -o $@ $(OPT)
 
 clean:
