@@ -9,6 +9,9 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define MAXLINE 4096
 #define BUFFSIZE 8192
@@ -69,3 +72,11 @@ void str_cli (FILE* fp, int sockfd);
  */
 ssize_t Readn (int fd, void* ptr, size_t nbytes);
 void Writen (int fd, void* ptr, size_t nbytes);
+ssize_t Readline (int fd, void* ptr, size_t maxlen);
+
+
+/**
+ * signal
+ */
+typedef void Sigfunc(int);
+Sigfunc* Signal (int signo, Sigfunc* func);
