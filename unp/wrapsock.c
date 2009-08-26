@@ -50,6 +50,15 @@ Listen (int fd, int backlog) {
 	}
 }
 
+int Select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) {
+	int n;
+
+	if ((n = select (nfds, readfds, writefds, exceptfds, timeout)) < 0) {
+		err_sys ("select error");
+	}
+	return (n);
+}
+
 int
 Socket (int family, int type, int protocol) {
 	int n;
@@ -59,4 +68,9 @@ Socket (int family, int type, int protocol) {
 	return(n);
 }
 
-
+void
+Shutdown (int fd, int how) {
+	if (shutdown (fd, how) < 0) {
+		err_sys ("shutdown error");
+	}
+}

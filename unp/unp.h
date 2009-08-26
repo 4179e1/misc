@@ -20,6 +20,8 @@
 #define SERV_PORT 9877
 #define SERV_PORT_STR "9877"
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 /**
  * error
  */
@@ -36,7 +38,9 @@ int Accept (int fd, struct sockaddr *sa, socklen_t *salenptr);
 void Bind (int fd, const struct sockaddr *sa, socklen_t salen);
 void Connect (int fd, const struct sockaddr *sa, socklen_t salen);
 void Listen (int fd, int backlog);
+int Select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
 int Socket (int family, int type, int protocol);
+void Shutdown (int fd, int how);
 
 /**
  * wrapunix
