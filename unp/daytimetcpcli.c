@@ -8,11 +8,11 @@
 #define DEBUG
 #include "debug_macro.h"
 
-
 int main(int argc, char* argv[]) {
 	int sockfd, n;
+	socklen_t len;
 	char recvline[MAXLINE + 1];
-	struct sockaddr_in servaddr;
+	struct sockaddr_in servaddr, cliaddr;
 
 	if (argc != 2) {
 		err_quit ("USAGE: a.out <IPaddress>");
@@ -28,6 +28,11 @@ int main(int argc, char* argv[]) {
 	Inet_pton (AF_INET, argv[1], &servaddr.sin_addr);
 
 	Connect (sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr));
+
+	len = sizeof(cliaddr);
+	Getsockname (sockfd, (struct sockaddr*) &cliaddr, &len);
+
+	printf ("local addr: %s, port: %d\n", inet_ntop (AF_INET, (struct sockaddr*)&cliaddr.sin_addr, recvline, len), cliaddr.sin_port);
 
 	{
 		int count = 0;

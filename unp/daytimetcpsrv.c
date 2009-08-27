@@ -7,7 +7,8 @@
 
 int main(int argc, char* argv[]) {
 	int listenfd, connfd;
-	struct sockaddr_in servaddr;
+	socklen_t len;
+	struct sockaddr_in servaddr, cliaddr;
 	char buff[MAXLINE];
 	time_t ticks;
 
@@ -23,7 +24,10 @@ int main(int argc, char* argv[]) {
 	Listen (listenfd, LISTENQ);
 
 	for (;;) {
-		connfd = Accept (listenfd, (struct sockaddr*) NULL, NULL);
+		len = sizeof(cliaddr);
+		connfd = Accept (listenfd, (struct sockaddr*) &cliaddr, &len);
+		printf ("Connection from %s, port %d\n",
+				Inet_ntop (AF_INET, &cliaddr.sin_addr, buff, sizeof(buff)), ntohs (cliaddr.sin_port));
 		ticks = time(NULL);
 		snprintf (buff, sizeof(buff), "%.24s\r\n", ctime(&ticks));
 		{

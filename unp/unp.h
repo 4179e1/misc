@@ -37,6 +37,8 @@ void err_quit 	(const char* fmt, ...);
 int Accept (int fd, struct sockaddr *sa, socklen_t *salenptr);
 void Bind (int fd, const struct sockaddr *sa, socklen_t salen);
 void Connect (int fd, const struct sockaddr *sa, socklen_t salen);
+void Getpeername (int fd, struct sockaddr *sa, socklen_t *salenptr);
+void Getsockname (int fd, struct sockaddr *sa, socklen_t *salenptr);
 void Listen (int fd, int backlog);
 int Select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
 int Socket (int family, int type, int protocol);

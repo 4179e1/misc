@@ -37,6 +37,20 @@ Connect (int fd, const struct sockaddr *sa, socklen_t salen) {
 	}
 }
 
+void 
+Getpeername (int fd, struct sockaddr *sa, socklen_t *salenptr) {
+	if (getpeername (fd, sa, salenptr) < 0) {
+		err_sys("getpeername error");
+	}
+}
+
+void
+Getsockname (int fd, struct sockaddr *sa, socklen_t *salenptr) {
+	if (getsockname (fd, sa, salenptr) < 0) {
+		err_sys ("getsockname error");
+	}
+}
+
 void
 Listen (int fd, int backlog) {
 	char *ptr;
