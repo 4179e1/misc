@@ -1,4 +1,5 @@
 #include "unp.h"
+#define NODEBUG
 #include "debug_macro.h"
 
 void

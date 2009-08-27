@@ -1,10 +1,12 @@
 CC = gcc
-TAR = daytimetcpcli daytimetcpsrv tcpserv01 tcpcli tcpcli04
+TAR = daytimetcpcli daytimetcpsrv tcpserv01 tcpcli tcpcli04 tcpservselect01
 OBJ = error.o wraplib.o wrapsock.o wrapunix.o wrapstdio.o str.o rw.o signal.o
 OPT = -Wall
 
 all: $(TAR)
 
+tcpservselect01: tcpservselect01.c $(OBJ)
+	$(CC) $< $(OBJ) -o $@ $(OPT)
 tcpcli04: tcpcli04.c $(OBJ)
 	$(CC) $< $(OBJ) -o $@ $(OPT)
 tcpcli: tcpcli.c $(OBJ)
