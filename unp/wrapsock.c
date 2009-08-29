@@ -64,6 +64,16 @@ Listen (int fd, int backlog) {
 	}
 }
 
+int
+Poll (struct pollfd *fdarray, unsigned long nfds, int timeout) {
+	int n;
+	if ((n = poll (fdarray, nfds, timeout)) < 0) {
+		err_sys ("poll error");
+	}
+
+	return (n);
+}
+
 int Select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) {
 	int n;
 

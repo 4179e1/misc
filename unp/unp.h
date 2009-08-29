@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <poll.h>
 
 #define MAXLINE 4096
 #define BUFFSIZE 8192
@@ -40,6 +41,7 @@ void Connect (int fd, const struct sockaddr *sa, socklen_t salen);
 void Getpeername (int fd, struct sockaddr *sa, socklen_t *salenptr);
 void Getsockname (int fd, struct sockaddr *sa, socklen_t *salenptr);
 void Listen (int fd, int backlog);
+int Poll (struct pollfd *fdarray, unsigned long nfds, int timeout);
 int Select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
 int Socket (int family, int type, int protocol);
 void Shutdown (int fd, int how);
