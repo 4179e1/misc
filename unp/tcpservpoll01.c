@@ -18,7 +18,13 @@ main (int argc, char *argv[]) {
 
 	memset (&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
+
 	servaddr.sin_addr.s_addr = htonl (INADDR_ANY);
+#if 0
+	/* only 192.168.1.95 is accepted, 127.0.0.1 won't be accepted */
+	Inet_pton (AF_INET, "192.168.1.95", &servaddr.sin_addr);
+#endif
+
 	servaddr.sin_port = htons (SERV_PORT);
 
 	Bind (listenfd, (struct sockaddr *)&servaddr, sizeof (servaddr));
