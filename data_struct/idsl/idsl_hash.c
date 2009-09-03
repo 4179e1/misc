@@ -13,7 +13,7 @@
 struct hash_table {
 	char* 			name;
 	idsl_list_t*	lists;
-	unsigned short	list_count;
+	unsigned short	lists_count;
 	unsigned short	list_max_size;
 	idsl_key_func_t	key_func;
 	idsl_hash_func_t	hash_func;
@@ -70,12 +70,12 @@ idsl_hash (const char* key) {
 }
 
 idsl_hash_t
-idsl_hash_alloc (const char* name, idsl_alloc_func_t alloc_func, idsl_free_func_t free_func, idsl_key_func_t key_func, idsl_hash_func_t hash_func, unsigned initial_size) {
+idsl_hash_alloc (const char* name, idsl_alloc_func_t alloc_func, idsl_free_func_t free_func, idsl_key_func_t key_func, idsl_hash_func_t hash_func, unsigned short initial_size) {
 	unsigned short	i;
 	unsigned short	j;
 	idsl_hash_t	ht;
 
-	ht = (idsl_hash_t) malloc (sizeof (struct _hash_table));
+	ht = (idsl_hash_t) malloc (sizeof (struct hash_table));
 	if (ht == NULL) {
 		return NULL;
 	}
@@ -86,7 +86,7 @@ idsl_hash_alloc (const char* name, idsl_alloc_func_t alloc_func, idsl_free_func_
 		return NULL;
 	}
 
-	ht->lists_count (initial_size < 2) ? _IDSL_HASH_DEFAULT_HASH_SIZE : initial_size;
+	ht->lists_count = (initial_size < 2) ? _IDSL_HASH_DEFAULT_HASH_SIZE : initial_size;
 
 	ht->lists = (idsl_list_t*) malloc (ht->lists_count * sizeof (idsl_list_t));
 	if (ht->lists == NULL) {
@@ -96,7 +96,7 @@ idsl_hash_alloc (const char* name, idsl_alloc_func_t alloc_func, idsl_free_func_
 	}
 
 	for (i = 0; i < ht->lists_count; i++) {
-		ht->list[i] = idsl_list_alloc (NULL, NULL, NULL);
+		ht->lists[i] = idsl_list_alloc (NULL, NULL, NULL);
 		if (ht->lists[i] == NULL) {
 			for (j = 0; j < i; j++) {
 				idsl_list_free (ht->lists[j]);
@@ -107,17 +107,17 @@ idsl_hash_alloc (const char* name, idsl_alloc_func_t alloc_func, idsl_free_func_
 			}
 
 			free (ht->lists);
-			free (th);
+			free (ht);
 			return NULL;
 		}
 	}
 
-	ht->lists_max_size = 0;
+	ht->list_max_size = 0;
 
 	ht->key_func = key_func ? key_func : default_key;
-	ht->hash_func = hash_func ? hash_func : default_hash;
+	ht->hash_func = hash_func ? hash_func : idsl_hash;
 	ht->alloc_func = alloc_func ? alloc_func : default_alloc;
-	ht->free_func = free_func ? free_func : default_alloc;
+	ht->free_func = free_func ? free_func : default_free;
 
 	return ht;
 }
