@@ -40,10 +40,12 @@ void Bind (int fd, const struct sockaddr *sa, socklen_t salen);
 void Connect (int fd, const struct sockaddr *sa, socklen_t salen);
 void Getpeername (int fd, struct sockaddr *sa, socklen_t *salenptr);
 void Getsockname (int fd, struct sockaddr *sa, socklen_t *salenptr);
+void Getsockopt (int sockfd, int level, int optname, void *optval, socklen_t *optlen);
 void Listen (int fd, int backlog);
 int Poll (struct pollfd *fdarray, unsigned long nfds, int timeout);
 int Select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
 int Socket (int family, int type, int protocol);
+void Setsockopt (int sockfd, int level, int optname, void *optval, socklen_t optlen);
 void Shutdown (int fd, int how);
 
 /**

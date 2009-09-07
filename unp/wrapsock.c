@@ -52,6 +52,15 @@ Getsockname (int fd, struct sockaddr *sa, socklen_t *salenptr) {
 }
 
 void
+Getsockopt (int sockfd, int level, int optname, void *optval, socklen_t *optlen)
+{
+	if (getsockopt (sockfd, level, optname, optval, optlen) < 0)
+	{
+		err_sys ("getsockopt error");
+	}
+}
+
+void
 Listen (int fd, int backlog) {
 	char *ptr;
 
@@ -74,7 +83,8 @@ Poll (struct pollfd *fdarray, unsigned long nfds, int timeout) {
 	return (n);
 }
 
-int Select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) {
+int 
+Select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) {
 	int n;
 
 	if ((n = select (nfds, readfds, writefds, exceptfds, timeout)) < 0) {
@@ -90,6 +100,15 @@ Socket (int family, int type, int protocol) {
 	if ((n = socket (family, type, protocol)) < 0)
 		err_sys("socket error");
 	return(n);
+}
+
+void
+Setsockopt (int sockfd, int level, int optname, void *optval, socklen_t optlen)
+{
+	if (setsockopt (sockfd, level, optname, optval, optlen) < 0)
+	{
+		err_sys ("setsockopt error");
+	}
 }
 
 void

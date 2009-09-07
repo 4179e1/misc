@@ -19,5 +19,13 @@ int main (int argc, char* argv[]) {
 
 	str_cli (stdin, sockfd);
 
+	{
+		struct linger ling;
+		ling.l_onoff = 1;
+		ling.l_linger = 0;
+
+		Setsockopt (sockfd, SOL_SOCKET, SO_LINGER, (void *)&ling, sizeof (ling));
+	}
+
 	exit(0);
 }

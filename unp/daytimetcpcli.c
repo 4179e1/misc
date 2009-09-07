@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <netinet/tcp.h>
 
 #include "unp.h"
 
@@ -9,8 +10,8 @@
 #include "debug_macro.h"
 
 int main(int argc, char* argv[]) {
-	int sockfd, n;
-	socklen_t len;
+	int sockfd, n, rcvbuf, mss;
+	socklen_t len, optlen;
 	char recvline[MAXLINE + 1];
 	struct sockaddr_in servaddr, cliaddr;
 
@@ -27,7 +28,23 @@ int main(int argc, char* argv[]) {
 
 	Inet_pton (AF_INET, argv[1], &servaddr.sin_addr);
 
+	{
+		optlen = sizeof (rcvbuf);
+		Getsockopt (sockfd, SOL_SOCKET, SO_RCVBUF, (void *)&rcvbuf, &len);
+		optlen = sizeof (mss);
+		Getsockopt (sockfd, IPPROTO_TCP, TCP_MAXSEG, (void *)&mss, &len);
+		printf ("Before connect, SO_RCVBUf = %d, TCP_MAXSEG = %d\n", rcvbuf, mss);
+	}
+
 	Connect (sockfd, (struct sockaddr *) &servaddr, sizeof(servaddr));
+
+	{
+		optlen = sizeof (rcvbuf);
+		Getsockopt (sockfd, SOL_SOCKET, SO_RCVBUF, (void *)&rcvbuf, &len);
+		optlen = sizeof (mss);
+		Getsockopt (sockfd, IPPROTO_TCP, TCP_MAXSEG, (void *)&mss, &len);
+		printf ("After connect, SO_RCVBUf = %d, TCP_MAXSEG = %d\n", rcvbuf, mss);
+	}
 
 	len = sizeof(cliaddr);
 	Getsockname (sockfd, (struct sockaddr*) &cliaddr, &len);
