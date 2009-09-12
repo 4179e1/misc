@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iterator>
+
 using namespace std;
 
 template <typename iteratortype>
@@ -31,13 +33,13 @@ int main (void)
 	vector<int> ivec(ia, ia + elem_size);
 
 	int ia2[elem_size];
-	vector<int> ivec2 (elem_size);
+	vector<int> ivec2;
 
 	cout << "filtering integer array for values less than 8\n";
 	filter (ia, ia + elem_size, ia2, elem_size, less<int>());
 
 	cout << "filtering integer array for values greater than 8\n";
-	filter (ivec.begin(), ivec.end(), ivec2.begin(), elem_size, greater<int>());
+	filter (ivec.begin(), ivec.end(), back_inserter(ivec2), elem_size, greater<int>());
 
 	map (ivec2.begin(), ivec2.end());
 
