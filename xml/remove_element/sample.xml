@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<story>
+  
+  <body>
+    <headline>This is the headline</headline>
+    <para>This is the body text.</para>
+  </body>
+</story>

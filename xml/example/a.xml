@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <node1>content of node1</node1>
+  <node3 attribute="yes">node has attributes</node3>
+  <node4>other way to create content</node4>
+</root>
