@@ -10,6 +10,7 @@ class Matrix
 		Matrix(const Matrix &rhs);
 		Matrix& copy(const Matrix &rhs);
 		~Matrix();
+		Matrix& operator=(const Matrix &rhs);
 	private:
 		int _row, _col;
 		double *_pmat;
@@ -57,12 +58,38 @@ Matrix::copy (const Matrix &rhs)
 	return *this;
 }
 
+Matrix&
+Matrix::operator=(const Matrix &rhs)
+{
+	if (this != &rhs)
+	{
+		_row = rhs._row;
+		_col = rhs._col;
+		int elem_cnt = _row * _col;
+
+		delete [] _pmat;
+		_pmat = new double[elem_cnt];
+
+		for (int ix = 0; ix < elem_cnt; ++ix)
+		{
+			_pmat[ix] = rhs._pmat[ix];
+		}
+
+	}
+
+	return *this;
+}
+
 int main(void) {
 	Matrix mat1;
 	Matrix mat2(4, 4);
 
 	{
 		Matrix mat3 = mat2;
+	}
+
+	{
+		Matrix mat4(mat2);
 	}
 
 	return 0;
