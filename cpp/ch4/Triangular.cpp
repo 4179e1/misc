@@ -28,8 +28,12 @@ class Triangular
 		Triangular(int len, int beg_pos);
 		int length() const {return _length;}
 		int beg_pos() const {return _beg_pos;}
+		int length(int val) {_length = val;}
+		int beg_pos(int val) {_beg_pos = val;}
 		int elem(int pos) const;
 		Triangular& copy (const Triangular &rhs);
+
+		void display (int length, int beg_pos, ostream &os) const;
 
 		bool next(int &val) const;
 		void next_reset() {_next = _beg_pos -1;}
@@ -59,6 +63,29 @@ class Triangular
 
 
 vector<int> Triangular::_elems;
+
+ostream& operator<<(ostream &os, const Triangular &rhs)
+{
+	os << "( " << rhs.beg_pos() << ", "
+		<< rhs.length() << " )";
+
+	rhs.display(rhs.length(), rhs.beg_pos(), os);
+	return os;
+}
+
+istream& operator>>(istream &is, Triangular &rhs)
+{
+	char ch1, ch2;
+	int bp, len;
+
+	is >> ch1 >> bp >> ch2 >> len;
+
+	rhs.beg_pos (bp);
+	rhs.length (len);
+	rhs.next_reset();
+
+	return is;
+}
 
 Triangular::Triangular()
 {
@@ -171,10 +198,34 @@ Triangular::gen_elements (int length)
 	}
 }
 
+
 inline bool
 Triangular_iterator::operator==(const Triangular_iterator &rhs) const
 {
 	return _index == rhs._index;
+}
+
+void
+Triangular::display (int length, int beg_pos, ostream &os) const
+{
+	if (length <= 0 || beg_pos <= 0)
+	{
+		cerr << "invalid parameters -- unable to fulfill request: "
+			<< length << ", " << beg_pos << endl;
+		return;
+	}
+
+	int elems = beg_pos + length - 1;
+
+	if (_elems.size() < elems)
+	{
+		gen_elements (elems);
+	}
+
+	for (int ix = beg_pos - 1; ix < elems; ++ix)
+	{
+		os << _elems[ix] << ' ';
+	}
 }
 
 inline bool
@@ -265,9 +316,20 @@ void prog2(void)
 	cout << endl;
 }
 
+void prog3(void)
+{
+	Triangular tri (6, 3);
+	cout << tri << '\n';
+
+	Triangular tri2;
+	cin >> tri2;
+	cout << tri2;
+}
+
 int main(void)
 {
 	//prog1();
-	prog2();
+	//prog2();
+	prog3();
 	return 0;
 }
