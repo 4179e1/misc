@@ -1,0 +1,35 @@
+class A{
+	virtual void print();
+};
+
+class B: public A{
+	virtual void print();
+};
+
+class C: public B{
+	virtual void print();
+};
+
+void func(A& a)
+{
+	a.print();
+}
+
+void func2(B& b)
+{
+	b.print();
+}
+
+void prog()
+{
+	A a;
+	B b;
+	C c;
+
+	func(a);	//A.print()
+	func(b);	//B.print()
+	func(c);	//C.print()
+
+	func2(b);	//B.print()
+	func2(c);	//C.print()
+}
