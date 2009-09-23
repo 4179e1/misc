@@ -9,7 +9,7 @@ class num_sequence
 		num_sequence(){}
 		virtual ~num_sequence(){}
 		virtual int elem (int pos)const = 0;
-		virtual const char *what_am_i()const;
+		virtual const char *what_am_i()const = 0;
 		virtual ostream &print(ostream &os = cout) const = 0;
 		static int max_elems() {return _max_elems;}
 	protected:
