@@ -1,3 +1,4 @@
+/* replace a .h file to .c file, delete ';' and add "{}" */
 #include <stdio.h>
 #include <stdlib.h>
 

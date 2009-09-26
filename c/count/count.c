@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 {
 	int num ;
 	int count;
+	int fileno = 0;
 	int totle = 0;
 
 	if (argc < 2)
@@ -40,14 +41,12 @@ int main(int argc, char *argv[])
 	{
 		count = get_rows(argv[num]);
 
-		if (count > 0)
-		{
-			printf ("%d\t%s\n", count, argv[num]);
-			totle += count;
-		}
+		printf ("%d\t%s\n", count, argv[num]);
+		totle += count;
+		fileno ++;
 	}
 
-	printf("\n%d\tlines totle\n", totle);
+	printf("\n%d lines totle in %d files, average %d lines in a file\n", totle, fileno, (totle / fileno));
 
 	return 0;
 }
