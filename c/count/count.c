@@ -19,6 +19,12 @@ int get_rows (const char *filename)
 			count++;
 	}
 
+	if (fclose (fp) != 0)
+	{
+		fprintf (stderr, "fclose() fail\n");
+		return -1;
+	}
+
 	return count;
 }
 
