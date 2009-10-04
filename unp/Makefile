@@ -1,9 +1,13 @@
 CC = gcc
-TAR = daytimetcpcli daytimetcpsrv tcpserv01 tcpcli tcpcli04 tcpservselect01 tcpservpoll01 checkopts
+TAR = daytimetcpcli daytimetcpsrv tcpserv01 tcpcli tcpcli04 tcpservselect01 tcpservpoll01 checkopts udpserv01 udpcli01
 OBJ = error.o wraplib.o wrapsock.o wrapunix.o wrapstdio.o str.o rw.o signal.o
 OPT = -Wall
 
 all: $(TAR)
+udpcli01: udpcli01.c $(OBJ)
+	$(CC) $< $(OBJ) -o $@ $(OPT)
+udpserv01: udpserv01.c $(OBJ)
+	$(CC) $< $(OBJ) -o $@ $(OPT)
 checkopts: checkopts.c $(OBJ)
 	$(CC) $< $(OBJ) -o $@ $(OPT)
 tcpservpoll01: tcpservpoll01.c $(OBJ)
