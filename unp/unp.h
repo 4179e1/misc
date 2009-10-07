@@ -54,6 +54,7 @@ void Shutdown (int fd, int how);
  * wrapunix
  */
 void Close (int fd);
+void *Malloc (size_t);
 int Open (const char* pathname, int oflag, mode_t mode);
 ssize_t Read (int fd, void* ptr, size_t nbytes);
 void Write (int fd, void* ptr, size_t nbytes);
@@ -92,3 +93,8 @@ ssize_t Readline (int fd, void* ptr, size_t maxlen);
  */
 typedef void Sigfunc(int);
 Sigfunc* Signal (int signo, Sigfunc* func);
+
+/**
+ * sock
+ */
+char *Sock_ntop (const struct sockaddr *sa, socklen_t salen);

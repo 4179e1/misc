@@ -10,6 +10,17 @@ Close (int fd) {
 	}
 }
 
+void *
+Malloc(size_t size)
+{
+	void *ptr;
+
+	if ((ptr = malloc(size)) == NULL)
+		err_sys ("malloc error");
+	
+	return (ptr);
+}
+
 int
 Open (const char* pathname, int oflag, mode_t mode) {
 	int fd;
@@ -38,3 +49,4 @@ Write (int fd, void* ptr, size_t nbytes) {
 		err_sys("write error");
 	}
 }
+
