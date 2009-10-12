@@ -1,5 +1,7 @@
 #include "wppath.h"
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef PATH_MAX
 static int pathmax = PATH_MAX;
@@ -7,7 +9,7 @@ static int pathmax = PATH_MAX;
 static int pathmax = 0;
 #endif /* PATH_MAX */
 
-#define SUV3 200112L
+#define SUSV3 200112L
 
 #define PATH_MAX_GUESS	1024
 
@@ -36,7 +38,7 @@ int wp_get_path_max(void)
 	}
 
 	if (posix_version < SUSV3)
-		sie = pathmax + 1;
+		size = pathmax + 1;
 	else 
 		size = pathmax;
 
