@@ -1,5 +1,5 @@
 TAR = idvc
-OBJ = main.o idvc.o
+OBJ = main.o idvc.o idvc_list.o
 
 CC = gcc
 OPT = -Wall
@@ -11,6 +11,8 @@ $(TAR): $(OBJ)
 main.o: main.c
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 idvc.o: idvc.c
+	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
+idvc_list.o: idvc_list.c
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 
 clean:
