@@ -5,8 +5,15 @@
 struct _idve
 {
 	GtkWidget *window;
+
 	GtkWidget *list;
+	GtkListStore *liststore;
+
+	GtkWidget *sidebar;
+	gboolean sidebar_is_shown;
+
 	GtkWidget *statusbar;
+	gboolean statusbar_is_shown;
 	gint statusbar_context_id;
 };
 
@@ -18,8 +25,15 @@ Idve *idve_new (void)
 
 	idve = g_slice_new (Idve);
 	idve->window = NULL;
+
 	idve->list = NULL;
+	idve->liststore = NULL;
+
+	idve->sidebar = NULL;
+	idve->sidebar_is_shown = TRUE;
+
 	idve->statusbar = NULL;
+	idve->statusbar_is_shown = TRUE;
 
 	return idve;
 }
@@ -56,6 +70,57 @@ GtkWidget *idve_get_list (Idve *idve)
 	return idve->list;
 }
 
+/* liststore */
+void idve_set_liststore (Idve *idve, GtkListStore *liststore)
+{
+	idve->liststore = liststore;
+}
+
+GtkListStore *idve_get_liststore (Idve *idve)
+{
+	return idve->liststore;
+}
+
+void idve_liststore_insert (Idve *idve, const gchar *str)
+{
+	GtkTreeIter iter;
+
+	gtk_list_store_append (idve->liststore, &iter);
+	gtk_list_store_set (idve->liststore, &iter,
+			0, str,
+			-1);
+}
+
+void idve_liststore_clear (Idve *idve)
+{
+	gtk_list_store_clear (idve->liststore);
+}
+
+/* sidebar */
+void idve_set_sidebar (Idve *idve, GtkWidget *sidebar)
+{
+	idve->sidebar = sidebar;
+}
+
+GtkWidget *idve_get_sidebar (Idve *idve)
+{
+	return idve->sidebar;
+}
+
+void idve_sidebar_toggle (Idve *idve)
+{
+	if (idve->sidebar_is_shown)
+	{
+		gtk_widget_hide (idve->sidebar);
+		idve->sidebar_is_shown = FALSE;
+	}
+	else
+	{
+		gtk_widget_show (idve->sidebar);
+		idve->sidebar_is_shown = TRUE;
+	}
+}
+
 /* statusbar */
 void idve_set_statusbar (Idve *idve, GtkWidget *statusbar)
 {
@@ -89,15 +154,16 @@ void idve_statusbar_message (Idve *idve, const char *fmt, ...)
 	g_free (msg);
 }
 
-
-GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name)
+void idve_statusbar_toggle (Idve *idve)
 {
-	GObject *obj;
-
-	if ((obj = gtk_builder_get_object (builder, name)) == NULL)
+	if (idve->statusbar_is_shown)
 	{
-		g_warning ("gtk_builder_get_object: %s failed!", name);
+		gtk_widget_hide (idve->statusbar);
+		idve->statusbar_is_shown = FALSE;
 	}
-
-	return obj;
+	else
+	{
+		gtk_widget_show (idve->statusbar);
+		idve->statusbar_is_shown = TRUE;
+	}
 }

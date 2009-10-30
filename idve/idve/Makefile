@@ -1,5 +1,5 @@
 TAR = idve
-OBJ = main.o idve.o
+OBJ = main.o idve.o callback.o
 
 CC = gcc
 OPT = -DG_LOG_DOMAIN=\"IDV_Editor\" -Wall -g
@@ -12,6 +12,8 @@ $(TAR): $(OBJ) $(DEP)
 main.o: main.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 idve.o: idve.c $(DEP)
+	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
+callback.o: callback.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 
 clean:
