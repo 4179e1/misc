@@ -25,6 +25,28 @@ void on_liststore_insert (gpointer *widget, Idve *idve)
 	}
 }
 
+G_MODULE_EXPORT
+void on_liststore_open (gpointer *widget, Idve *idve)
+{
+	GSList *pathlist;
+
+	pathlist = get_path (GTK_WINDOW (idve_get_window (idve)),
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+	if (pathlist != NULL)
+	{
+		GSList *ptr = pathlist;
+		while (ptr != NULL)
+		{
+			idve_liststore_insert (idve, (gchar *)ptr->data);
+			/* TODO: list all files by recursion */
+			g_free (ptr->data);
+			ptr = g_slist_next (ptr);
+		}
+		g_slist_free (pathlist);
+	}
+}
+
 G_MODULE_EXPORT 
 void on_liststore_clear (gpointer *widget, Idve *idve)
 {
