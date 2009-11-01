@@ -14,7 +14,8 @@ int *selection_sort (int *array, int len)
 	int i, j; 
 	int *min;
 	
-	for (i = 0; i < len; i++)
+	/* Not necessary to check the last element */
+	for (i = 0; i < len - 1; i++)
 	{
 		min = &array[i];
 		for(j = i; (j < len); j++)
