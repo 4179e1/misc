@@ -27,4 +27,6 @@ int *selection_sort (int *array, int len)
 		}
 		swap (&array[i], min);
 	}
+
+	return array;
 }

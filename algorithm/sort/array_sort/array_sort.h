@@ -37,4 +37,6 @@ int *insert_sort (int *array, int len);
  */
 int *selection_sort (int *array, int len);
 
+int *merge_sort (int *array, int p, int r);
+
 #endif /* _SORT_H */
