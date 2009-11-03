@@ -58,6 +58,7 @@ static GtkWidget* create_view_and_model (void) {
 	GtkWidget *view;
 
 	view = gtk_tree_view_new ();
+	gtk_tree_view_set_rubber_banding (GTK_TREE_VIEW (view), TRUE);
 
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),

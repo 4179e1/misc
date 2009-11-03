@@ -81,6 +81,11 @@ GtkListStore *idve_get_liststore (Idve *idve)
 	return idve->liststore;
 }
 
+GtkListStore **idve_get_liststore_ref (Idve *idve)
+{
+	return &(idve->liststore);
+}
+
 void idve_liststore_insert (Idve *idve, const gchar *str)
 {
 	GtkTreeIter iter;

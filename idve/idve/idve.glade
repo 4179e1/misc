@@ -54,6 +54,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_liststore_delete"/>
                       </object>
                     </child>
                     <child>
@@ -219,6 +220,7 @@
                 <property name="tooltip_text" translatable="yes">Remove the selected file from list</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-remove</property>
+                <signal name="clicked" handler="on_liststore_delete"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -263,6 +265,20 @@
             <child>
               <object class="GtkSeparatorToolItem" id="bt_sep2">
                 <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="bt_sidebar">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Side Bar</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-goto-first</property>
+                <property name="active">True</property>
+                <signal name="toggled" handler="on_sidebar_toggle"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -349,6 +365,8 @@
                     <property name="reorderable">True</property>
                     <property name="rules_hint">True</property>
                     <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <property name="rubber_banding">True</property>
                     <property name="tooltip_column">0</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="path_col">

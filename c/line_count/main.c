@@ -9,7 +9,7 @@
 
 #define MAXLINE 1024
 
-static char fullpath[MAXLINE];
+static char fullpath_line[MAXLINE];
 static int files = 0;
 static int rows = 0;
 
@@ -65,7 +65,7 @@ static bool identify (const char *path){
 	return false;
 }
 
-static void listfile (const char* path)
+static void listfile (char* fullpath)
 {
 	struct stat statbuf;
 	struct dirent *dir;
@@ -74,7 +74,7 @@ static void listfile (const char* path)
 	int len;
 
 
-	if (lstat(path, &statbuf) < 0)
+	if (lstat(fullpath, &statbuf) < 0)
 	{
 		fprintf (stderr, "lstat() error\n");
 		return;
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 
 	strcpy (fullpath, argv[1]);
 
-	listfile(fullpath);
+	listfile(fullpath_line);
 
 	printf ("\n%d lines in %d files, average %d linse in a file\n",
 			rows, files, (files == 0 ? 0 : (rows/files)));

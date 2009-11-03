@@ -2,7 +2,16 @@
 #include "idve.h"
 #include "callback.h"
 
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <string.h>
+
+/* the same as linux */
+#define IDVE_PATH_LEN 4096
+
 static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action);
+static void listfile (Idve *idve, char* path);
 
 G_MODULE_EXPORT 
 void on_liststore_insert (gpointer *widget, Idve *idve)
@@ -26,10 +35,59 @@ void on_liststore_insert (gpointer *widget, Idve *idve)
 }
 
 G_MODULE_EXPORT
+void on_liststore_delete (gpointer *widget, Idve *idve)
+{
+	GtkTreeSelection *selection;
+	GList *list;
+	GList *ref_list = NULL;
+	GList *ptr;
+	GtkTreeRowReference *ref;
+	GtkTreeModel *model;
+
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (idve_get_list (idve)));
+	
+	list = gtk_tree_selection_get_selected_rows (selection, 
+			(GtkTreeModel **)idve_get_liststore_ref (idve));
+
+	/* convert GtkTreePath to GtkTreeRowReference */
+	model = GTK_TREE_MODEL (idve_get_liststore (idve));
+	for (ptr = list; ptr != NULL; ptr = g_list_next (ptr))
+	{
+		ref = gtk_tree_row_reference_new (model, (GtkTreePath *)ptr->data);
+		ref_list = g_list_prepend (ref_list, ref);
+		gtk_tree_path_free (ptr->data);
+	}
+
+	for (ptr = ref_list; ptr != NULL; ptr = g_list_next (ptr))
+	{
+		GtkTreePath *path;
+		path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)ptr->data);
+
+		if (path)
+		{
+			GtkTreeIter iter;
+
+			if (gtk_tree_model_get_iter (model, &iter, path))
+			{
+				gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+			}
+		}
+		gtk_tree_row_reference_free (ptr->data);
+	}
+	
+	g_list_free (ref_list);
+	g_list_free (list);
+}
+
+G_MODULE_EXPORT
 void on_liststore_open (gpointer *widget, Idve *idve)
 {
 	GSList *pathlist;
+	gchar *path;
 
+
+	path = g_new (gchar, IDVE_PATH_LEN);
 	pathlist = get_path (GTK_WINDOW (idve_get_window (idve)),
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
@@ -38,13 +96,17 @@ void on_liststore_open (gpointer *widget, Idve *idve)
 		GSList *ptr = pathlist;
 		while (ptr != NULL)
 		{
-			idve_liststore_insert (idve, (gchar *)ptr->data);
+			//idve_liststore_insert (idve, (gchar *)ptr->data);
 			/* TODO: list all files by recursion */
+			strncpy (path, (gchar *)ptr->data, IDVE_PATH_LEN);
+			listfile (idve, path);
 			g_free (ptr->data);
 			ptr = g_slist_next (ptr);
 		}
 		g_slist_free (pathlist);
 	}
+
+	g_free (path);
 }
 
 G_MODULE_EXPORT 
@@ -94,4 +156,66 @@ static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action)
 
 	gtk_widget_destroy (chooser);
 	return pathlist;
+}
+
+/* linux system dependence, use Glib File Utilities instead */
+static void listfile (Idve *idve, char* path)
+{
+	struct stat statbuf;
+	struct dirent *dir;
+	DIR *dp;
+	char *ptr;
+	int len;
+
+
+	if (lstat(path, &statbuf) < 0)
+	{
+		fprintf (stderr, "lstat() error\n");
+		return;
+	}
+
+
+	len = strlen (path);
+	if (S_ISDIR(statbuf.st_mode) == 0)
+	{
+		/* FIXME: it assume the suffix in lowercase */
+		if ((len >= 4) && (strcmp (&path[len - 4], ".mp3") == 0))
+		{
+			idve_liststore_insert (idve, path);
+		}
+		return;
+	}
+
+	ptr = path + strlen(path);
+	*ptr++ = '/';
+	*ptr = 0;
+
+	//printf ("listing contents in \"%s\"\n", path);
+
+	if ((dp = opendir(path)) == NULL)
+	{
+		fprintf (stderr, "opendir(\"%s\") error\n", path);
+		return;
+	}
+
+	while ((dir = readdir(dp)) != NULL)
+	{
+		if(strcmp (dir->d_name, ".") == 0 || 
+		   strcmp (dir->d_name, "..") == 0)
+		{
+			continue;
+		}
+
+		strcpy (ptr, dir->d_name);
+		//printf ("%s\n", path);
+		listfile (idve, path);
+	}
+
+	ptr[-1] = 0;
+
+	if (closedir (dp) < 0)
+	{
+		fprintf (stderr, "can't close directory %s\n", path);
+		return;
+	}
 }

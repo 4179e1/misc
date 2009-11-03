@@ -17,6 +17,7 @@ GtkWidget *idve_get_list (Idve *idve);
 
 void idve_set_liststore (Idve *idve, GtkListStore *liststore);
 GtkListStore *idve_get_liststore (Idve *idve);
+GtkListStore **idve_get_liststore_ref (Idve *idve);
 void idve_liststore_insert (Idve *idve, const gchar *str);
 void idve_liststore_clear (Idve *idve);
 

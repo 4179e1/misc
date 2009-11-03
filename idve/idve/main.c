@@ -51,6 +51,10 @@ static gboolean init_app (Idve *idve)
 			GTK_WIDGET (Gtk_builder_get_object (builder, "window")));
 	idve_set_list (idve,
 			GTK_WIDGET (Gtk_builder_get_object (builder, "list")));
+	/* WTF the two lines are necessary to select multiple rows */
+	GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (idve_get_list (idve)));
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
 	idve_set_liststore (idve,
 			GTK_LIST_STORE (Gtk_builder_get_object (builder, "liststore")));
 	idve_set_sidebar (idve,
