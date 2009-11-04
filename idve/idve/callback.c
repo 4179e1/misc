@@ -3,8 +3,6 @@
 #include "callback.h"
 
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <dirent.h>
 #include <string.h>
 
 /* the same as linux */
@@ -96,9 +94,7 @@ void on_liststore_open (gpointer *widget, Idve *idve)
 		GSList *ptr = pathlist;
 		while (ptr != NULL)
 		{
-			//idve_liststore_insert (idve, (gchar *)ptr->data);
-			/* TODO: list all files by recursion */
-			strncpy (path, (gchar *)ptr->data, IDVE_PATH_LEN);
+			g_strlcpy (path, (gchar *)ptr->data, IDVE_PATH_LEN);
 			listfile (idve, path);
 			g_free (ptr->data);
 			ptr = g_slist_next (ptr);
@@ -158,64 +154,57 @@ static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action)
 	return pathlist;
 }
 
-/* linux system dependence, use Glib File Utilities instead */
-static void listfile (Idve *idve, char* path)
+/*
+ * with glib, it works on both linux & windows,
+ * but the path looks a bit strange on windows , it looks like:
+ * 		"E:\code\idve\test/a.MP3"
+ * windows use '\' as separator, but '/' still works.
+*/
+static void listfile (Idve *idve, gchar *path)
 {
-	struct stat statbuf;
-	struct dirent *dir;
-	DIR *dp;
-	char *ptr;
-	int len;
-
-
-	if (lstat(path, &statbuf) < 0)
-	{
-		fprintf (stderr, "lstat() error\n");
-		return;
-	}
-
+	GDir *dir;
+	gchar *ptr;
+	GError *error = NULL;
+	const gchar *name;
+	gint len;
 
 	len = strlen (path);
-	if (S_ISDIR(statbuf.st_mode) == 0)
+
+	/* 
+	 * test the path is a directory or not, 
+	 * there's something worng with stat() family on window,
+	 * we don't use it.
+	 */
+	if (!g_file_test (path, G_FILE_TEST_IS_DIR))
 	{
-		/* FIXME: it assume the suffix in lowercase */
-		if ((len >= 4) && (strcmp (&path[len - 4], ".mp3") == 0))
+		/* check the suffix, we only handle mp3 files, not case sensitive */
+		if ((len >= 4) && (g_ascii_strcasecmp (&path[len - 4], ".mp3") == 0))
 		{
 			idve_liststore_insert (idve, path);
 		}
 		return;
 	}
 
-	ptr = path + strlen(path);
+	ptr = path + len;
 	*ptr++ = '/';
 	*ptr = 0;
 
-	//printf ("listing contents in \"%s\"\n", path);
-
-	if ((dp = opendir(path)) == NULL)
+	dir = g_dir_open (path, 0, &error);
+	if (error != NULL)
 	{
-		fprintf (stderr, "opendir(\"%s\") error\n", path);
+		g_warning ("g_dir_open error");
+		g_warning ("%s\n", error->message);
+		g_free (error);
 		return;
 	}
 
-	while ((dir = readdir(dp)) != NULL)
+	while ((name = g_dir_read_name (dir)) != NULL)
 	{
-		if(strcmp (dir->d_name, ".") == 0 || 
-		   strcmp (dir->d_name, "..") == 0)
-		{
-			continue;
-		}
-
-		strcpy (ptr, dir->d_name);
-		//printf ("%s\n", path);
+		strcpy (ptr, name);
 		listfile (idve, path);
 	}
 
 	ptr[-1] = 0;
-
-	if (closedir (dp) < 0)
-	{
-		fprintf (stderr, "can't close directory %s\n", path);
-		return;
-	}
+	
+	g_dir_close (dir);
 }
