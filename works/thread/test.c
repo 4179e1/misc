@@ -2,7 +2,7 @@
 #include  <unistd.h>   
 #include <pthread.h>
 #include <stdlib.h>
-
+#include <Windows.h>
 int i;
 double value = 0.1;
 
@@ -16,13 +16,10 @@ gboolean timeout_callback (gpointer progressbar) {
 }
 
 static void *thread_function (void *progressbar) {
-//	int i;
 
 	a = 0;
 
 	gint timer;
-
-	timer = g_timeout_add (1000, timeout_callback, (gpointer)progressbar);
 
 
 //	double value = 0.1;
@@ -33,12 +30,10 @@ static void *thread_function (void *progressbar) {
 		}
 
 		g_print ("%d\n", i);
-//		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR (progressbar), value * i);
-//		gdk_flush ();
-//		sleep (1);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR (progressbar), value * i);
+		g_usleep (1000000);
 	}
 
-	g_source_remove (timer);
 
 	return ((void *) 0);
 }
@@ -71,6 +66,7 @@ int main (int argc, char *argv[]) {
 	GtkWidget *button_stop;
 	GtkWidget *progressbar;
 	
+	g_thread_init (NULL);
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
