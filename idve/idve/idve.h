@@ -31,4 +31,9 @@ void idve_statusbar_init (Idve *idve);
 void idve_statusbar_message (Idve *idve, const char *fmt, ...);
 void idve_statusbar_toggle (Idve *idve);
 
+gpointer idve_pointer_aquire (Idve *idve, gpointer data);
+gpointer idve_pointer_release (Idve *idve);
+gpointer idve_get_pointer (Idve *idve);
+gboolean idve_pointer_is_available (Idve *idve);
+
 #endif /* _IDVE_H */

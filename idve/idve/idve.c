@@ -15,6 +15,8 @@ struct _idve
 	GtkWidget *statusbar;
 	gboolean statusbar_is_shown;
 	gint statusbar_context_id;
+
+	gpointer pointer;
 };
 
 
@@ -34,6 +36,8 @@ Idve *idve_new (void)
 
 	idve->statusbar = NULL;
 	idve->statusbar_is_shown = TRUE;
+
+	idve->pointer = NULL;
 
 	return idve;
 }
@@ -171,4 +175,34 @@ void idve_statusbar_toggle (Idve *idve)
 		gtk_widget_show (idve->statusbar);
 		idve->statusbar_is_shown = TRUE;
 	}
+}
+
+/* pointer for some func only accept certain number of parmas, very ugly designs in fact */
+gpointer idve_pointer_aquire (Idve *idve, gpointer data)
+{
+	if (idve->pointer != NULL)
+	{
+		g_warning ("pointer not available now, try again later");
+		return NULL;
+	}
+
+	idve->pointer = data;
+	return idve->pointer;
+}
+
+gpointer idve_pointer_release (Idve *idve)
+{
+	gpointer tmp = idve->pointer;
+	idve->pointer = NULL;
+	return tmp;
+}
+
+gpointer idve_get_pointer (Idve *idve)
+{
+	return idve->pointer;
+}
+
+gboolean idve_pointer_is_available (Idve *idve)
+{
+	return (idve->pointer == NULL);
 }
