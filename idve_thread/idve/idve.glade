@@ -7,6 +7,17 @@
       <!-- column-name path -->
       <column type="gchararray"/>
     </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">/home/lyre/test.txt</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">adsfafda</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">zdafv</col>
+      </row>
+    </data>
   </object>
   <object class="GtkWindow" id="window">
     <property name="default_width">599</property>
@@ -262,7 +273,7 @@
             </child>
             <child>
               <object class="GtkToggleToolButton" id="bt_sidebar">
-                <property name="tooltip_text" translatable="yes">hide it for some programming problem</property>
+                <property name="visible">True</property>
                 <property name="label" translatable="yes">Side Bar</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-goto-first</property>

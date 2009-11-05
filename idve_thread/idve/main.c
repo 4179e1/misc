@@ -10,10 +10,16 @@ int main (int argc, char *argv[])
 	Idve *idve;
 	GtkBuilder *builder;
 
+	if (!g_thread_supported ())
+	{
+		g_thread_init (NULL);
+	}
+	gdk_threads_init ();
+	gdk_threads_enter ();
+
 	gtk_init (&argc, &argv);
 
 	builder = gtk_builder_new ();
-
 	idve = idve_new ();
 
 	if (!init_app (idve))
@@ -25,6 +31,8 @@ int main (int argc, char *argv[])
 	idve_window_show (idve);
 
 	gtk_main ();
+
+	gdk_threads_leave ();
 
 	idve_free (idve);
 
@@ -63,6 +71,11 @@ static gboolean init_app (Idve *idve)
 			GTK_WIDGET (Gtk_builder_get_object (builder, "statusbar")));
 	idve_statusbar_init (idve);
 	idve_statusbar_message (idve, "IDV Editor Ready!");
+
+#if 1 /* testing code */
+	idve_liststore_insert (idve, "abc");
+	idve_liststore_insert (idve, "def");
+#endif
 
 	gtk_builder_connect_signals (builder, idve);
 
