@@ -21,6 +21,11 @@ int main (void)
 	merge_sort (array3, 0, ARRAY_LEN(array3) - 1);
 	print_array (array3, ARRAY_LEN(array3));
 
+	int array4[] = {5, 2, 4, 6, 1, 3};
+	printf ("Bubble sort\n");
+	bubble_sort (array4, ARRAY_LEN(array4));
+	print_array (array4, ARRAY_LEN(array4));
+
 	return 0;
 }
 

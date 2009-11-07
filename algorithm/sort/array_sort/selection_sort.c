@@ -1,14 +1,17 @@
 #include <stdio.h>
 #include "array_sort.h"
 
-static void swap (int *a, int *b)
-{
-	int tmp;
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
+/**
+ * @brief Selection Sort for array.
+ *
+ * select the minium card from the unsorted cards in right hand,
+ * insert it into the end of the sorted cards in left hand.
+ *
+ * @note Complexity: O(n^2).
+ * @parma array The array need to be sort.
+ * @parma len Length of array.
+ * @return The sorted array.
+ */
 int *selection_sort (int *array, int len)
 {
 	int i, j; 

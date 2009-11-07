@@ -7,12 +7,12 @@
 #define MERGE_SORT_SENTINEL 0x7fffffff
 
 /** 
- * @brief Merge two sorted sub-squence
+ * @brief Merge two sorted sub-sequences
  *
  * @param array The input array
- * @param p 
- * @param q
- * @param r
+ * @param p Beginning index number of array.
+ * @param q Endding index number of array.
+ * @param r	Middle index number of array, end of the first sub-sequence.
  * @note Attention: p <= q < r
  */
 static void merge (int *array, int p, int q, int r)
@@ -56,6 +56,21 @@ static void merge (int *array, int p, int q, int r)
 		}
 	}
 }
+
+/**
+ * @brief Merge sort for array
+ *
+ * Divide: Divede the n-element sequence to be sorted into two subsequences
+ * of n/2 elements each.
+ * Conquer: Sort the two subsequences recursively using merge sort.
+ * Combine: Merger the two sorted subsequences to produce the sorted answer.
+ *
+ * @note Complexity O( n*lg(n) )
+ * @parma array The array need to be sort
+ * @parma p Beginning index number of array
+ * @parma r Ending index number of array
+ * @return The sorted array.
+ */
 
 int *merge_sort (int *array, int p, int r)
 {
