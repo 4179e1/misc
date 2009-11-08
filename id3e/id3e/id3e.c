@@ -1,6 +1,5 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
-#include "callback.h"
 
 /* struct for id3e, passed as the argument to all callback func  */
 struct _id3e
@@ -164,7 +163,11 @@ GtkWidget *id3e_get_statusbar (Id3e *id3e)
 
 void id3e_statusbar_init (Id3e *id3e)
 {
-	id3e->statusbar_context_id = gtk_statusbar_get_context_id (GTK_STATUSBAR (id3e->statusbar), "ID3 Editor Ready!");
+	char *msg = "ID3 Editor Ready!";
+	id3e->statusbar_context_id = gtk_statusbar_get_context_id (GTK_STATUSBAR (id3e->statusbar), msg);
+	gtk_statusbar_push (GTK_STATUSBAR (id3e->statusbar), id3e->statusbar_context_id, msg);
+	id3e->statusbar_context_id = gtk_statusbar_get_context_id (GTK_STATUSBAR (id3e->statusbar), msg);
+	gtk_statusbar_push (GTK_STATUSBAR (id3e->statusbar), id3e->statusbar_context_id, msg);
 }
 
 void id3e_statusbar_message (Id3e *id3e, const char *fmt, ...)

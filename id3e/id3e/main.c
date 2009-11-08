@@ -18,6 +18,7 @@ int main (int argc, char *argv[])
 
 	if (!init_app (id3e))
 	{
+		g_print ("init_app failed\n");
 		id3e_free (id3e);
 		return (1);
 	}
@@ -61,7 +62,6 @@ static gboolean init_app (Id3e *id3e)
 	id3e_set_statusbar (id3e,
 			GTK_WIDGET (Gtk_builder_get_object (builder, "statusbar")));
 	id3e_statusbar_init (id3e);
-	id3e_statusbar_message (id3e, "IDV Editor Ready!");
 
 	gtk_builder_connect_signals (builder, id3e);
 
