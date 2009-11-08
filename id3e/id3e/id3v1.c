@@ -9,13 +9,17 @@ struct _id3v1
 	gchar album[ID3V1_ALBUM_LEN];
 	gchar year[ID3V1_YEAR_LEN];
 	gchar comment[ID3V1_COMMENT_LEN];
-	ghcar comment;
+	gchar padding;
+	gchar track;
 	gchar gener;
-}
+};
 
 Id3v1 *id3v1_new (void)
 {
-	return g_new (sturct _id3v1);
+	Id3v1 *tag;
+	tag =  g_new0 (Id3v1, 1);
+
+	return tag;
 }
 
 void id3v1_free (Id3v1 *id3v1)

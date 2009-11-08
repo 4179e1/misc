@@ -13,8 +13,7 @@ typedef struct _id3v1 Id3v1;
 #define ID3V1_ARTIST_LEN 30
 #define ID3V1_ALBUM_LEN 30
 #define ID3V1_YEAR_LEN 30
-/* in fact 28, but the last byte shoule always be 0 */
-#define ID3V1_COMMENT_LEN 29
+#define ID3V1_COMMENT_LEN 28
 #define ID3V1_TRACK_LEN 1
 #define ID3V1_GENRE_LEN 1
 
