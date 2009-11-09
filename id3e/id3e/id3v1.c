@@ -18,7 +18,7 @@ Id3v1 *id3v1_new (void)
 {
 	Id3v1 *tag;
 	tag =  g_new0 (Id3v1, 1);
-
+	snprintf (tag->tag, ID3V1_TAG_LEN, ID3V1_TAG);
 	return tag;
 }
 
