@@ -12,7 +12,7 @@ static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action);
 static void listfile (Id3e *id3e, char* path);
 
 G_MODULE_EXPORT 
-void on_liststore_insert (gpointer *widget, Id3e *id3e)
+void on_list_insert (gpointer *widget, Id3e *id3e)
 {
 	GSList *pathlist;
 
@@ -24,7 +24,7 @@ void on_liststore_insert (gpointer *widget, Id3e *id3e)
 		GSList *ptr = pathlist;
 		while (ptr != NULL)
 		{
-			id3e_liststore_insert (id3e, (gchar *)ptr->data);
+			id3e_list_insert (id3e, (gchar *)ptr->data);
 			g_free (ptr->data);
 			ptr = g_slist_next (ptr);
 		}
@@ -33,23 +33,23 @@ void on_liststore_insert (gpointer *widget, Id3e *id3e)
 }
 
 G_MODULE_EXPORT
-void on_liststore_delete (gpointer *widget, Id3e *id3e)
+void on_list_delete (gpointer *widget, Id3e *id3e)
 {
 	GtkTreeSelection *selection;
 	GList *list;
 	GList *ref_list = NULL;
 	GList *ptr;
 	GtkTreeRowReference *ref;
-	GtkTreeModel *model;
+	GtkTreeModel *model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e_get_list (id3e)));
 	
 	list = gtk_tree_selection_get_selected_rows (selection, 
-			(GtkTreeModel **)id3e_get_liststore_ref (id3e));
+			&model);
 
 	/* convert GtkTreePath to GtkTreeRowReference */
-	model = GTK_TREE_MODEL (id3e_get_liststore (id3e));
+	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 	for (ptr = list; ptr != NULL; ptr = g_list_next (ptr))
 	{
 		ref = gtk_tree_row_reference_new (model, (GtkTreePath *)ptr->data);
@@ -79,7 +79,7 @@ void on_liststore_delete (gpointer *widget, Id3e *id3e)
 }
 
 G_MODULE_EXPORT
-void on_liststore_open (gpointer *widget, Id3e *id3e)
+void on_list_open (gpointer *widget, Id3e *id3e)
 {
 	GSList *pathlist;
 	gchar *path;
@@ -106,9 +106,12 @@ void on_liststore_open (gpointer *widget, Id3e *id3e)
 }
 
 G_MODULE_EXPORT 
-void on_liststore_clear (gpointer *widget, Id3e *id3e)
+void on_list_clear (gpointer *widget, Id3e *id3e)
 {
-	id3e_liststore_clear (id3e);
+	GtkListStore *liststore;
+
+	liststore = id3e_get_list_store (id3e);
+	gtk_list_store_clear (liststore);
 }
 
 
@@ -129,7 +132,7 @@ gboolean on_query_tooltip (GtkWidget *widget, gint x, gint y, gboolean keyboard_
 {
 	GtkTreeIter iter;
 	GtkTreeView *view = GTK_TREE_VIEW (widget);
-	GtkTreeModel *model = GTK_TREE_MODEL (id3e_get_liststore (id3e));
+	GtkTreeModel *model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 	GtkTreePath *treepath = NULL;
 	gchar *path;
 
@@ -211,7 +214,7 @@ static void listfile (Id3e *id3e, gchar *path)
 		/* check the suffix, we only handle mp3 files, not case sensitive */
 		if ((len >= 4) && (g_ascii_strcasecmp (&path[len - 4], ".mp3") == 0))
 		{
-			id3e_liststore_insert (id3e, path);
+			id3e_list_insert (id3e, path);
 		}
 		return;
 	}

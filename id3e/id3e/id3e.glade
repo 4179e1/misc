@@ -37,7 +37,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_liststore_insert"/>
+                        <signal name="activate" handler="on_list_insert"/>
                       </object>
                     </child>
                     <child>
@@ -46,7 +46,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_liststore_delete"/>
+                        <signal name="activate" handler="on_list_delete"/>
                       </object>
                     </child>
                     <child>
@@ -60,7 +60,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_liststore_open"/>
+                        <signal name="activate" handler="on_list_open"/>
                       </object>
                     </child>
                     <child>
@@ -69,7 +69,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_liststore_clear"/>
+                        <signal name="activate" handler="on_list_clear"/>
                       </object>
                     </child>
                     <child>
@@ -199,7 +199,7 @@
                 <property name="tooltip_text" translatable="yes">Add a single file to list</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-add</property>
-                <signal name="clicked" handler="on_liststore_insert"/>
+                <signal name="clicked" handler="on_list_insert"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -212,7 +212,7 @@
                 <property name="tooltip_text" translatable="yes">Remove the selected file from list</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-remove</property>
-                <signal name="clicked" handler="on_liststore_delete"/>
+                <signal name="clicked" handler="on_list_delete"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -234,7 +234,7 @@
                 <property name="tooltip_text" translatable="yes">Add all files in a directory and sub directory</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
-                <signal name="clicked" handler="on_liststore_open"/>
+                <signal name="clicked" handler="on_list_open"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -247,7 +247,7 @@
                 <property name="tooltip_text" translatable="yes">Remove all files in list</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-clear</property>
-                <signal name="clicked" handler="on_liststore_clear"/>
+                <signal name="clicked" handler="on_list_clear"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -299,6 +299,7 @@
                   <object class="GtkTreeView" id="list">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
                     <property name="model">liststore</property>
                     <property name="reorderable">True</property>
                     <property name="rules_hint">True</property>
@@ -705,8 +706,8 @@
     <property name="website_label" translatable="yes">www.abc.com</property>
     <property name="license" translatable="yes">gpl</property>
     <property name="authors">lyre &lt;4179e1@gmail.com&gt;</property>
-    <signal name="delete_event" handler="gtk_widget_hide"/>
     <signal name="response" handler="gtk_widget_hide"/>
+    <signal name="delete_event" handler="gtk_widget_hide"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>

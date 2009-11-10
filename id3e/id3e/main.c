@@ -55,8 +55,6 @@ static gboolean init_app (Id3e *id3e)
 	id3e_list_init (id3e);
 
 
-	id3e_set_liststore (id3e,
-			GTK_LIST_STORE (Gtk_builder_get_object (builder, "liststore")));
 	id3e_set_sidebar (id3e,
 			GTK_WIDGET (Gtk_builder_get_object (builder, "notebook")));
 	id3e_set_statusbar (id3e,

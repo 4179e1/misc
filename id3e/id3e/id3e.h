@@ -15,12 +15,8 @@ void id3e_window_show (Id3e *id3e);
 void id3e_set_list (Id3e *id3e, GtkWidget *list);
 GtkWidget *id3e_get_list (Id3e *id3e);
 void id3e_list_init (Id3e *id3e);
-
-void id3e_set_liststore (Id3e *id3e, GtkListStore *liststore);
-GtkListStore *id3e_get_liststore (Id3e *id3e);
-GtkListStore **id3e_get_liststore_ref (Id3e *id3e);
-void id3e_liststore_insert (Id3e *id3e, const gchar *name);
-void id3e_liststore_clear (Id3e *id3e);
+GtkListStore *id3e_get_list_store (Id3e *id3e);
+void id3e_list_insert (Id3e *id3e, const gchar *path);
 
 void id3e_set_sidebar (Id3e *id3e, GtkWidget *sidebar);
 GtkWidget *id3e_get_sidebar (Id3e *id3e);

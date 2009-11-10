@@ -4,10 +4,10 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 
-void on_liststore_insert (gpointer *widget, Id3e *id3e);
-void on_liststore_delete (gpointer *widget, Id3e *id3e);
-void on_liststore_open (gpointer *widget, Id3e *id3e);
-void on_liststore_clear (gpointer *widget, Id3e *id3e);
+void on_list_insert (gpointer *widget, Id3e *id3e);
+void on_list_delete (gpointer *widget, Id3e *id3e);
+void on_list_open (gpointer *widget, Id3e *id3e);
+void on_list_clear (gpointer *widget, Id3e *id3e);
 
 void on_sidebar_toggle (gpointer *widget, Id3e *id3e);
 
