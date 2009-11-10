@@ -1,5 +1,5 @@
 TAR = id3e
-OBJ = main.o id3e.o callback.o id3v1.o
+OBJ = main.o id3e.o callback.o id3v1.o gv1.o genre.o
 
 CC = gcc
 OPT = -DG_LOG_DOMAIN=\"ID3_Editor\" -Wall -g
@@ -16,6 +16,10 @@ id3e.o: id3e.c $(DEP)
 callback.o: callback.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 id3v1.o: id3v1.c $(DEP)
+	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
+gv1.o: gv1.c $(DEP)
+	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
+genre.o: genre.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 
 clean:

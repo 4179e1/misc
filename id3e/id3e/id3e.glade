@@ -15,14 +15,6 @@
       <!-- column-name genre -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">pop</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">classic</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">ID3 Editor</property>
@@ -480,11 +472,12 @@
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="id3v1_title">
+                                    <property name="width_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
-                                    <property name="width_chars">30</property>
+                                    <property name="text" translatable="yes">012345678901234567890123456789</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -501,14 +494,13 @@
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
-                                    <property name="width_chars">30</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                     <property name="top_attach">2</property>
                                     <property name="bottom_attach">3</property>
-                                    <property name="x_options"></property>
+                                    <property name="x_options">GTK_FILL</property>
                                     <property name="y_options"></property>
                                   </packing>
                                 </child>
@@ -518,14 +510,13 @@
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
-                                    <property name="width_chars">30</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                     <property name="top_attach">3</property>
                                     <property name="bottom_attach">4</property>
-                                    <property name="x_options"></property>
+                                    <property name="x_options">GTK_FILL</property>
                                     <property name="y_options"></property>
                                   </packing>
                                 </child>
@@ -734,8 +725,8 @@
     <property name="website_label" translatable="yes">www.abc.com</property>
     <property name="license" translatable="yes">gpl</property>
     <property name="authors">lyre &lt;4179e1@gmail.com&gt;</property>
-    <signal name="response" handler="gtk_widget_hide"/>
     <signal name="delete_event" handler="gtk_widget_hide"/>
+    <signal name="response" handler="gtk_widget_hide"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>

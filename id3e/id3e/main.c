@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
+#include "gv1.h"
 #include "debug_macro.h"
 
 static gboolean init_app (Id3e *id3e);
@@ -60,6 +61,10 @@ static gboolean init_app (Id3e *id3e)
 	id3e_set_statusbar (id3e,
 			GTK_WIDGET (Gtk_builder_get_object (builder, "statusbar")));
 	id3e_statusbar_init (id3e);
+
+
+	gv1_init (builder);
+
 
 	gtk_builder_connect_signals (builder, id3e);
 
