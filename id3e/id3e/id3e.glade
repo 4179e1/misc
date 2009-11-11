@@ -477,7 +477,6 @@
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
-                                    <property name="text" translatable="yes">012345678901234567890123456789</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -725,8 +724,8 @@
     <property name="website_label" translatable="yes">www.abc.com</property>
     <property name="license" translatable="yes">gpl</property>
     <property name="authors">lyre &lt;4179e1@gmail.com&gt;</property>
-    <signal name="delete_event" handler="gtk_widget_hide"/>
     <signal name="response" handler="gtk_widget_hide"/>
+    <signal name="delete_event" handler="gtk_widget_hide"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>

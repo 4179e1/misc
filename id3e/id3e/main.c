@@ -1,10 +1,10 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "gv1.h"
+#include "wrap.h"
 #include "debug_macro.h"
 
 static gboolean init_app (Id3e *id3e);
-static GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name);
 
 int main (int argc, char *argv[])
 {
@@ -71,16 +71,4 @@ static gboolean init_app (Id3e *id3e)
 	g_object_unref (G_OBJECT (builder));
 
 	return TRUE;
-}
-
-static GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name)
-{
-	GObject *obj;
-
-	if ((obj = gtk_builder_get_object (builder, name)) == NULL)
-	{
-		g_warning ("gtk_builder_get_object: %s failed!", name);
-	}
-
-	return obj;
 }
