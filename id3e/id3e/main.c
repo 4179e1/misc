@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "gv1.h"
+#include "callback.h"
 #include "wrap.h"
 #include "debug_macro.h"
 

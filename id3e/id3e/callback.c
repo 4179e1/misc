@@ -6,39 +6,61 @@
 #include <string.h>
 
 /* the same as linux */
-#define IDVE_PATH_LEN 4096
+#define ID3E_PATH_LEN 4096
 
 static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action);
 static void listfile (Id3e *id3e, char* path);
 
 G_MODULE_EXPORT
-void on_list_cursor_changed (GtkTreeView *treeview, Id3e *id3e)
+void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 {
-	GtkTreeSelection *selection;
 	GList *list;
 	GList *ptr;
 	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gchar *path;
+	gint selected_num;
 
-	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e_get_list (id3e)));
+	selected_num = gtk_tree_selection_count_selected_rows (selection);
 
-	list = gtk_tree_selection_get_selected_rows (selection,
-			&model);
-	g_print ("somethint happened\n");
-	
-	if (list == NULL)
+	id3e_statusbar_message (id3e, "Selected %d rows", selected_num);
+
+	/* not thing selected */
+	if (selected_num == 0)
 	{
 		return;
+		/* TODO: reset gv1 */
 	}
 
+	/* ok, selected something, initial some variable */
+	path = g_new (gchar, ID3E_PATH_LEN);
+	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
+	list = gtk_tree_selection_get_selected_rows (selection,
+			&model);
 	ptr = list;
-	if (g_list_next (ptr) == NULL)
+
+	/* only 1 row selected */
+	if (selected_num == 1)
 	{
-		g_print ("only 1 item selected\n");
+		if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
+		{
+			gtk_tree_model_get (model, &iter,
+					1, &path,
+					-1);
+
+			/* TODO: read tags */
+			g_print ("%s\n", path);
+		}
+
+	}
+	else /* 2 or more rows are selected */
+	{
+		/* TODO: reset gv1, update some same field */
 	}
 
-	g_list_foreach (list, gtk_tree_path_free, NULL);
+	g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (list);
+	g_free (path);
 }
 
 G_MODULE_EXPORT 
@@ -58,10 +80,11 @@ void on_list_insert (gpointer *widget, Id3e *id3e)
 			g_free (ptr->data);
 			ptr = g_slist_next (ptr);
 		}
-		g_list_free (pathlist);
+		g_slist_free (pathlist);
 	}
 }
 
+/* GtkTreePath -> GtkTreeRowReference -> GtkTreePath -> GtkTreeIter */
 G_MODULE_EXPORT
 void on_list_delete (gpointer *widget, Id3e *id3e)
 {
@@ -115,7 +138,7 @@ void on_list_open (gpointer *widget, Id3e *id3e)
 	gchar *path;
 
 
-	path = g_new (gchar, IDVE_PATH_LEN);
+	path = g_new (gchar, ID3E_PATH_LEN);
 	pathlist = get_path (GTK_WINDOW (id3e_get_window (id3e)),
 			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
@@ -124,7 +147,7 @@ void on_list_open (gpointer *widget, Id3e *id3e)
 		GSList *ptr = pathlist;
 		while (ptr != NULL)
 		{
-			g_strlcpy (path, (gchar *)ptr->data, IDVE_PATH_LEN);
+			g_strlcpy (path, (gchar *)ptr->data, ID3E_PATH_LEN);
 			listfile (id3e, path);
 			g_free (ptr->data);
 			ptr = g_slist_next (ptr);

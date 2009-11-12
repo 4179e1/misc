@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
+#include "callback.h"
 
 /* struct for id3e, passed as the argument to all callback func  */
 struct _id3e
@@ -84,6 +85,7 @@ void id3e_list_init (Id3e *id3e)
 	/* WTF the two lines are necessary to select multiple rows */
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	g_signal_connect (selection, "changed", (GCallback)on_selection_changed, id3e);
 }
 
 GtkListStore *id3e_get_list_store (Id3e *id3e)

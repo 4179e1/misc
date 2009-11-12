@@ -168,7 +168,7 @@ void genre_list_init (GtkListStore *liststore)
 
 }
 
-gchar *get_genre (int id)
+const gchar *get_genre (int id)
 {
 	return genre[id];
 }
