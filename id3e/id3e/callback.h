@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 
+void on_list_cursor_changed (GtkTreeView *treeview, Id3e *id3e);
 void on_list_insert (gpointer *widget, Id3e *id3e);
 void on_list_delete (gpointer *widget, Id3e *id3e);
 void on_list_open (gpointer *widget, Id3e *id3e);

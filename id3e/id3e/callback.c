@@ -11,6 +11,36 @@
 static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action);
 static void listfile (Id3e *id3e, char* path);
 
+G_MODULE_EXPORT
+void on_list_cursor_changed (GtkTreeView *treeview, Id3e *id3e)
+{
+	GtkTreeSelection *selection;
+	GList *list;
+	GList *ptr;
+	GtkTreeModel *model;
+
+	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e_get_list (id3e)));
+
+	list = gtk_tree_selection_get_selected_rows (selection,
+			&model);
+	g_print ("somethint happened\n");
+	
+	if (list == NULL)
+	{
+		return;
+	}
+
+	ptr = list;
+	if (g_list_next (ptr) == NULL)
+	{
+		g_print ("only 1 item selected\n");
+	}
+
+	g_list_foreach (list, gtk_tree_path_free, NULL);
+	g_list_free (list);
+}
+
 G_MODULE_EXPORT 
 void on_list_insert (gpointer *widget, Id3e *id3e)
 {
@@ -28,7 +58,7 @@ void on_list_insert (gpointer *widget, Id3e *id3e)
 			g_free (ptr->data);
 			ptr = g_slist_next (ptr);
 		}
-		g_slist_free (pathlist);
+		g_list_free (pathlist);
 	}
 }
 
@@ -40,16 +70,16 @@ void on_list_delete (gpointer *widget, Id3e *id3e)
 	GList *ref_list = NULL;
 	GList *ptr;
 	GtkTreeRowReference *ref;
-	GtkTreeModel *model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
+	GtkTreeModel *model;
 
 
+	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e_get_list (id3e)));
 	
 	list = gtk_tree_selection_get_selected_rows (selection, 
 			&model);
 
 	/* convert GtkTreePath to GtkTreeRowReference */
-	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 	for (ptr = list; ptr != NULL; ptr = g_list_next (ptr))
 	{
 		ref = gtk_tree_row_reference_new (model, (GtkTreePath *)ptr->data);

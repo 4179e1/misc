@@ -43,3 +43,25 @@ int Fseek (FILE *stream, long offset, int orgin)
 	}
 	return result;
 }
+
+gboolean Efread (void *ptr, size_t size, size_t nobject, FILE *stream)
+{
+	size_t n;
+	if ((n = fread (ptr, size, nobject, stream)) != size)
+	{
+		g_warning ("fread error: Request to read %d bytes, but %d bytes actually readed", size, n);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+gboolean Ewrite (const void *ptr, size_t size, size_t nobject, FILE *stream)
+{
+	size_t n;
+	if ((n = fwrite (ptr, size, nobject, stream)) != size)
+	{
+		g_warning ("fwrite error: Request to write %d bytes, but %d bytes actually wrote", size, n);
+		return FALSE;
+	}
+	return TRUE;
+}

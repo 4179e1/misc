@@ -10,4 +10,8 @@ FILE *Fopen (const char *filename, const char *mode);
 int Fclose (FILE *stream);
 int Fseek (FILE *stream, long offset, int orgin);
 
+/* Exactly file read/write */
+gboolean Efread (void *ptr, size_t size, size_t nobject, FILE *stream);
+gboolean Ewrite (const void *ptr, size_t size, size_t nobject, FILE *stream);
+
 #endif /* _WRAP_H */
