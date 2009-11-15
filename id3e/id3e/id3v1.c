@@ -3,8 +3,8 @@
 #include "id3v1.h"
 #include "wrap.h"
 
-#define FILE_MODE "rb+"
-#define DUMP_MODE "wb+"
+#define FILE_MODE "r+"
+#define DUMP_MODE "w+"
 #define ID3V1_LEN 128
 #define ID3V1_POS (-ID3V1_LEN)
 
@@ -146,20 +146,20 @@ gboolean id3v1_file_have_tag (FILE *file)
 {
 	gchar tmp[ID3V1_TAG_LEN + 1];
 	tmp[ID3V1_TAG_LEN] = '\0';
-	fpos_t file_len;
+	long file_len;
 
 	if (Fseek (file, 0, SEEK_END) != 0)
 	{
 		return FALSE;
 	}
-	if (Fgetpos (file, &file_len) == 0)
+
+	if ((file_len = Ftell (file)) != -1)
 	{
-		if (file_len <= ID3V1_LEN)
+		if (file_len < ID3V1_LEN)
 		{
 			return FALSE;
 		}
 	}
-	
 
 	if (Fseek (file, ID3V1_POS, SEEK_END) != 0)
 	{

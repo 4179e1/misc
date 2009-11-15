@@ -45,14 +45,15 @@ int Fseek (FILE *stream, long offset, int orgin)
 	return result;
 }
 
-int Fgetpos (FILE *file, fpos_t *ptr)
+long Ftell (FILE *file)
 {
-	int result;
-	if ((result = fgetpos (file, ptr)) != 0)
+	long len;
+	if ((len = ftell (file)) == -1)
 	{
-		g_warning ("fgetpos error");
+		g_warning ("ftell error");
 	}
-	return result;
+
+	return len;
 }
 
 gboolean Efread (void *ptr, size_t size, size_t nobject, FILE *stream)
