@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <glib/gstdio.h>
 #include "wrap.h"
 
 GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name)
@@ -14,11 +15,11 @@ GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name)
 	return obj;
 }
 
-FILE *Fopen (const char *filename, const char *mode)
+FILE *G_fopen (const char *filename, const char *mode)
 {	FILE *file;
-	if ((file = fopen (filename, mode)) == NULL)
+	if ((file = g_fopen (filename, mode)) == NULL)
 	{
-		g_warning ("fopen error");
+		g_warning ("g_fopen error");
 	}
 
 	return file;
@@ -44,10 +45,20 @@ int Fseek (FILE *stream, long offset, int orgin)
 	return result;
 }
 
+int Fgetpos (FILE *file, fpos_t *ptr)
+{
+	int result;
+	if ((result = fgetpos (file, ptr)) != 0)
+	{
+		g_warning ("fgetpos error");
+	}
+	return result;
+}
+
 gboolean Efread (void *ptr, size_t size, size_t nobject, FILE *stream)
 {
 	size_t n;
-	if ((n = fread (ptr, size, nobject, stream)) != size)
+	if ((n = fread (ptr, size, nobject, stream)) != nobject)
 	{
 		g_warning ("fread error: Request to read %d bytes, but %d bytes actually readed", size, n);
 		return FALSE;
@@ -55,10 +66,10 @@ gboolean Efread (void *ptr, size_t size, size_t nobject, FILE *stream)
 	return TRUE;
 }
 
-gboolean Ewrite (const void *ptr, size_t size, size_t nobject, FILE *stream)
+gboolean Efwrite (const void *ptr, size_t size, size_t nobject, FILE *stream)
 {
 	size_t n;
-	if ((n = fwrite (ptr, size, nobject, stream)) != size)
+	if ((n = fwrite (ptr, size, nobject, stream)) != nobject)
 	{
 		g_warning ("fwrite error: Request to write %d bytes, but %d bytes actually wrote", size, n);
 		return FALSE;

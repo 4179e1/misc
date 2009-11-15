@@ -69,4 +69,12 @@ Id3v1 *id3v1_get_content_to_param (Id3v1 *tag, gchar**title,
 Id3v1 *id3v1_set_content_from_param (Id3v1 *tag,
 		gchar *title, gchar *artist, gchar *album,
 		gchar *year, gchar *comment, gchar *track, gchar *genre);		
+
+void id3v1_dump (Id3v1 *tag, FILE *file);
+/* 
+  the difference between id3v1_dump_path & id3v1_write_tag_to_path is
+  the open file mode, id3v1_dump_path will create a new file if it doesn't 
+  exist. there is no id3v1_dump_file(), id3v1_write_tag_to_file will work
+ */
+void id3v1_dump_path (Id3v1 *tag, const gchar *path);
 #endif /* _ID3V1_H */

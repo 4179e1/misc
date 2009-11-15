@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "callback.h"
+#include "wrap.h"
+#include "gv1.h"
 
 /* struct for id3e, passed as the argument to all callback func  */
 struct _id3e
@@ -15,6 +17,8 @@ struct _id3e
 	GtkWidget *statusbar;
 	gboolean statusbar_is_shown;
 	gint statusbar_context_id;
+
+	Gv1 *gv1;
 
 	gpointer pointer;
 };
@@ -46,6 +50,23 @@ void id3e_free (Id3e *id3e)
 	g_slice_free (Id3e, id3e);
 }
 
+Id3e *id3e_init (Id3e *id3e, GtkBuilder *builder)
+{
+	id3e_set_window (id3e, 
+			GTK_WIDGET (Gtk_builder_get_object (builder, "window")));
+	id3e_set_list (id3e,
+			GTK_WIDGET (Gtk_builder_get_object (builder, "list")));
+	id3e_list_init (id3e);
+
+
+	id3e_set_sidebar (id3e,
+			GTK_WIDGET (Gtk_builder_get_object (builder, "notebook")));
+	id3e_set_statusbar (id3e,
+			GTK_WIDGET (Gtk_builder_get_object (builder, "statusbar")));
+	id3e_statusbar_init (id3e);
+
+	return id3e;
+}
 /* window */
 void id3e_set_window (Id3e *id3e, GtkWidget *window)
 {
@@ -187,6 +208,17 @@ void id3e_statusbar_toggle (Id3e *id3e)
 		gtk_widget_show (id3e->statusbar);
 		id3e->statusbar_is_shown = TRUE;
 	}
+}
+
+/* gv1 */
+void id3e_set_gv1 (Id3e *id3e, Gv1 *gv1)
+{
+	id3e->gv1 = gv1;
+}
+
+Gv1 *id3e_get_gv1 (Id3e *id3e)
+{
+	return id3e->gv1;
 }
 
 /* pointer for some func only accept certain number of parmas, very ugly designs in fact */

@@ -3,7 +3,7 @@
 
 /**
  * @brief Macro to calculate array's length.
- * @parma array It MUST be a array, passing a pointer won't work as you expact.
+ * @param array It MUST be a array, passing a pointer won't work as you expact.
  * @return Size of the array.
  */
 #define ARRAY_LEN(array) (sizeof(array)/sizeof(array[0]))
@@ -11,7 +11,7 @@
 /** 
  * @beief Inline func for swapping two integer
  *
- * @parma a, b Pointer to integer 
+ * @param a, b Pointer to integer 
  */
 static inline void swap (int *a, int *b)
 {

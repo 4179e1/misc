@@ -66,9 +66,9 @@ static void merge (int *array, int p, int q, int r)
  * Combine: Merger the two sorted subsequences to produce the sorted answer.
  *
  * @note Complexity O( n*lg(n) )
- * @parma array The array need to be sort
- * @parma p Beginning index number of array
- * @parma r Ending index number of array
+ * @param array The array need to be sort
+ * @param p Beginning index number of array
+ * @param r Ending index number of array
  * @return The sorted array.
  */
 

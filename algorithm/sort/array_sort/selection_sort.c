@@ -8,8 +8,8 @@
  * insert it into the end of the sorted cards in left hand.
  *
  * @note Complexity: O(n^2).
- * @parma array The array need to be sort.
- * @parma len Length of array.
+ * @param array The array need to be sort.
+ * @param len Length of array.
  * @return The sorted array.
  */
 int *selection_sort (int *array, int len)

@@ -1,9 +1,6 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "gv1.h"
-#include "callback.h"
-#include "wrap.h"
-#include "debug_macro.h"
 
 static gboolean init_app (Id3e *id3e);
 
@@ -38,33 +35,23 @@ static gboolean init_app (Id3e *id3e)
 {
 	GtkBuilder *builder;
 	GError *error = NULL;
+	Gv1 *gv1;
 
 	/* IMPORTENT, i always forget to initial it :( */
 	builder = gtk_builder_new ();
 
 	if (!gtk_builder_add_from_file (builder, "id3e.glade", &error))
 	{
-		DEBUG_PRINT;
 		g_warning ("%s", error->message);
 		g_free (error);
 		return FALSE;
 	}
 
-	id3e_set_window (id3e, 
-			GTK_WIDGET (Gtk_builder_get_object (builder, "window")));
-	id3e_set_list (id3e,
-			GTK_WIDGET (Gtk_builder_get_object (builder, "list")));
-	id3e_list_init (id3e);
+	id3e_init (id3e, builder);
 
-
-	id3e_set_sidebar (id3e,
-			GTK_WIDGET (Gtk_builder_get_object (builder, "notebook")));
-	id3e_set_statusbar (id3e,
-			GTK_WIDGET (Gtk_builder_get_object (builder, "statusbar")));
-	id3e_statusbar_init (id3e);
-
-
-	gv1_init (builder);
+	gv1 = gv1_new ();
+	gv1_init (gv1, builder);
+	id3e_set_gv1 (id3e, gv1);
 
 
 	gtk_builder_connect_signals (builder, id3e);

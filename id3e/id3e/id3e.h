@@ -2,11 +2,14 @@
 #define _ID3E_H
 
 #include <gtk/gtk.h>
+#include "gv1.h"
 
 typedef struct _id3e Id3e;
 
 Id3e *id3e_new (void);
 void id3e_free (Id3e *id3e);
+
+Id3e *id3e_init (Id3e *id3e, GtkBuilder *builder);
 
 void id3e_set_window (Id3e * id3e, GtkWidget *window);
 GtkWidget *id3e_get_window (Id3e *id3e);
@@ -27,6 +30,9 @@ GtkWidget *id3e_get_statusbar (Id3e *id3e);
 void id3e_statusbar_init (Id3e *id3e);
 void id3e_statusbar_message (Id3e *id3e, const char *fmt, ...);
 void id3e_statusbar_toggle (Id3e *id3e);
+
+void id3e_set_gv1 (Id3e *id3e, Gv1 *gv1);
+Gv1 *id3e_get_gv1 (Id3e *id3e);
 
 gpointer id3e_pointer_aquire (Id3e *id3e, gpointer data);
 gpointer id3e_pointer_release (Id3e *id3e);

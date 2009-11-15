@@ -10,8 +10,8 @@
  * the new card goes in the empty slot after right shift.
  *
  * @note Complexity: O(n^2).
- * @parma array The array need to be sort.
- * @parma len Length of array.
+ * @param array The array need to be sort.
+ * @param len Length of array.
  * @return The sorted array, Ascending.
  */
 int *insert_sort (int *array, int len)

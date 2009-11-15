@@ -168,7 +168,21 @@ void genre_list_init (GtkListStore *liststore)
 
 }
 
-const gchar *get_genre (int id)
+const gchar *get_genre (gchar id)
 {
-	return genre[id];
+	if (genre_valid(id))
+	{
+		return genre[(gint)id];
+	}
+	return NULL;
+}
+
+gboolean genre_valid (gchar id)
+{
+	if ((id > 0) && (id < (sizeof(genre) - 1)))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }

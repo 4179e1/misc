@@ -1,8 +1,9 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "callback.h"
+#include "id3v1.h"
+#include "gv1.h"
 
-#include <sys/stat.h>
 #include <string.h>
 
 /* the same as linux */
@@ -20,16 +21,19 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 	GtkTreeIter iter;
 	gchar *path;
 	gint selected_num;
+	Id3v1 *tag = NULL;
+	Gv1 *gv1;
 
 	selected_num = gtk_tree_selection_count_selected_rows (selection);
-
+	gv1 = id3e_get_gv1 (id3e);
+	gv1_reset (gv1);
 	id3e_statusbar_message (id3e, "Selected %d rows", selected_num);
 
 	/* not thing selected */
 	if (selected_num == 0)
 	{
-		return;
 		/* TODO: reset gv1 */
+		return;
 	}
 
 	/* ok, selected something, initial some variable */
@@ -49,7 +53,15 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 					-1);
 
 			/* TODO: read tags */
-			g_print ("%s\n", path);
+			if ((tag = id3v1_new_from_path (path)) != NULL)
+			{
+				id3v1_dump (tag, stdout);
+				gv1_read_from_id3v1 (gv1, tag);
+			}
+			else
+			{
+				g_message ("file: %s don't have Id3v1 tag\n", path);
+			}
 		}
 
 	}

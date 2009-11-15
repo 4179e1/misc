@@ -7,8 +7,8 @@
  * Repeatedly swapping adjacent elements that are out of order.
  *
  * @note Complexity: O(n^2).
- * @parma array The array need to be sort.
- * @parma len Length of array.
+ * @param array The array need to be sort.
+ * @param len Length of array.
  * @return The sorted array.
  */
 int *bubble_sort (int *array, int len)

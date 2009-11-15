@@ -471,12 +471,13 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="id3v1_title">
+                                  <object class="GtkEntry" id="gv1_title">
                                     <property name="width_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
+                                    <property name="text" translatable="yes">abc</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -488,11 +489,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="id3v1_artist">
+                                  <object class="GtkEntry" id="gv1_artist">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
+                                    <property name="text" translatable="yes">123</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -504,11 +506,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="id3v1_album">
+                                  <object class="GtkEntry" id="gv1_album">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">30</property>
                                     <property name="invisible_char">&#x25CF;</property>
+                                    <property name="text" translatable="yes">456</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -520,11 +523,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="id3v1_comment">
+                                  <object class="GtkEntry" id="gv1_comment">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">28</property>
                                     <property name="invisible_char">&#x25CF;</property>
+                                    <property name="text" translatable="yes">789</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -536,7 +540,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="id3v1_genre">
+                                  <object class="GtkComboBox" id="gv1_genre">
                                     <property name="visible">True</property>
                                     <property name="model">genre_list</property>
                                     <child>
@@ -556,7 +560,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="id3v1_year">
+                                  <object class="GtkSpinButton" id="gv1_year">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">4</property>
@@ -577,7 +581,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="id3v1_track">
+                                  <object class="GtkSpinButton" id="gv1_track">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">3</property>
@@ -598,7 +602,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="id3v1_tag">
+                                  <object class="GtkLabel" id="gv1_tag">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Unknown</property>
@@ -724,8 +728,8 @@
     <property name="website_label" translatable="yes">www.abc.com</property>
     <property name="license" translatable="yes">gpl</property>
     <property name="authors">lyre &lt;4179e1@gmail.com&gt;</property>
-    <signal name="delete_event" handler="gtk_widget_hide"/>
     <signal name="response" handler="gtk_widget_hide"/>
+    <signal name="delete_event" handler="gtk_widget_hide"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
