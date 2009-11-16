@@ -1,26 +1,19 @@
-#include <stdio.h>
-#include <dirent.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <stdlib.h>
-
 #define MAXLINE 1024
 
-static char fullpath_line[MAXLINE];
-static int files = 0;
-static int rows = 0;
+static gint files = 0;
+static gint rows = 0;
 
-static int get_rows (const char *filename)
+static gint get_rows (const gchar *filename)
 {
-	int count = 0;
-	int c;
+	gint count = 0;
+	gint c;
 
 	FILE *fp;
 
-	if (NULL == (fp = fopen(filename, "r")))
+	if (NULL == (fp = g_fopen(filename, "r")))
 	{
 		fprintf(stderr, "can't open %s\n", filename);
 		return -1;
@@ -41,15 +34,15 @@ static int get_rows (const char *filename)
 	return count;
 }
 
-static bool identify (const char *path){
-	int len = strlen(path);
+static gboolean identify (const gchar *path){
+	gint len = strlen(path);
 
 	if (len >= 2)
 	{
-		const char *ptr = (path + len - 2);
+		const gchar *ptr = (path + len - 2);
 		if (strcmp (ptr, ".c") == 0 || strcmp (ptr, ".h") == 0)
 		{
-			return true;
+			return TRUE;
 		}
 
 		if (len >= 4)
@@ -57,37 +50,31 @@ static bool identify (const char *path){
 			ptr-=2;
 			if (strcmp (ptr, ".cpp") == 0)
 			{
-				return true;
+				return TRUE;
 			}
 		}
 	}
 
-	return false;
+	return FALSE;
 }
 
-static void listfile (char* fullpath)
+static void listfile (gchar *path)
 {
-	struct stat statbuf;
-	struct dirent *dir;
-	DIR *dp;
-	char *ptr;
-	int len;
+	GDir *dir;
+	gchar *ptr;
+	GError *error = NULL;
+	const gchar *name;
+	gint len;
 
+	len = strlen (path);
 
-	if (lstat(fullpath, &statbuf) < 0)
+	if (!g_file_test (path, G_FILE_TEST_IS_DIR))
 	{
-		fprintf (stderr, "lstat() error\n");
-		return;
-	}
-
-	if (S_ISDIR(statbuf.st_mode) == 0)
-	{
-		//fprintf (stderr, "\"%s\" not a directory\n", fullpath);
-		if (identify (fullpath))
+		if (identify (path))
 		{
-			if ((len = get_rows (fullpath)) >= 0)
+			if ((len = get_rows (path)) >= 0)
 			{
-				printf ("%d\t%s\n", len, fullpath);
+				g_print ("%d\t%s\n", len, path);
 				files++;
 				rows += len;
 			}
@@ -95,38 +82,27 @@ static void listfile (char* fullpath)
 		return;
 	}
 
-	ptr = fullpath + strlen(fullpath);
+	ptr = path + len;
 	*ptr++ = '/';
 	*ptr = 0;
 
-	//printf ("listing contents in \"%s\"\n", fullpath);
-
-	if ((dp = opendir(fullpath)) == NULL)
+	dir = g_dir_open (path, 0, &error);
+	if (error != NULL)
 	{
-		fprintf (stderr, "opendir(\"%s\") error\n", fullpath);
+		g_warning ("g_dir_openerror: %s\n", error->message);
+		g_free (error);
 		return;
 	}
 
-	while ((dir = readdir(dp)) != NULL)
+	while ((name = g_dir_read_name (dir)) != NULL)
 	{
-		if(strcmp (dir->d_name, ".") == 0 || 
-		   strcmp (dir->d_name, "..") == 0)
-		{
-			continue;
-		}
-
-		strcpy (ptr, dir->d_name);
-		//printf ("%s\n", fullpath);
-		listfile (fullpath);
+		strcpy (ptr, name);
+		listfile (path);
 	}
 
 	ptr[-1] = 0;
 
-	if (closedir (dp) < 0)
-	{
-		fprintf (stderr, "can't close directory %s\n", fullpath);
-		return;
-	}
+	g_dir_close (dir);
 }
 
 int main(int argc, char *argv[])
@@ -134,21 +110,19 @@ int main(int argc, char *argv[])
 	if (argc != 2)
 	{
 		fprintf (stderr, "usage: count <path>\n");
-		exit (1);
+		return 1;
 	}
+	gchar *path;
+	path = g_new0(gchar, MAXLINE);
 
-	int i;
-	for (i = 0; i < sizeof(fullpath); i++)
-	{
-		fullpath[i] = '\0';
-	}
+	strcpy (path, argv[1]);
 
-	strcpy (fullpath, argv[1]);
+	listfile(path);
 
-	listfile(fullpath_line);
-
-	printf ("\n%d lines in %d files, average %d linse in a file\n",
+	g_print ("\n%d lines in %d files, average %d linse in a file\n",
 			rows, files, (files == 0 ? 0 : (rows/files)));
+
+	g_free (path);
 
 	return 0;
 }

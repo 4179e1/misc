@@ -1,5 +1,4 @@
 #include <gtk/gtk.h>
-#include <stdio.h>
 #include <glib/gstdio.h>
 #include "wrap.h"
 
@@ -13,6 +12,22 @@ GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name)
 	}
 
 	return obj;
+}
+
+gchar *G_convert (const gchar *str, gssize len, const gchar *to_codeset,
+		const gchar *from_codeset, gsize *bytes_read,
+		gsize *bytes_written)
+{
+	gchar *ptr;
+	GError *error = NULL;
+	ptr = g_convert (str, len, to_codeset, from_codeset,
+			bytes_read, bytes_written, &error);
+	if (error != NULL)
+	{
+		g_warning ("%s", error->message);
+		g_free (error);
+	}
+	return ptr;
 }
 
 FILE *G_fopen (const char *filename, const char *mode)

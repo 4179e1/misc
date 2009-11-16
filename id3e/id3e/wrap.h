@@ -5,6 +5,9 @@
 #include <stdio.h>
 
 GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name);
+gchar *G_convert (const gchar *str, gssize len,
+		const gchar *to_codeset, const gchar *from_codeset,
+		gsize *bytes_read, gsize *bytes_written);
 
 FILE *G_fopen (const char *filename, const char *mode);
 int Fclose (FILE *stream);

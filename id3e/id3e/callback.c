@@ -73,6 +73,7 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 	g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (list);
 	g_free (path);
+	id3v1_free (tag);
 }
 
 G_MODULE_EXPORT 
