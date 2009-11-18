@@ -2,6 +2,7 @@
 #include "id3e.h"
 #include "callback.h"
 #include "wrap.h"
+#include "gva.h"
 #include "gv1.h"
 
 /* struct for id3e, passed as the argument to all callback func  */
@@ -18,6 +19,7 @@ struct _id3e
 	gboolean statusbar_is_shown;
 	gint statusbar_context_id;
 
+	Gva *gva;
 	Gv1 *gv1;
 
 	gpointer pointer;
@@ -208,6 +210,18 @@ void id3e_statusbar_toggle (Id3e *id3e)
 		gtk_widget_show (id3e->statusbar);
 		id3e->statusbar_is_shown = TRUE;
 	}
+}
+
+/* gva */
+
+void id3e_set_gva (Id3e *id3e, Gva *gva)
+{
+	id3e->gva = gva;
+}
+
+Gva *id3e_get_gva (Id3e *id3e)
+{
+	return id3e->gva;
 }
 
 /* gv1 */

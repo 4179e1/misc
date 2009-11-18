@@ -1,8 +1,8 @@
 TAR = id3e
-OBJ = main.o id3e.o callback.o id3v1.o gv1.o genre.o wrap.o
+OBJ = main.o id3e.o callback.o id3v1.o gva.o gv1.o genre.o wrap.o
 
 CC = gcc
-OPT = -DG_LOG_DOMAIN=\"ID3_Editor\" -Wall -g
+OPT = -DG_LOG_DOMAIN=\"ID3_Editor\" -Wall
 DEP = id3e.h Makefile
 FLAGS = $(shell pkg-config --cflags gtk+-2.0 gmodule-2.0)
 LIBS = $(shell pkg-config --libs gtk+-2.0 gmodule-2.0)
@@ -16,6 +16,8 @@ id3e.o: id3e.c $(DEP)
 callback.o: callback.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 id3v1.o: id3v1.c $(DEP)
+	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
+gva.o: gva.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)
 gv1.o: gv1.c $(DEP)
 	$(CC) -c $< -o $@ $(FLAGS) $(OPT)

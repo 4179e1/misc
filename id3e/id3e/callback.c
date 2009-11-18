@@ -220,6 +220,14 @@ gboolean on_query_tooltip (GtkWidget *widget, gint x, gint y, gboolean keyboard_
 	return TRUE;
 }
 
+G_MODULE_EXPORT
+void on_edit_clicked (gpointer *widget, Id3e *id3e)
+{
+	Gv1 *gv1;
+	gv1 = id3e_get_gv1 (id3e);
+	gv1_set_sensitive (gv1, !(gv1_is_sensitive(gv1)));
+}
+
 /* Private func */
 static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action)
 {

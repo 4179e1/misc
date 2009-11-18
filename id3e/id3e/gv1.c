@@ -13,6 +13,7 @@ struct _gv1
 	GtkEntry *comment;
 	GtkSpinButton *track;
 	GtkComboBox *genre;
+	gboolean is_sensitive;
 };
 
 Gv1 *gv1_new ()
@@ -25,7 +26,7 @@ void gv1_free (Gv1 *gv1)
 	g_free (gv1);
 }
 
-gboolean gv1_init (Gv1 *gv1, GtkBuilder *builder)
+Gv1 *gv1_init (Gv1 *gv1, GtkBuilder *builder)
 {
 	GtkListStore *liststore;
 
@@ -45,7 +46,7 @@ gboolean gv1_init (Gv1 *gv1, GtkBuilder *builder)
 	gv1_reset (gv1);
 	gv1_set_sensitive (gv1, FALSE);
 
-	return TRUE;
+	return gv1;
 }
 
 Gv1 *gv1_reset (Gv1 *gv1)
@@ -70,9 +71,14 @@ Gv1 *gv1_set_sensitive (Gv1 *gv1, gboolean status)
 	gtk_widget_set_sensitive (GTK_WIDGET (gv1->comment), status);
 	gtk_widget_set_sensitive (GTK_WIDGET (gv1->track), status);
 	gtk_widget_set_sensitive (GTK_WIDGET (gv1->genre), status);
+	gv1->is_sensitive = status;
 	return gv1;
 }
 
+gboolean gv1_is_sensitive (Gv1 *gv1)
+{
+	return gv1->is_sensitive;
+}
 
 Id3v1 *gv1_write_to_id3v1 (Gv1 *gv1, Id3v1 *tag)
 {
