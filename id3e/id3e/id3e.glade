@@ -318,7 +318,7 @@
             <property name="visible">True</property>
             <property name="toolbar_style">both-horiz</property>
             <child>
-              <object class="GtkToolButton" id="gva_edit">
+              <object class="GtkToolButton" id="enc_edit">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
                 <property name="use_underline">True</property>
@@ -331,11 +331,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="gva_save">
+              <object class="GtkToolButton" id="enc_save">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
+                <signal name="clicked" handler="on_save_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -367,12 +368,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolItem" id="toolbutton2">
+              <object class="GtkToolItem" id="src_ph">
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkComboBoxEntry" id="gva_src">
+                  <object class="GtkComboBoxEntry" id="enc_src">
                     <property name="visible">True</property>
+                    <signal name="changed" handler="on_enc_changed"/>
                   </object>
                 </child>
               </object>
@@ -381,11 +383,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="gva_convert">
+              <object class="GtkToolButton" id="enc_convert">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-convert</property>
+                <signal name="clicked" handler="on_convert_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -408,12 +411,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolItem" id="toolbutton4">
+              <object class="GtkToolItem" id="dest_ph">
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkComboBoxEntry" id="gva_dest">
+                  <object class="GtkComboBoxEntry" id="enc_dest">
                     <property name="visible">True</property>
+                    <signal name="editing_done" handler="on_enc_editing_done"/>
+                    <signal name="popdown" handler="on_enc_popdown"/>
                   </object>
                 </child>
               </object>

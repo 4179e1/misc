@@ -3,8 +3,8 @@
 #include "id3v1.h"
 #include "wrap.h"
 
-#define FILE_MODE "r+"
-#define DUMP_MODE "w+"
+#define FILE_MODE "rb+"
+#define DUMP_MODE "wb+"
 #define ID3V1_LEN 128
 #define ID3V1_POS (-ID3V1_LEN)
 
@@ -22,7 +22,7 @@ struct _id3v1
 };
 
 /* for testing */
-void id3v1_assert (Id3v1 *tag)
+static void id3v1_assert (Id3v1 *tag)
 {
 	g_assert ((tag->title - tag->tag) == 3);
 	g_assert ((tag->artist - tag->title) == 30);
@@ -40,7 +40,6 @@ Id3v1 *id3v1_new (void)
 	Id3v1 *tag;
 	tag =  g_new0 (Id3v1, 1);
 
-	id3v1_assert (tag);
 	return tag;
 }
 

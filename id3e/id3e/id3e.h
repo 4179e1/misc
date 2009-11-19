@@ -2,7 +2,7 @@
 #define _ID3E_H
 
 #include <gtk/gtk.h>
-#include "gva.h"
+#include "enc.h"
 #include "gv1.h"
 
 typedef struct _id3e Id3e;
@@ -32,8 +32,8 @@ void id3e_statusbar_init (Id3e *id3e);
 void id3e_statusbar_message (Id3e *id3e, const char *fmt, ...);
 void id3e_statusbar_toggle (Id3e *id3e);
 
-void id3e_set_gva (Id3e *id3e, Gva *gva);
-Gva *id3e_get_gva (Id3e *id3e);
+void id3e_set_enc (Id3e *id3e, Enc *enc);
+Enc *id3e_get_enc (Id3e *id3e);
 
 void id3e_set_gv1 (Id3e *id3e, Gv1 *gv1);
 Gv1 *id3e_get_gv1 (Id3e *id3e);

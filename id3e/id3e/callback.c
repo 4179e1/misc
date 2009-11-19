@@ -228,6 +228,36 @@ void on_edit_clicked (gpointer *widget, Id3e *id3e)
 	gv1_set_sensitive (gv1, !(gv1_is_sensitive(gv1)));
 }
 
+G_MODULE_EXPORT
+void on_save_clicked (gpointer *widget, Id3e *id3e)
+{
+	g_message ("on_save_clicked");
+}
+
+G_MODULE_EXPORT
+void on_enc_changed (gpointer *widget, Id3e *id3e)
+{
+	g_message ("on_enc_changed");
+}
+
+G_MODULE_EXPORT
+void on_enc_popdown (GtkComboBox *button, Id3e *id3e)
+{
+	g_message ("on_enc_popdown");
+}
+
+G_MODULE_EXPORT
+void on_enc_editing_done (GtkCellEditable *celleditable, Id3e *id3e)
+{
+	g_message ("on_enc_editing_done");
+}
+
+G_MODULE_EXPORT
+void on_convert_clicked (gpointer *widget, Id3e *id3e)
+{
+	g_message ("on_convert_clicked");
+}
+
 /* Private func */
 static GSList *get_path (GtkWindow *parent, GtkFileChooserAction action)
 {
