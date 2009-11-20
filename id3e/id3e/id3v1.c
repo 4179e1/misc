@@ -3,8 +3,7 @@
 #include "id3v1.h"
 #include "wrap.h"
 
-#define FILE_MODE "rb+"
-#define DUMP_MODE "wb+"
+
 #define ID3V1_LEN 128
 #define ID3V1_POS (-ID3V1_LEN)
 
@@ -54,6 +53,10 @@ Id3v1 *id3v1_new_from_path (const gchar *path)
 	Id3v1 *tag;
 
 	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return NULL;
+	}
 	tag = id3v1_new_from_file (file);
 	Fclose (file);
 

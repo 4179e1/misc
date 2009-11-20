@@ -4,6 +4,9 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 
+#define FILE_MODE "rb+"
+#define DUMP_MODE "wb+"
+
 GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name);
 gchar *G_convert (const gchar *str, gssize len,
 		const gchar *to_codeset, const gchar *from_codeset,

@@ -16,12 +16,6 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="charset_list">
-    <columns>
-      <!-- column-name charset -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">ID3 Editor</property>
     <property name="default_width">800</property>
@@ -374,7 +368,6 @@
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_src">
                     <property name="visible">True</property>
-                    <signal name="changed" handler="on_enc_changed"/>
                   </object>
                 </child>
               </object>
@@ -417,8 +410,6 @@
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_dest">
                     <property name="visible">True</property>
-                    <signal name="editing_done" handler="on_enc_editing_done"/>
-                    <signal name="popdown" handler="on_enc_popdown"/>
                   </object>
                 </child>
               </object>

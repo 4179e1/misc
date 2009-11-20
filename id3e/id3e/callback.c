@@ -1,8 +1,7 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "callback.h"
-#include "id3v1.h"
-#include "gv1.h"
+#include "gva.h"
 
 #include <string.h>
 
@@ -21,12 +20,8 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 	GtkTreeIter iter;
 	gchar *path;
 	gint selected_num;
-	Id3v1 *tag = NULL;
-	Gv1 *gv1;
 
 	selected_num = gtk_tree_selection_count_selected_rows (selection);
-	gv1 = id3e_get_gv1 (id3e);
-	gv1_reset (gv1);
 	id3e_statusbar_message (id3e, "Selected %d rows", selected_num);
 
 	/* not thing selected */
@@ -37,11 +32,15 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 	}
 
 	/* ok, selected something, initial some variable */
+	Id3 *id3;
+	Gva *gva = id3e_get_gva (id3e);
 	path = g_new (gchar, ID3E_PATH_LEN);
 	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 	list = gtk_tree_selection_get_selected_rows (selection,
 			&model);
 	ptr = list;
+
+	gva_reset (gva);
 
 	/* only 1 row selected */
 	if (selected_num == 1)
@@ -51,17 +50,12 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 			gtk_tree_model_get (model, &iter,
 					1, &path,
 					-1);
-
+			if ((id3 = id3_new_from_path (path)) != NULL)
+			{
+				gva_read_from_id3 (gva, id3);
+			}
 			/* TODO: read tags */
-			if ((tag = id3v1_new_from_path (path)) != NULL)
-			{
-				id3v1_dump (tag, stdout);
-				gv1_read_from_id3v1 (gv1, tag);
-			}
-			else
-			{
-				g_message ("file: %s don't have Id3v1 tag\n", path);
-			}
+
 		}
 
 	}
@@ -73,7 +67,6 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 	g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (list);
 	g_free (path);
-	id3v1_free (tag);
 }
 
 G_MODULE_EXPORT 
@@ -223,9 +216,8 @@ gboolean on_query_tooltip (GtkWidget *widget, gint x, gint y, gboolean keyboard_
 G_MODULE_EXPORT
 void on_edit_clicked (gpointer *widget, Id3e *id3e)
 {
-	Gv1 *gv1;
-	gv1 = id3e_get_gv1 (id3e);
-	gv1_set_sensitive (gv1, !(gv1_is_sensitive(gv1)));
+	Gva *gva = id3e_get_gva (id3e);
+	gva_set_sensitive (gva, !gva_is_sensitive (gva));
 }
 
 G_MODULE_EXPORT
@@ -241,21 +233,15 @@ void on_enc_changed (gpointer *widget, Id3e *id3e)
 }
 
 G_MODULE_EXPORT
-void on_enc_popdown (GtkComboBox *button, Id3e *id3e)
-{
-	g_message ("on_enc_popdown");
-}
-
-G_MODULE_EXPORT
-void on_enc_editing_done (GtkCellEditable *celleditable, Id3e *id3e)
-{
-	g_message ("on_enc_editing_done");
-}
-
-G_MODULE_EXPORT
 void on_convert_clicked (gpointer *widget, Id3e *id3e)
 {
 	g_message ("on_convert_clicked");
+}
+
+G_MODULE_EXPORT
+void on_entry_invalid_input (GtkEntry *arg0, void *arg1, Id3e *id3e)
+{
+	g_print ("invalid input\n");
 }
 
 /* Private func */

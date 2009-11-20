@@ -3,7 +3,6 @@
 #include "callback.h"
 #include "wrap.h"
 #include "enc.h"
-#include "gv1.h"
 
 /* struct for id3e, passed as the argument to all callback func  */
 struct _id3e
@@ -20,7 +19,8 @@ struct _id3e
 	gint statusbar_context_id;
 
 	Enc *enc;
-	Gv1 *gv1;
+
+	Gva *gva;
 
 	gpointer pointer;
 };
@@ -224,15 +224,15 @@ Enc *id3e_get_enc (Id3e *id3e)
 	return id3e->enc;
 }
 
-/* gv1 */
-void id3e_set_gv1 (Id3e *id3e, Gv1 *gv1)
+/* gva */
+void id3e_set_gva (Id3e *id3e, Gva *gva)
 {
-	id3e->gv1 = gv1;
+	id3e->gva = gva;
 }
 
-Gv1 *id3e_get_gv1 (Id3e *id3e)
+Gva *id3e_get_gva (Id3e *id3e)
 {
-	return id3e->gv1;
+	return id3e->gva;
 }
 
 /* pointer for some func only accept certain number of parmas, very ugly designs in fact */

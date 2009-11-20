@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "id3e.h"
 #include "enc.h"
-#include "gv1.h"
+#include "gva.h"
 
 static gboolean init_app (Id3e *id3e);
 
@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 	gtk_main ();
 
 	enc_free (id3e_get_enc (id3e));
-	gv1_free (id3e_get_gv1 (id3e));
+	gva_free (id3e_get_gva (id3e));
 	id3e_free (id3e);
 
 	return (0);
@@ -39,7 +39,7 @@ static gboolean init_app (Id3e *id3e)
 	GtkBuilder *builder;
 	GError *error = NULL;
 	Enc *enc;
-	Gv1 *gv1;
+	Gva *gva;
 
 	/* IMPORTENT, i always forget to initial it :( */
 	builder = gtk_builder_new ();
@@ -57,9 +57,9 @@ static gboolean init_app (Id3e *id3e)
 	enc_init (enc, builder);
 	id3e_set_enc (id3e, enc);
 
-	gv1 = gv1_new ();
-	gv1_init (gv1, builder);
-	id3e_set_gv1 (id3e, gv1);
+	gva = gva_new ();
+	gva_init (gva, builder);
+	id3e_set_gva (id3e, gva);
 
 	gtk_builder_connect_signals (builder, id3e);
 

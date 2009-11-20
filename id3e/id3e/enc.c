@@ -1,6 +1,5 @@
 #include <gtk/gtk.h>
 #include "enc.h"
-#include "gv1.h"
 #include "wrap.h"
 #include "callback.h"
 
@@ -9,7 +8,6 @@ struct _enc
 	GtkWidget *src;
 	GtkWidget *dest;
 	GtkListStore *store;
-	Gv1 *gv1;
 };
 
 gchar *charset_list[] = 
@@ -36,6 +34,7 @@ Enc *enc_init (Enc *enc, GtkBuilder *builder)
 	enc->store = gtk_list_store_new (1, G_TYPE_STRING);
 
 	{
+		GtkWidget *entry;
 		GtkTreeIter iter;
 		gchar **ptr;
 
@@ -53,9 +52,21 @@ Enc *enc_init (Enc *enc, GtkBuilder *builder)
 				GTK_TREE_MODEL (enc->store));
 		gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (enc->dest), 0);
 
-		GtkEntry *entry;
-		entry = GTK_ENTRY (GTK_BIN (enc->dest)->child);
-		g_signal_connect (entry, "activate", G_CALLBACK (on_enc_editing_done), NULL);
+		/* src entry */
+		entry = GTK_WIDGET (GTK_BIN (enc->src)->child);
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_ADD);
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
+		/* TODO: connect signals */
+
+		/* dest entry */
+		entry = GTK_WIDGET (GTK_BIN (enc->dest)->child);
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_ADD);
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
+		/* TODO: connect signals */
 
 		enc_reset(enc);
 	}
