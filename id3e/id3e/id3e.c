@@ -1,8 +1,10 @@
 #include <gtk/gtk.h>
-#include "id3e.h"
 #include "callback.h"
 #include "wrap.h"
 #include "enc.h"
+#include "gva.h"
+#include "id3e.h"
+#include "list.h"
 
 /* struct for id3e, passed as the argument to all callback func  */
 struct _id3e
@@ -43,12 +45,18 @@ Id3e *id3e_new (void)
 	id3e->statusbar_is_shown = TRUE;
 
 	id3e->pointer = NULL;
+	
+	id3e->enc = enc_new ();
+
+	id3e->gva = gva_new ();
 
 	return id3e;
 }
 
 void id3e_free (Id3e *id3e)
 {
+	enc_free (id3e->enc);
+	gva_free (id3e->gva);
 	g_slice_free (Id3e, id3e);
 }
 
@@ -66,6 +74,10 @@ Id3e *id3e_init (Id3e *id3e, GtkBuilder *builder)
 	id3e_set_statusbar (id3e,
 			GTK_WIDGET (Gtk_builder_get_object (builder, "statusbar")));
 	id3e_statusbar_init (id3e);
+
+	enc_init (id3e->enc, builder);
+
+	gva_init (id3e->gva, builder);
 
 	return id3e;
 }
@@ -108,7 +120,7 @@ void id3e_list_init (Id3e *id3e)
 	/* WTF the two lines are necessary to select multiple rows */
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	g_signal_connect (selection, "changed", (GCallback)on_selection_changed, id3e);
+	g_signal_connect (selection, "changed", G_CALLBACK (on_selection_changed), id3e);
 }
 
 GtkListStore *id3e_get_list_store (Id3e *id3e)
@@ -136,6 +148,21 @@ void id3e_list_insert (Id3e *id3e, const gchar *path)
 	g_free (name);
 }
 
+gint id3e_list_get_selected_count (Id3e *id3e)
+{
+	GtkTreeSelection *selection;
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e->list));
+	return gtk_tree_selection_count_selected_rows (selection);
+}
+
+GList *id3e_list_get_selectd_rows (Id3e *id3e)
+{
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e->list));
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (id3e->list));
+	return gtk_tree_selection_get_selected_rows (selection, &model);
+}
 /* sidebar */
 void id3e_set_sidebar (Id3e *id3e, GtkWidget *sidebar)
 {

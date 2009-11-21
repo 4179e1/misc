@@ -21,6 +21,9 @@ typedef struct _id3v1 Id3v1;
 
 Id3v1 *id3v1_new (void);
 void id3v1_free (Id3v1 *tag);
+
+Id3v1 *id3v1_copy (Id3v1 *tag);
+
 /* return NULL if fail */
 Id3v1 *id3v1_new_from_path (const gchar *path);
 Id3v1 *id3v1_new_from_file (FILE *file);
@@ -77,4 +80,5 @@ void id3v1_dump (Id3v1 *tag, FILE *file);
   exist. there is no id3v1_dump_file(), id3v1_write_tag_to_file will work
  */
 void id3v1_dump_path (Id3v1 *tag, const gchar *path);
+void id3v1_assert (Id3v1 *tag);
 #endif /* _ID3V1_H */

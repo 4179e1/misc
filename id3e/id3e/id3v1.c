@@ -21,17 +21,7 @@ struct _id3v1
 };
 
 /* for testing */
-static void id3v1_assert (Id3v1 *tag)
-{
-	g_assert ((tag->title - tag->tag) == 3);
-	g_assert ((tag->artist - tag->title) == 30);
-	g_assert ((tag->album - tag->artist) == 30);
-	g_assert ((tag->year - tag->album) == 30);
-	g_assert ((tag->comment - tag->year) == 4);
-	g_assert ((&(tag->padding) - tag->comment) == 28);
-	g_assert ((&(tag->track) - &(tag->padding)) == 1);
-	g_assert ((&(tag->genre) - &(tag->track)) == 1);
-}
+
 
 /* mem */
 Id3v1 *id3v1_new (void)
@@ -45,6 +35,14 @@ Id3v1 *id3v1_new (void)
 void id3v1_free (Id3v1 *id3v1)
 {
 	g_free (id3v1);
+}
+
+Id3v1 *id3v1_copy (Id3v1 *tag)
+{
+	Id3v1 *new;
+	new = id3v1_new ();
+	memcpy (new, tag, ID3V1_LEN);
+	return new;
 }
 
 Id3v1 *id3v1_new_from_path (const gchar *path)
@@ -434,4 +432,15 @@ void id3v1_dump_path (Id3v1 *tag, const gchar *path)
 	}
 	id3v1_write_tag_to_file (tag, file);
 	Fclose (file);
+}
+void id3v1_assert (Id3v1 *tag)
+{
+	g_assert ((tag->title - tag->tag) == 3);
+	g_assert ((tag->artist - tag->title) == 30);
+	g_assert ((tag->album - tag->artist) == 30);
+	g_assert ((tag->year - tag->album) == 30);
+	g_assert ((tag->comment - tag->year) == 4);
+	g_assert ((&(tag->padding) - tag->comment) == 28);
+	g_assert ((&(tag->track) - &(tag->padding)) == 1);
+	g_assert ((&(tag->genre) - &(tag->track)) == 1);
 }

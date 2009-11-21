@@ -57,6 +57,7 @@ Gv1 *gv1_reset (Gv1 *gv1)
 	gtk_entry_set_text (gv1->comment, "");
 	gtk_spin_button_set_value (gv1->track, 0.0);
 	gtk_combo_box_set_active (gv1->genre, -1);
+	
 	return gv1;
 }
 

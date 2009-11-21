@@ -368,6 +368,7 @@
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_src">
                     <property name="visible">True</property>
+                    <signal name="changed" handler="on_enc_changed"/>
                   </object>
                 </child>
               </object>
@@ -410,6 +411,7 @@
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_dest">
                     <property name="visible">True</property>
+                    <signal name="changed" handler="on_enc_changed"/>
                   </object>
                 </child>
               </object>
@@ -596,6 +598,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="max_length">30</property>
                                 <property name="invisible_char">&#x25CF;</property>
+                                <property name="secondary_icon_stock">gtk-clear</property>
+                                <property name="secondary_icon_activatable">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
+                                <signal name="icon_press" handler="on_secondary_icon_press"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -612,6 +618,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="max_length">30</property>
                                 <property name="invisible_char">&#x25CF;</property>
+                                <property name="secondary_icon_stock">gtk-clear</property>
+                                <property name="secondary_icon_activatable">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
+                                <signal name="icon_press" handler="on_secondary_icon_press"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -628,6 +638,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="max_length">30</property>
                                 <property name="invisible_char">&#x25CF;</property>
+                                <property name="secondary_icon_stock">gtk-clear</property>
+                                <property name="secondary_icon_activatable">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
+                                <signal name="icon_press" handler="on_secondary_icon_press"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -644,6 +658,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="max_length">28</property>
                                 <property name="invisible_char">&#x25CF;</property>
+                                <property name="secondary_icon_stock">gtk-clear</property>
+                                <property name="secondary_icon_activatable">True</property>
+                                <property name="secondary_icon_sensitive">True</property>
+                                <signal name="icon_press" handler="on_secondary_icon_press"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>

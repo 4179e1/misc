@@ -1,0 +1,141 @@
+#include <gtk/gtk.h>
+#include "id3.h"
+#include "id3v1.h"
+#include "wrap.h"
+
+struct _id3
+{
+	Id3v1 *tag1;
+	/*TODO: Id3v2 */
+};
+
+Id3 *id3_new (void) 
+{
+	Id3 *id3;
+	id3 = g_new (Id3, 1);
+	
+	id3->tag1 = NULL;
+	/* TODO: Id3v2 */
+
+	return id3;
+}
+
+void id3_free (Id3 *id3)
+{
+	if (id3->tag1)
+	{
+		id3v1_free (id3->tag1);
+	}
+	/* TODO: Id3v2 */
+
+	g_free (id3);
+}
+
+Id3 *id3_copy (Id3 *id3)
+{
+	Id3 *new;
+	new = id3_new ();
+	if (id3->tag1)
+	{
+		new->tag1 = id3v1_copy (id3->tag1);
+	}
+	/* TODO: Id3v2 */
+
+	return new;
+}
+
+Id3 *id3_new_from_path (const gchar *path)
+{
+	FILE *file;
+	Id3 *id3;
+
+	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return NULL;
+	}
+	id3 = id3_new_from_file (file);
+	Fclose (file);
+
+	return id3;
+}
+
+Id3 *id3_new_from_file (FILE *file)
+{
+	Id3 *id3;
+
+	id3 = id3_new();
+	id3->tag1 = id3v1_new_from_file (file);
+	/* TODO: Id3v2 */
+
+	return id3;
+}
+
+void id3_read_tag_from_path (Id3 *id3, const gchar *path)
+{
+	FILE *file;
+
+	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return;
+	}
+	id3_read_tag_from_file (id3, file);
+	Fclose (file);
+}
+
+void id3_write_tag_to_path (Id3 *id3, const gchar *path)
+{
+	FILE *file;
+
+	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return;
+	}
+	id3_write_tag_to_file (id3, file);
+	Fclose (file);
+}
+
+void id3_remove_tag_from_path (const gchar *path)
+{
+	FILE *file;
+
+	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return;
+	}
+	id3_remove_tag_from_file (file);
+	Fclose (file);
+}
+
+void id3_read_tag_from_file (Id3 *id3, FILE *file)
+{
+	if (id3->tag1)
+	{
+		id3v1_read_tag_from_file (id3->tag1, file);
+	}
+	/* TODO: Id3v2 */
+}
+
+void id3_write_tag_to_file (Id3 *id3, FILE *file)
+{
+	if (id3->tag1)
+	{
+		id3v1_write_tag_to_file (id3->tag1, file);
+	}
+	/* TODO: Id3v2 */
+}
+
+void id3_remove_tag_from_file (FILE *file)
+{
+
+	id3v1_remove_tag_from_file (file);
+	/* TODO: Id3v2 */
+}
+
+Id3v1 *id3_get_id3v1 (Id3 *id3)
+{
+	return id3->tag1;
+}

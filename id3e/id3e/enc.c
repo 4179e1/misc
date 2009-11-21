@@ -2,6 +2,10 @@
 #include "enc.h"
 #include "wrap.h"
 #include "callback.h"
+#include "id3e.h"
+
+static void set_entry_attribute (GtkEntry *entry);
+static void enc_icon_press (GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer data);
 
 struct _enc
 {
@@ -34,7 +38,7 @@ Enc *enc_init (Enc *enc, GtkBuilder *builder)
 	enc->store = gtk_list_store_new (1, G_TYPE_STRING);
 
 	{
-		GtkWidget *entry;
+		GtkEntry *entry;
 		GtkTreeIter iter;
 		gchar **ptr;
 
@@ -53,20 +57,11 @@ Enc *enc_init (Enc *enc, GtkBuilder *builder)
 		gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (enc->dest), 0);
 
 		/* src entry */
-		entry = GTK_WIDGET (GTK_BIN (enc->src)->child);
-		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_ADD);
-		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
-		/* TODO: connect signals */
-
+		entry = GTK_ENTRY (GTK_BIN (enc->src)->child);
+		set_entry_attribute (entry);
 		/* dest entry */
-		entry = GTK_WIDGET (GTK_BIN (enc->dest)->child);
-		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_ADD);
-		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
-		/* TODO: connect signals */
+		entry = GTK_ENTRY (GTK_BIN (enc->dest)->child);
+		set_entry_attribute (entry);
 
 		enc_reset(enc);
 	}
@@ -81,6 +76,31 @@ Enc *enc_reset (Enc *enc)
 	return enc;
 }
 
+gchar *enc_get_src_text (Enc *enc)
+{
+	gchar *text;
+	text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (enc->src));
+	return text;
+}
+
+gchar *enc_get_dest_text (Enc *enc)
+{
+	gchar *text;
+	text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (enc->dest));
+	return text;
+}
+
+gchar *enc_set_src_text (Enc *enc, gchar *text)
+{
+	return text;
+}
+
+gchar *enc_set_dest_text (Enc *enc, gchar *text)
+{
+	return text;
+}
+
+/* not complete */
 gchar *enc_get_src (Enc *enc)
 {
 	gchar *codeset = NULL;
@@ -116,3 +136,31 @@ gchar *enc_set_dest (Enc *enc, gchar *codeset)
 {
 	return codeset;
 }
+
+/* private func */
+static void enc_icon_press (GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer data)
+{
+	if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+	{
+		/* TODO: add text to list */
+	}
+	else
+	{
+		/**
+		 * using gtk_entry_set_text() would faster,
+		 * but need to maintain same facility in two place.
+		 */
+		on_secondary_icon_press (entry, icon_pos, event, NULL);
+	}
+}
+
+static void set_entry_attribute (GtkEntry *entry)
+{
+	gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_ADD);
+	gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
+	g_signal_connect (entry, "icon-press", G_CALLBACK (enc_icon_press), NULL);
+	/* TODO: connect signals */
+}
+

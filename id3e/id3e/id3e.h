@@ -5,6 +5,19 @@
 #include "enc.h"
 #include "gva.h"
 
+#if 0
+/* the modules are not designed very well... */
+#ifndef _ID3E_ENC
+#define _ID3E_ENC
+typedef struct _enc Enc;
+#endif /* _ID3E_ENC */
+
+#ifndef _ID3E_GVA
+#define _ID3E_GVA
+typedef struct _gva Gva;
+#endif /* _ID3E_GVA */
+#endif
+
 typedef struct _id3e Id3e;
 
 Id3e *id3e_new (void);
@@ -21,6 +34,8 @@ GtkWidget *id3e_get_list (Id3e *id3e);
 void id3e_list_init (Id3e *id3e);
 GtkListStore *id3e_get_list_store (Id3e *id3e);
 void id3e_list_insert (Id3e *id3e, const gchar *path);
+gint id3e_list_get_selected_count (Id3e *id3e);
+GList *id3e_list_get_selectd_rows (Id3e *id3e);
 
 void id3e_set_sidebar (Id3e *id3e, GtkWidget *sidebar);
 GtkWidget *id3e_get_sidebar (Id3e *id3e);
