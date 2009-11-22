@@ -76,6 +76,21 @@ Id3e *id3e_init (Id3e *id3e, GtkBuilder *builder)
 	id3e_statusbar_init (id3e);
 
 	enc_init (id3e->enc, builder);
+	/** 
+	 * however, Enc cannot completely initial itsert
+	 * without some help from Id3e. it need a pointer to Id3e,
+	 * but enc know nothing about Id3e.
+	 */
+	g_signal_connect (enc_get_src_entry (id3e->enc), "activate", G_CALLBACK (on_enc_activate), id3e);
+	
+#if 0
+	/**
+	 * the dest entry don't need this signal,
+	 * while complete input in src, we should refresh gva,
+	 * but dest don't refresh gva;
+	 */
+	g_signal_connect (enc_get_dest_entry (id3e->enc), "activate", G_CALLBACK (on_enc_activate), id3e);
+#endif
 
 	gva_init (id3e->gva, builder);
 

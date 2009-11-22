@@ -17,6 +17,16 @@ void on_statusbar_toggle (gpointer *widget, Id3e *id3e)
 }
 
 G_MODULE_EXPORT
+void on_secondary_icon_press (GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, Id3e *id3e)
+{
+	if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+	{
+		/* clear text */
+		gtk_entry_set_text (entry, "");
+	}
+}
+
+G_MODULE_EXPORT
 void on_edit_clicked (GtkButton *button, Id3e *id3e)
 {
 	Gva *gva = id3e_get_gva (id3e);
@@ -48,17 +58,13 @@ void on_enc_changed (GtkComboBox *combo, Id3e *id3e)
 }
 
 G_MODULE_EXPORT
-void on_convert_clicked (GtkButton *button, Id3e *id3e)
+void on_enc_activate (GtkEntry *entry, Id3e *id3e)
 {
-	g_message ("on_convert_clicked");
+	g_message ("on_enc_activate");
 }
 
 G_MODULE_EXPORT
-void on_secondary_icon_press (GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, Id3e *id3e)
+void on_convert_clicked (GtkButton *button, Id3e *id3e)
 {
-	if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
-	{
-		/* clear text */
-		gtk_entry_set_text (entry, "");
-	}
+	g_message ("on_convert_clicked");
 }
