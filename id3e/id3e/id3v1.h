@@ -23,6 +23,7 @@ Id3v1 *id3v1_new (void);
 void id3v1_free (Id3v1 *tag);
 
 Id3v1 *id3v1_copy (Id3v1 *tag);
+Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboolean *result);
 
 /* return NULL if fail */
 Id3v1 *id3v1_new_from_path (const gchar *path);

@@ -20,13 +20,12 @@ struct _id3v1
 	gchar genre;						/* 1	128 */
 };
 
-/* for testing */
-
 
 /* mem */
 Id3v1 *id3v1_new (void)
 {
 	Id3v1 *tag;
+
 	tag =  g_new0 (Id3v1, 1);
 
 	return tag;
@@ -42,6 +41,104 @@ Id3v1 *id3v1_copy (Id3v1 *tag)
 	Id3v1 *new;
 	new = id3v1_new ();
 	memcpy (new, tag, ID3V1_LEN);
+	return new;
+}
+
+Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboolean *result)
+{
+	Id3v1 *new;	
+	gchar *title;
+	gchar *artist;
+	gchar *album;
+	gchar *comment;
+
+	gchar *title_new;
+	gchar *artist_new;
+	gchar *album_new;
+	gchar *comment_new;
+
+	gsize read;
+	gsize written;
+
+	g_assert (tag != NULL);
+
+	*result = TRUE;
+	new = id3v1_copy (tag);
+
+	if ((to_codeset == NULL) || (from_codeset == NULL) )
+	{
+		*result = FALSE;
+		return new;
+	}
+	g_message ("converting from \"%s\" to \"%s\"", from_codeset, to_codeset);
+
+#if 1
+	id3v1_get_content_to_param (tag, &title, &artist, &album, NULL, &comment, NULL, NULL);
+
+	read = written = ID3V1_TITLE_LEN;
+	if ((title_new = G_convert (title, ID3V1_TITLE_LEN, to_codeset, from_codeset, &read, &written)) != NULL)
+	{
+		id3v1_set_title (new, title_new);
+		g_free (title_new);
+	}
+	else
+	{
+		/* if fail, stop, don't need to covert other string */
+		g_message ("convert \"%s\" to %s failed", title, to_codeset);
+		*result = FALSE;
+//		goto ROF;
+	}
+
+	read = written = ID3V1_ARTIST_LEN;
+	if ((artist_new = G_convert (artist, ID3V1_ARTIST_LEN, to_codeset, from_codeset, &read, &written)) != NULL)
+	{
+		id3v1_set_artist (new, artist_new);
+		g_free (artist_new);
+	}
+	else
+	{
+		g_message ("convert \"%s\" to %s failed", artist, to_codeset);
+		*result = FALSE;
+//		goto ROF;
+	}
+
+	read = written = ID3V1_ALBUM_LEN;
+	if ((album_new = G_convert (album, ID3V1_ALBUM_LEN, to_codeset, from_codeset, &read, &written)) != NULL)
+	{
+		id3v1_set_album (new, album_new);
+		g_free (album_new);
+	}
+	else
+	{
+		g_message ("convert \"%s\" to %s failed", album, to_codeset);
+		*result = FALSE;
+//		goto ROF;
+	}
+
+	read = written = ID3V1_ALBUM_LEN;
+	if ((comment_new = G_convert (comment, ID3V1_COMMENT_LEN, to_codeset, from_codeset, &read, &written)) != NULL)
+	{
+		id3v1_set_comment (new, comment_new);
+		g_free (comment_new);
+	}
+	else
+	{
+		g_message ("convert \"%s\" to %s failed", comment, to_codeset);
+		*result = FALSE;
+		/* we don't need it now :p */
+		/* goto ROF; */
+	}
+
+/* return of function */	
+ROF:
+	g_message ("ROF reached");
+
+	g_free (title);
+	g_free (artist);
+	g_free (album);
+	g_free (comment);
+
+#endif
 	return new;
 }
 

@@ -44,6 +44,25 @@ Id3 *id3_copy (Id3 *id3)
 	return new;
 }
 
+Id3 *id3_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboolean *result)
+{
+	Id3 *new;
+	gboolean r1 = FALSE;
+	/* TODO: don't init it if Id3v2 done */
+	gboolean r2 = TRUE;
+
+	new = id3_new ();
+	if (id3->tag1)
+	{
+		new->tag1 = id3v1_convert (id3->tag1, to_codeset, from_codeset, &r1);
+	}
+	/* TODO: Id3v2 */
+
+	*result = (r1 && r2);
+
+	return new;
+}
+
 Id3 *id3_new_from_path (const gchar *path)
 {
 	FILE *file;
@@ -115,6 +134,10 @@ void id3_read_tag_from_file (Id3 *id3, FILE *file)
 	if (id3->tag1)
 	{
 		id3v1_read_tag_from_file (id3->tag1, file);
+	}
+	else
+	{
+		g_message ("don't have Id3v1 tag");
 	}
 	/* TODO: Id3v2 */
 }

@@ -10,6 +10,7 @@ Id3 *id3_new (void);
 void id3_free (Id3 *id3);
 
 Id3 *id3_copy (Id3 *id3);
+Id3 *id3_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboolean *result);
 
 Id3 *id3_new_from_path (const gchar *path);
 Id3 *id3_new_from_file (FILE *file);
