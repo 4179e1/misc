@@ -72,7 +72,6 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	}
 	g_message ("converting from \"%s\" to \"%s\"", from_codeset, to_codeset);
 
-#if 1
 	id3v1_get_content_to_param (tag, &title, &artist, &album, NULL, &comment, NULL, NULL);
 
 	read = written = ID3V1_TITLE_LEN;
@@ -86,7 +85,6 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 		/* if fail, stop, don't need to covert other string */
 		g_message ("convert \"%s\" to %s failed", title, to_codeset);
 		*result = FALSE;
-//		goto ROF;
 	}
 
 	read = written = ID3V1_ARTIST_LEN;
@@ -99,7 +97,6 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	{
 		g_message ("convert \"%s\" to %s failed", artist, to_codeset);
 		*result = FALSE;
-//		goto ROF;
 	}
 
 	read = written = ID3V1_ALBUM_LEN;
@@ -112,7 +109,6 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	{
 		g_message ("convert \"%s\" to %s failed", album, to_codeset);
 		*result = FALSE;
-//		goto ROF;
 	}
 
 	read = written = ID3V1_ALBUM_LEN;
@@ -125,20 +121,16 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	{
 		g_message ("convert \"%s\" to %s failed", comment, to_codeset);
 		*result = FALSE;
-		/* we don't need it now :p */
-		/* goto ROF; */
 	}
 
 /* return of function */	
-ROF:
-	g_message ("ROF reached");
 
 	g_free (title);
 	g_free (artist);
 	g_free (album);
 	g_free (comment);
 
-#endif
+	g_message ("do we reach here?");
 	return new;
 }
 

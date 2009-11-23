@@ -26,7 +26,7 @@ gchar *G_convert (const gchar *str, gssize len, const gchar *to_codeset,
 	{
 		g_warning ("%s", error->message);
 		g_message ("%u reade, %u written", *bytes_read, *bytes_written);
-		g_free (error);
+		g_error_free (error);
 	}
 	return ptr;
 }

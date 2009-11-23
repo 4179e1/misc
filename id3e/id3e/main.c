@@ -43,7 +43,7 @@ static gboolean init_app (Id3e *id3e)
 	if (!gtk_builder_add_from_file (builder, "id3e.glade", &error))
 	{
 		g_warning ("%s", error->message);
-		g_free (error);
+		g_error_free (error);
 		return FALSE;
 	}
 

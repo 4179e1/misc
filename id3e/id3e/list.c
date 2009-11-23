@@ -297,7 +297,7 @@ static void listfile (Id3e *id3e, gchar *path)
 	{
 		g_warning ("g_dir_open error");
 		g_warning ("%s\n", error->message);
-		g_free (error);
+		g_error_free (error);
 		return;
 	}
 
