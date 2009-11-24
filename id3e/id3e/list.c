@@ -72,8 +72,6 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 					id3_free (id3_new);
 					id3_free (id3);
 				}
-				/* TODO: read tags */
-	
 			}
 	
 		}

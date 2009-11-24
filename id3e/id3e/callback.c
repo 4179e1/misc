@@ -84,6 +84,10 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 				gva_write_to_id3 (gva, tag);
 
 				id3_new = id3_convert (tag, src, "UTF-8", &result);
+				if (!result)
+				{
+					id3e_statusbar_message (id3e, "Convert from UTF-8 to %s fail", src);
+				}
 
 				id3_write_tag_to_path (id3_new, path);
 
@@ -157,14 +161,38 @@ void on_convert_clicked (GtkButton *button, Id3e *id3e)
 		{
 			if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 			{
+				Id3 *id3;
 				gtk_tree_model_get (model, &iter, 1, &path, -1);
-				/* TODO: convert codeset */
-				g_free (path);
+				if ((id3 = id3_new_from_path (path)) != NULL)
+				{
+					Id3 *id3_new;
+					gboolean result;
+	
+					id3_new = id3_convert (id3, dest, src, &result);
+	
+					if (!result)
+					{
+						id3e_statusbar_message (id3e, "Convert from %s to %s fail", src, dest);
+					}
+
+					id3_write_tag_to_path (id3_new, path);
+
+	
+					id3_free (id3_new);
+					id3_free (id3);
+					g_free (path);
+				}
 			}
 		}
 		else
 		{
 		}
+
+		/* swap src/dest codeset */
+		enc_set_src_text (enc, dest);
+		enc_set_dest_text (enc, src);
+
+		on_selection_changed (id3e_list_get_selection (id3e), id3e);
 
 		g_free (src);
 		g_free (dest);

@@ -63,7 +63,11 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 
 	g_assert (tag != NULL);
 
-	*result = TRUE;
+	if (result)
+	{
+		*result = TRUE;
+	}
+
 	new = id3v1_copy (tag);
 
 	if ((to_codeset == NULL) || (from_codeset == NULL) )
@@ -85,7 +89,10 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	{
 		/* if fail, stop, don't need to covert other string */
 		g_message ("convert \"%s\" to %s failed", title, to_codeset);
-		*result = FALSE;
+		if (result)
+		{
+			*result = FALSE;
+		}
 	}
 
 	read = written = ID3V1_ARTIST_LEN;
@@ -97,7 +104,10 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	else
 	{
 		g_message ("convert \"%s\" to %s failed", artist, to_codeset);
-		*result = FALSE;
+		if (result)
+		{
+			*result = FALSE;
+		}
 	}
 
 	read = written = ID3V1_ALBUM_LEN;
@@ -109,7 +119,10 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	else
 	{
 		g_message ("convert \"%s\" to %s failed", album, to_codeset);
-		*result = FALSE;
+		if (result)
+		{
+			*result = FALSE;
+		}
 	}
 
 	read = written = ID3V1_ALBUM_LEN;
@@ -121,7 +134,10 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	else
 	{
 		g_message ("convert \"%s\" to %s failed", comment, to_codeset);
-		*result = FALSE;
+		if (result)
+		{
+			*result = FALSE;
+		}
 	}
 
 /* return of function */	
