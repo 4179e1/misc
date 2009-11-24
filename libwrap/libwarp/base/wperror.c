@@ -8,6 +8,8 @@
 #include "wperror.h"
 #include "wpbase.h"
 
+#define EXIT_STATUS_DEFAULT -1
+
 static bool wp_syslog_status = false;
 static FILE *wp_error_of = NULL;
 
@@ -73,7 +75,7 @@ void wp_error_sys_return (const char *fmt, ...)
 	return;
 }
 
-void wp_error_sys_exit (int exit_status, const char *fmt, ...)
+void wp_error_sys_exit (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -81,11 +83,19 @@ void wp_error_sys_exit (int exit_status, const char *fmt, ...)
 	error_do (true, LOG_ERR, fmt, ap);
 	va_end (ap);
 	
-	exit (exit_status);
+	exit (EXIT_STATUS_DEFAULT);
 }
 
+void wp_error_sys_exit_with_status (int exit_status, const char *fmt, ...)
+{
+	va_list ap;
 
+	va_start (ap, fmt);
+	error_do (true, LOG_ERR, fmt, ap);
+	va_end (ap);
 
+	exit (exit_status);
+}
 
 void wp_error_syslog_on (void) 
 {

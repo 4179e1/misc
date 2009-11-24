@@ -359,7 +359,7 @@
             </child>
             <child>
               <object class="GtkToolItem" id="src_ph">
-                <property name="width_request">100</property>
+                <property name="width_request">150</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_src">
@@ -402,7 +402,7 @@
             </child>
             <child>
               <object class="GtkToolItem" id="dest_ph">
-                <property name="width_request">100</property>
+                <property name="width_request">150</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_dest">

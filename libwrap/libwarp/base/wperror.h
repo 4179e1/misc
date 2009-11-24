@@ -12,7 +12,8 @@ void wp_error_exit (int exit_status, const char *fmt, ...);
 /* error process for system call, check errno */
 void wp_error_sys_warning (const char *fmt, ...);
 void wp_error_sys_return (const char *fmt, ...);
-void wp_error_sys_exit (int exit_status, const char *fmt, ...);
+void wp_error_sys_exit (const char *fmt, ...);
+void wp_error_sys_exit_ws(int exit_status, const char *fmt, ...);
 
 void wp_error_syslog_on (void);
 void wp_error_syslog_off (void);

@@ -1,7 +1,9 @@
-#include "wppath.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include "wpbase.h"
+#include "wppath.h"
 
 #ifdef PATH_MAX
 static int pathmax = PATH_MAX;
@@ -24,12 +26,12 @@ int wp_get_path_max(void)
 	if (pathmax == 0)
 	{
 		errno = 0;
-		if (pathmax = pathconf ("/", _PC_PATH_MAX) < 0)
+		if ((pathmax = pathconf ("/", _PC_PATH_MAX)) < 0)
 		{
 			if (errno == 0)
 				pathmax = PATH_MAX_GUESS;
 			else
-				wp_err_sys ("pathconf error for _PC_PATH_MAX");
+				wp_error_sys_exit ("pathconf error for _PC_PATH_MAX");
 		}
 		else
 		{
@@ -48,10 +50,10 @@ int wp_get_path_max(void)
 char *wp_path_alloc (int *sizep)
 {
 	char *ptr;
-	int size = get_path_max();
+	int size = wp_get_path_max();
 
 	if ((ptr = malloc (size)) == NULL)
-		wp_err_sys ("malloc error for pathname");
+		wp_error_sys_exit ("malloc error for pathname");
 
 	if (sizep != NULL)
 		*sizep = size;
