@@ -170,7 +170,7 @@ gint id3e_list_get_selected_count (Id3e *id3e)
 	return gtk_tree_selection_count_selected_rows (selection);
 }
 
-GList *id3e_list_get_selectd_rows (Id3e *id3e)
+GList *id3e_list_get_selected_rows (Id3e *id3e)
 {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
@@ -178,6 +178,12 @@ GList *id3e_list_get_selectd_rows (Id3e *id3e)
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (id3e->list));
 	return gtk_tree_selection_get_selected_rows (selection, &model);
 }
+
+GtkTreeSelection *id3e_list_get_selection (Id3e *id3e)
+{
+	return gtk_tree_view_get_selection (GTK_TREE_VIEW (id3e->list));
+}
+
 /* sidebar */
 void id3e_set_sidebar (Id3e *id3e, GtkWidget *sidebar)
 {

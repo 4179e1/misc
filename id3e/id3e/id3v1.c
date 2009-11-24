@@ -27,6 +27,7 @@ Id3v1 *id3v1_new (void)
 	Id3v1 *tag;
 
 	tag =  g_new0 (Id3v1, 1);
+	strncpy (tag->tag, "TAG", ID3V1_TAG_LEN);
 
 	return tag;
 }
@@ -130,7 +131,6 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	g_free (album);
 	g_free (comment);
 
-	g_message ("do we reach here?");
 	return new;
 }
 
@@ -354,7 +354,7 @@ gchar id3v1_get_genre (Id3v1 *tag) {
 	return tag->genre;
 }
 
-void id3v1_set_title (Id3v1 *tag, gchar *title)
+void id3v1_set_title (Id3v1 *tag, const gchar *title)
 {
 	memset (tag->title, 0, ID3V1_TITLE_LEN);
 	if (title != NULL)
@@ -363,7 +363,7 @@ void id3v1_set_title (Id3v1 *tag, gchar *title)
 	}
 }
 
-void id3v1_set_artist (Id3v1 *tag, gchar *artist)
+void id3v1_set_artist (Id3v1 *tag, const gchar *artist)
 {
 	memset (tag->artist, 0, ID3V1_ARTIST_LEN);
 	if (artist != NULL)
@@ -372,7 +372,7 @@ void id3v1_set_artist (Id3v1 *tag, gchar *artist)
 	}
 }
 
-void id3v1_set_album (Id3v1 *tag, gchar *album)
+void id3v1_set_album (Id3v1 *tag,const gchar *album)
 {
 	memset (tag->album, 0, ID3V1_ALBUM_LEN);
 	if (album != NULL)
@@ -382,7 +382,7 @@ void id3v1_set_album (Id3v1 *tag, gchar *album)
 }
 
 
-void id3v1_set_year (Id3v1 *tag, gchar *year)
+void id3v1_set_year (Id3v1 *tag, const gchar *year)
 {
 	memset (tag->year, 0, ID3V1_YEAR_LEN);
 	if (year != NULL)
@@ -392,7 +392,7 @@ void id3v1_set_year (Id3v1 *tag, gchar *year)
 }
 
 
-void id3v1_set_comment (Id3v1 *tag, gchar *comment)
+void id3v1_set_comment (Id3v1 *tag, const gchar *comment)
 {
 	memset (tag->comment, 0, ID3V1_COMMENT_LEN);
 	if (comment != NULL)
@@ -451,8 +451,9 @@ Id3v1 *id3v1_get_content_to_param (Id3v1 *tag, gchar**title,
 }
 
 Id3v1 *id3v1_set_content_from_param (Id3v1 *tag,
-		gchar *title, gchar *artist, gchar *album,
-		gchar *year, gchar *comment, gchar *track, gchar *genre)
+		const gchar *title, const gchar *artist, const gchar *album,
+		const gchar *year, const gchar *comment,
+		const gchar *track, const gchar *genre)
 {
 	if (title)
 	{

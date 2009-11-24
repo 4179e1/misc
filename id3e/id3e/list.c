@@ -29,64 +29,65 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 		/* TODO: reset gva */
 		return;
 	}
-
-	/* ok, selected something, initial some variable */
-	GList *list;
-	GList *ptr;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	gchar *path = NULL;
-
-	//path = g_new (gchar, ID3E_PATH_LEN);
-	model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
-	list = gtk_tree_selection_get_selected_rows (selection,
-			&model);
-	ptr = list;
-
-	/* only 1 row selected */
-	if (selected_num == 1)
+	else
 	{
-		if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
+		/* ok, selected something, initial some variable */
+		GList *list;
+		GList *ptr;
+		GtkTreeModel *model;
+		GtkTreeIter iter;
+		gchar *path = NULL;
+		gchar *src;
+	
+		src = enc_get_src_text (enc);
+		model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
+		list = gtk_tree_selection_get_selected_rows (selection,
+				&model);
+		ptr = list;
+	
+		/* only 1 row selected */
+		if (selected_num == 1)
 		{
-			Id3 *id3;
-
-			gtk_tree_model_get (model, &iter,
-					1, &path,
-					-1);
-			if ((id3 = id3_new_from_path (path)) != NULL)
+			if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 			{
-				g_message ("readed tag from path");
-				Id3 *id3_new;
-				gboolean result;
-				gchar *src;
-
-				src = enc_get_src_text (enc);
-				id3_new = id3_convert (id3, "UTF-8", src, &result);
-
-				gva_read_from_id3 (gva, id3_new);
-
-				if (!result)
+				Id3 *id3;
+	
+				gtk_tree_model_get (model, &iter,
+						1, &path,
+						-1);
+				if ((id3 = id3_new_from_path (path)) != NULL)
 				{
-					id3e_statusbar_message (id3e, "Convert from %s to UTF-8 fail", src);
+					Id3 *id3_new;
+					gboolean result;
+	
+					id3_new = id3_convert (id3, "UTF-8", src, &result);
+	
+					gva_read_from_id3 (gva, id3_new);
+	
+					if (!result)
+					{
+						id3e_statusbar_message (id3e, "Convert from %s to UTF-8 fail", src);
+					}
+	
+					id3_free (id3_new);
+					id3_free (id3);
 				}
-
-				g_free (src);
-				id3_free (id3_new);
-				id3_free (id3);
+				/* TODO: read tags */
+	
 			}
-			/* TODO: read tags */
-
+	
+		}
+		else /* 2 or more rows are selected */
+		{
+			/* TODO: reset gv1, update some same field */
 		}
 
-	}
-	else /* 2 or more rows are selected */
-	{
-		/* TODO: reset gv1, update some same field */
-	}
+		g_free (src);
 
-	g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (list);
-	g_free (path);
+		g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
+		g_list_free (list);
+		g_free (path);
+	}
 }
 
 G_MODULE_EXPORT 

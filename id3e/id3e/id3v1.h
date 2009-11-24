@@ -54,11 +54,11 @@ gchar id3v1_get_genre (Id3v1 *tag);
  * set property, if pointer to new property is NULL, 
  * it will clear the previous property with 0
  */
-void id3v1_set_title (Id3v1 *tag, gchar *title);
-void id3v1_set_artist (Id3v1 *tag, gchar *artist);
-void id3v1_set_album (Id3v1 *tag, gchar *album);
-void id3v1_set_year (Id3v1 *tag, gchar *year);
-void id3v1_set_comment (Id3v1 *tag, gchar *comment);
+void id3v1_set_title (Id3v1 *tag, const gchar *title);
+void id3v1_set_artist (Id3v1 *tag, const gchar *artist);
+void id3v1_set_album (Id3v1 *tag, const gchar *album);
+void id3v1_set_year (Id3v1 *tag, const gchar *year);
+void id3v1_set_comment (Id3v1 *tag, const gchar *comment);
 
 void id3v1_set_track (Id3v1 *tag, gchar track);
 void id3v1_set_genre (Id3v1 *tag, gchar genre);
@@ -71,8 +71,9 @@ Id3v1 *id3v1_get_content_to_param (Id3v1 *tag, gchar**title,
 
 /* ingnore if property pointer is NULL */
 Id3v1 *id3v1_set_content_from_param (Id3v1 *tag,
-		gchar *title, gchar *artist, gchar *album,
-		gchar *year, gchar *comment, gchar *track, gchar *genre);		
+		const gchar *title, const gchar *artist, const gchar *album,
+		const gchar *year, const gchar *comment,
+		const gchar *track, const gchar *genre);		
 
 void id3v1_dump (Id3v1 *tag, FILE *file);
 /* 

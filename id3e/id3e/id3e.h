@@ -35,7 +35,8 @@ void id3e_list_init (Id3e *id3e);
 GtkListStore *id3e_get_list_store (Id3e *id3e);
 void id3e_list_insert (Id3e *id3e, const gchar *path);
 gint id3e_list_get_selected_count (Id3e *id3e);
-GList *id3e_list_get_selectd_rows (Id3e *id3e);
+GList *id3e_list_get_selected_rows (Id3e *id3e);
+GtkTreeSelection *id3e_list_get_selection (Id3e *id3e);
 
 void id3e_set_sidebar (Id3e *id3e, GtkWidget *sidebar);
 GtkWidget *id3e_get_sidebar (Id3e *id3e);

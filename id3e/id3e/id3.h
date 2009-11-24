@@ -7,6 +7,7 @@
 typedef struct _id3 Id3;
 
 Id3 *id3_new (void);
+Id3 *id3_new_with_tag (void);
 void id3_free (Id3 *id3);
 
 Id3 *id3_copy (Id3 *id3);
@@ -24,5 +25,7 @@ void id3_write_tag_to_file (Id3 *id3, FILE *file);
 void id3_remove_tag_from_file (FILE *file);
 
 Id3v1 *id3_get_id3v1 (Id3 *id3);
+
+void id3_dump (Id3 *id3, FILE *file);
 
 #endif /* _ID3_H */

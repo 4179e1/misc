@@ -75,6 +75,33 @@ Gv1 *gv1_set_sensitive (Gv1 *gv1, gboolean status)
 
 Id3v1 *gv1_write_to_id3v1 (Gv1 *gv1, Id3v1 *tag)
 {
+	g_assert (gv1 != NULL);
+	g_assert (tag != NULL);
+
+	const gchar *title;
+	const gchar *artist;
+	const gchar *album;
+	gdouble d_year;
+	gchar year[ID3V1_YEAR_LEN];
+	const gchar *comment;
+	gchar track;
+	gchar genre;
+
+	title = gtk_entry_get_text (gv1->title);
+	artist = gtk_entry_get_text (gv1->artist);
+	album = gtk_entry_get_text (gv1->album);
+
+	d_year = gtk_spin_button_get_value (gv1->track);
+	g_ascii_dtostr (year, ID3V1_YEAR_LEN, d_year);
+
+	comment = gtk_entry_get_text (gv1->comment);
+	track = (gchar)gtk_spin_button_get_value (gv1->track);
+	genre = gtk_combo_box_get_active (gv1->genre);
+
+	id3v1_set_content_from_param (tag, title, artist, album,
+			year, comment, &track, &genre);
+
+	/* nothing need to free */
 	return tag;
 }
 
@@ -95,12 +122,16 @@ Gv1 *gv1_read_from_id3v1 (Gv1 *gv1, Id3v1 *tag)
 	gtk_entry_set_text (gv1->title, title);
 	gtk_entry_set_text (gv1->artist, artist);
 	gtk_entry_set_text (gv1->album, album);
-	gtk_spin_button_set_value (gv1->year, g_strtod (year, NULL));
+	gtk_spin_button_set_value (gv1->year, g_ascii_strtod (year, NULL));
 	gtk_entry_set_text (gv1->comment, comment);
 	gtk_spin_button_set_value (gv1->track, (gdouble)track);
 	if (genre_valid (genre))
 	{
 		gtk_combo_box_set_active (gv1->genre, genre);
+	}
+	else
+	{
+		gtk_combo_box_set_active (gv1->genre, -1);
 	}
 
 	g_free (title);

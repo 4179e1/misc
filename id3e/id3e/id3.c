@@ -20,6 +20,17 @@ Id3 *id3_new (void)
 	return id3;
 }
 
+Id3 *id3_new_with_tag (void)
+{
+	Id3 *id3;
+	id3 = g_new (Id3, 1);
+
+	id3->tag1 = id3v1_new ();
+	/* TODO: Id3v2 */
+
+	return id3;
+}
+
 void id3_free (Id3 *id3)
 {
 	if (id3->tag1)
@@ -161,4 +172,15 @@ void id3_remove_tag_from_file (FILE *file)
 Id3v1 *id3_get_id3v1 (Id3 *id3)
 {
 	return id3->tag1;
+}
+
+void id3_dump (Id3 *id3, FILE *file)
+{
+	fprintf (file, "<ID3_TAG>\n");
+	if (id3->tag1)
+	{
+		id3v1_dump (id3->tag1, file);
+	}
+	/* TODO: Id3v2 */
+	fprintf (file, "</ID3_TAG>\n");
 }
