@@ -407,7 +407,6 @@
                 <child>
                   <object class="GtkComboBoxEntry" id="enc_dest">
                     <property name="visible">True</property>
-                    <signal name="changed" handler="on_enc_changed"/>
                   </object>
                 </child>
               </object>
