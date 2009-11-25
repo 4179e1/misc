@@ -14,4 +14,7 @@ void on_save_clicked (GtkButton *button, Id3e *id3e);
 void on_enc_changed (GtkComboBox *combo, Id3e *id3e);
 void on_enc_activate (GtkEntry *entry, Id3e *id3e);
 void on_convert_clicked (GtkButton *button, Id3e *id3e);
+
+void on_switch_page (GtkNotebook *notebook, GtkNotebookPage *page,
+		guint page_num, Id3e *id3e);
 #endif /* _CALLBACK_H */

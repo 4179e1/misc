@@ -1,9 +1,10 @@
 #include <gtk/gtk.h>
+#include <string.h>
 #include "id3e.h"
 #include "callback.h"
 #include "list.h"
+#include "gva.h"
 
-#include <string.h>
 
 G_MODULE_EXPORT 
 void on_sidebar_toggle (gpointer *widget, Id3e *id3e)
@@ -75,23 +76,23 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 			if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 			{
 				Id3 *tag;
-				Id3 *id3_new;
+				Id3 *tag_new;
 				gboolean result;
 
 				gtk_tree_model_get (model, &iter, 1, &path, -1);
 				
-				tag = id3_new_with_tag ();
+				tag = id3_new ();
 				gva_write_to_id3 (gva, tag);
 
-				id3_new = id3_convert (tag, src, "UTF-8", &result);
+				tag_new = id3_convert (tag, src, "UTF-8", &result);
 				if (!result)
 				{
-					id3e_statusbar_message (id3e, "Convert from UTF-8 to %s fail", src);
+					id3e_statusbar_message (id3e, "%s Convert from UTF-8 to %s fail", __func__, src);
 				}
 
-				id3_write_tag_to_path (id3_new, path);
+				id3_write_tag_to_path (tag_new, path);
 
-				id3_free (id3_new);
+				id3_free (tag_new);
 				id3_free (tag);
 				g_free (path);
 			}
@@ -155,38 +156,34 @@ void on_convert_clicked (GtkButton *button, Id3e *id3e)
 		dest = enc_get_dest_text (enc);
 		model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 		list = id3e_list_get_selected_rows (id3e);
-		ptr = list;
 
-		if (selected_num == 1)
+		GvaSelection select;
+		if ((select = gva_get_selection (gva) )== GVA_SELECTION_V1)
 		{
-			if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
+			for (ptr = list; ptr != NULL; ptr = g_list_next (ptr))
 			{
-				Id3 *id3;
-				gtk_tree_model_get (model, &iter, 1, &path, -1);
-				if ((id3 = id3_new_from_path (path)) != NULL)
+				if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 				{
-					Id3 *id3_new;
 					gboolean result;
-	
-					id3_new = id3_convert (id3, dest, src, &result);
-	
+					gtk_tree_model_get (model, &iter, 1, &path, -1);
+					id3v1_convert_path (path, dest, src, &result);
 					if (!result)
 					{
-						id3e_statusbar_message (id3e, "Convert from %s to %s fail", src, dest);
+						id3e_statusbar_message (id3e, "Error occur while converting from %s to %s", src, dest);
 					}
-
-					id3_write_tag_to_path (id3_new, path);
-
-	
-					id3_free (id3_new);
-					id3_free (id3);
 					g_free (path);
 				}
 			}
 		}
+		else if (select == GVA_SELECTION_V2)
+		{
+			g_message ("nothing to do with Id3v2 now");
+		}
 		else
 		{
+			g_warning ("should not reach here");
 		}
+
 
 		/* swap src/dest codeset */
 		enc_set_src_text (enc, dest);
@@ -201,4 +198,14 @@ void on_convert_clicked (GtkButton *button, Id3e *id3e)
 		g_list_free (list);
 	}
 
+}
+
+G_MODULE_EXPORT
+void on_switch_page (GtkNotebook *notebook, GtkNotebookPage *page,
+		guint page_num, Id3e *id3e)
+{
+	Gva *gva;
+
+	gva = id3e_get_gva (id3e);
+	gva_set_selection (gva, (GvaSelection)page_num);
 }

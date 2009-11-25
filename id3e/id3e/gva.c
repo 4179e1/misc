@@ -7,6 +7,7 @@ struct _gva
 	Gv1 *gv1;
 	/* TODO: Gv2 */
 	gboolean is_sensitive;
+	GvaSelection current;
 };
 
 Gva *gva_new ()
@@ -14,6 +15,7 @@ Gva *gva_new ()
 	Gva *gva;
 	gva = g_new (Gva, 1);
 	gva->is_sensitive = FALSE;
+	gva->current = GVA_SELECTION_V1;
 	gva->gv1 = gv1_new ();
 	/* TODO: Gv2 */
 	return gva;
@@ -53,14 +55,35 @@ gboolean gva_is_sensitive (Gva *gva)
 	return gva->is_sensitive;
 }
 
+GvaSelection gva_get_selection (Gva *gva)
+{
+	return gva->current;
+}
+
+void gva_set_selection (Gva *gva, GvaSelection select)
+{
+	gva->current = select;
+}
+
 Id3 *gva_write_to_id3 (Gva *gva, Id3 *id3)
 {
-	Id3v1 *tag1;
-	if ((tag1 = id3_get_id3v1 (id3)) != NULL)
+	if (gva->current == GVA_SELECTION_V1)
 	{
+		Id3v1 *tag1;
+
+		tag1 = id3v1_new ();
+		id3_set_id3v1 (id3, tag1);
 		gv1_write_to_id3v1 (gva->gv1, tag1);
 	}
-	/* TODO: Gv2 */
+	else if (gva->current == GVA_SELECTION_V2)
+	{
+		g_message ("nothing to do here");
+		/* TODO: Gv2 */
+	}
+	else
+	{
+		g_warning ("should not reach here");
+	}
 	return id3;
 }
 

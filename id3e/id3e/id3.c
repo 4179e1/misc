@@ -174,6 +174,17 @@ Id3v1 *id3_get_id3v1 (Id3 *id3)
 	return id3->tag1;
 }
 
+void id3_set_id3v1 (Id3 *id3, Id3v1 *tag1)
+{
+	/* FIXME: do we need to free this? */
+	if (id3->tag1)
+	{
+		g_message ("freed previous object, set a new one");
+		id3v1_free (id3->tag1);
+	}
+	id3->tag1 = tag1;
+}
+
 void id3_dump (Id3 *id3, FILE *file)
 {
 	fprintf (file, "<ID3_TAG>\n");

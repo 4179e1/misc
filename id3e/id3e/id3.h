@@ -25,6 +25,7 @@ void id3_write_tag_to_file (Id3 *id3, FILE *file);
 void id3_remove_tag_from_file (FILE *file);
 
 Id3v1 *id3_get_id3v1 (Id3 *id3);
+void id3_set_id3v1 (Id3 *id3, Id3v1 *tag1);
 
 void id3_dump (Id3 *id3, FILE *file);
 

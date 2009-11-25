@@ -5,7 +5,6 @@
 
 struct _gv1
 {
-	GtkLabel *tag;
 	GtkEntry *title;
 	GtkEntry *artist;
 	GtkEntry *album;
@@ -29,7 +28,6 @@ Gv1 *gv1_init (Gv1 *gv1, GtkBuilder *builder)
 {
 	GtkListStore *liststore;
 
-	gv1->tag = GTK_LABEL (Gtk_builder_get_object (builder, "gv1_tag"));
 	gv1->title = GTK_ENTRY (Gtk_builder_get_object (builder, "gv1_title"));
 	gv1->artist = GTK_ENTRY (Gtk_builder_get_object (builder, "gv1_artist"));
 	gv1->album = GTK_ENTRY (Gtk_builder_get_object (builder, "gv1_album"));

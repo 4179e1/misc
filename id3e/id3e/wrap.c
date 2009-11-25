@@ -35,7 +35,7 @@ FILE *G_fopen (const char *filename, const char *mode)
 {	FILE *file;
 	if ((file = g_fopen (filename, mode)) == NULL)
 	{
-		g_warning ("g_fopen error");
+		g_warning ("g_fopen %s error", filename);
 	}
 
 	return file;

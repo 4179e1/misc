@@ -3,6 +3,15 @@
 #include "id3v1.h"
 #include "wrap.h"
 
+#define ID3V1_TAG "TAG"
+#define ID3V1_TAG_LEN 3
+#define ID3V1_TITLE_LEN 30
+#define ID3V1_ARTIST_LEN 30
+#define ID3V1_ALBUM_LEN 30
+#define ID3V1_YEAR_LEN 4
+#define ID3V1_COMMENT_LEN 28
+#define ID3V1_TRACK_LEN 1
+#define ID3V1_GENRE_LEN 1
 
 #define ID3V1_LEN 128
 #define ID3V1_POS (-ID3V1_LEN)
@@ -20,6 +29,24 @@ struct _id3v1
 	gchar genre;						/* 1	128 */
 };
 
+struct _id3v1_multi
+{
+	gchar tag[ID3V1_TAG_LEN];			/* 3	3	*/
+	/* while selecting one more items, we don't need title field */
+	gchar artist_same;					/* 1	4	*/
+	gchar album_same;					/* 1	5	*/
+	gchar year_same;					/* 1	6	*/
+	gchar comment_same;					/* 1	7	*/
+	gchar genre_same;					/* 1	8	*/
+	gchar padding2[25];					/* 25	33	*/
+	gchar artist[ID3V1_ARTIST_LEN];		/* 30	63	*/
+	gchar album[ID3V1_ALBUM_LEN];		/* 30	93	*/
+	gchar year[ID3V1_YEAR_LEN];			/* 4	97	*/
+	gchar comment[ID3V1_COMMENT_LEN];	/* 28	125	*/
+	gchar padding;						/* 1	126 */
+	gchar track;						/* 1	127	*/
+	gchar genre;						/* 1	128 */
+};
 
 /* mem */
 Id3v1 *id3v1_new (void)
@@ -45,7 +72,7 @@ Id3v1 *id3v1_copy (Id3v1 *tag)
 	return new;
 }
 
-Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboolean *result)
+Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_codeset, gboolean *result)
 {
 	Id3v1 *new;	
 	gchar *title;
@@ -148,6 +175,37 @@ Id3v1 *id3v1_convert (Id3v1 *tag, gchar *to_codeset, gchar *from_codeset, gboole
 	g_free (comment);
 
 	return new;
+}
+
+gboolean id3v1_convert_path (const gchar *path, const gchar *to_codeset, const gchar *from_codeset, gboolean *result)
+{
+	FILE *file;
+	gboolean stat;
+
+	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return FALSE;
+	}
+	stat = id3v1_convert_file (file, to_codeset, from_codeset, result);
+	Fclose (file);
+
+	return stat;
+}
+
+gboolean id3v1_convert_file (FILE *file, const gchar *to_codeset, const gchar *from_codeset, gboolean *result)
+{
+	Id3v1 *tag;
+	Id3v1 *tag_new;
+
+	tag = id3v1_new_from_file (file);
+	tag_new = id3v1_convert (tag, to_codeset, from_codeset, result);
+	id3v1_write_tag_to_file (tag_new, file);
+
+	id3v1_free (tag);
+	id3v1_free (tag_new);
+
+	return *result;
 }
 
 Id3v1 *id3v1_new_from_path (const gchar *path)
@@ -549,4 +607,56 @@ void id3v1_assert (Id3v1 *tag)
 	g_assert ((&(tag->padding) - tag->comment) == 28);
 	g_assert ((&(tag->track) - &(tag->padding)) == 1);
 	g_assert ((&(tag->genre) - &(tag->track)) == 1);
+}
+
+Id3v1Multi *id3v1_multi_new (void)
+{
+	Id3v1Multi *mul;
+	mul = g_new0 (Id3v1Multi, 1);
+	mul->artist_same = 1;
+	mul->album_same = 1;
+	mul->year_same = 1;
+	mul->comment_same = 1;
+	mul->genre_same = 1;
+	return mul;
+}
+void id3v1_multi_free (Id3v1Multi *mul)
+{
+	g_free (mul);
+}
+
+gboolean id3v1_multi_write_to_path (Id3v1Multi *mul, const gchar *path)
+{
+	FILE *file;
+	gboolean result;
+	
+	file = G_fopen (path, FILE_MODE);
+	if (file == NULL)
+	{
+		return FALSE;
+	}
+
+	result = id3v1_multi_write_to_file (mul, file);
+	Fclose (file);
+
+	return result;
+}
+
+gboolean id3v1_multi_write_to_file (Id3v1Multi *mul, FILE *file)
+{
+	return FALSE;
+}
+
+void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
+		gchar **album, gchar **year, gchar **comment, gchar *genre)
+{
+	g_assert (mul != NULL);
+	id3v1_get_content_to_param ((Id3v1 *)mul, NULL, artist, album, year, comment, NULL, genre);
+}
+
+void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
+		const gchar *album, const gchar *year, const gchar *comment, const gchar *genre)
+{
+	g_assert (mul != NULL);
+	id3v1_set_content_from_param ((Id3v1 *)mul, NULL, artist, album, year, comment, NULL, genre);
 }
