@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "wpbase.h"
-#include "wppath.h"
 
 #ifdef PATH_MAX
 static int pathmax = PATH_MAX;
@@ -31,7 +30,7 @@ int wp_get_path_max(void)
 			if (errno == 0)
 				pathmax = PATH_MAX_GUESS;
 			else
-				wp_error_sys_exit ("pathconf error for _PC_PATH_MAX");
+				wp_error_sys_warning ("pathconf error for _PC_PATH_MAX");
 		}
 		else
 		{

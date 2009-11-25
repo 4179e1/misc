@@ -5,7 +5,6 @@
 #include <stdarg.h>
 #include <syslog.h>
 #include <errno.h>
-#include "wperror.h"
 #include "wpbase.h"
 
 #define EXIT_STATUS_DEFAULT -1

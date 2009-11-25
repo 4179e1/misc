@@ -22,7 +22,7 @@ long open_max (void)
 			if (errno == 0)
 				openmax = OPEN_MAX_GUESS;
 			else
-				wp_error_sys_exit ("sysconf error for _SC_OPEN_MAX");
+				wp_error_sys_warning ("sysconf error for _SC_OPEN_MAX");
 		}
 
 	}
