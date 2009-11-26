@@ -1,10 +1,10 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -std=c99
 OBJ = wpfileio.o wpfileutilities.o
 TAR = unixio.a
 
 all: $(OBJ)
 	ar rcs $(TAR) $(OBJ)
 
-celan:
+clean:
 	rm $(OBJ) $(TAR)
