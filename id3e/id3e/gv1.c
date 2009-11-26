@@ -12,6 +12,12 @@ struct _gv1
 	GtkEntry *comment;
 	GtkSpinButton *track;
 	GtkComboBox *genre;
+
+	GtkToggleButton *ck_artist;
+	GtkToggleButton *ck_album;
+	GtkToggleButton *ck_year;
+	GtkToggleButton *ck_comment;
+	GtkToggleButton *ck_genre;
 };
 
 Gv1 *gv1_new ()
@@ -35,6 +41,12 @@ Gv1 *gv1_init (Gv1 *gv1, GtkBuilder *builder)
 	gv1->comment = GTK_ENTRY (Gtk_builder_get_object (builder, "gv1_comment"));
 	gv1->track = GTK_SPIN_BUTTON (Gtk_builder_get_object (builder, "gv1_track"));
 	gv1->genre = GTK_COMBO_BOX (Gtk_builder_get_object (builder, "gv1_genre"));
+
+	gv1->ck_artist = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_artist"));
+	gv1->ck_album = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_album"));
+	gv1->ck_year = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_year"));
+	gv1->ck_comment = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_comment"));
+	gv1->ck_genre = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_genre"));
 
 	liststore = GTK_LIST_STORE (
 			Gtk_builder_get_object (builder, "genre_list"));
@@ -139,4 +151,133 @@ Gv1 *gv1_read_from_id3v1 (Gv1 *gv1, Id3v1 *tag)
 	g_free (comment);
 
 	return gv1;
+}
+
+void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
+{
+	g_assert (gv1 != NULL);
+	g_assert (mul != NULL);
+
+	if (gtk_toggle_button_get_active (gv1->ck_artist))
+	{
+		id3v1_multi_set_artist (mul, gtk_entry_get_text (gv1->artist));
+	}
+	else
+	{
+		id3v1_multi_set_artist (mul, NULL);
+	}
+
+	if (gtk_toggle_button_get_active (gv1->ck_album))
+	{
+		id3v1_multi_set_album (mul, gtk_entry_get_text (gv1->album));
+	}
+	else
+	{
+		id3v1_multi_set_album (mul, NULL);
+	}
+
+	if (gtk_toggle_button_get_active (gv1->ck_year))
+	{
+		/* TODO: */
+		gchar year[ID3V1_YEAR_LEN];
+		gdouble d_year = gtk_spin_button_get_value (gv1->year);
+		g_ascii_dtostr (year, ID3V1_YEAR_LEN, d_year);
+		id3v1_multi_set_year (mul, year);
+	}
+	else
+	{
+		id3v1_multi_set_year (mul, NULL);
+	}
+
+	if (gtk_toggle_button_get_active (gv1->ck_comment))
+	{
+		id3v1_multi_set_comment (mul, gtk_entry_get_text (gv1->comment));
+	}
+	else
+	{
+		id3v1_multi_set_comment (mul, NULL);
+	}
+
+	if (gtk_toggle_button_get_active (gv1->ck_genre))
+	{
+		gchar genre = gtk_combo_box_get_active (gv1->genre);
+		id3v1_multi_set_genre (mul, &genre);
+	}
+	else
+	{
+		id3v1_multi_set_genre (mul, NULL);
+	}
+}
+
+void gv1_read_from_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
+{
+	gchar *artist;
+	gchar *album;
+	gchar *year;
+	gchar *comment;
+	gchar genre_val;
+	gchar *genre = &genre_val;
+
+	id3v1_multi_get_content_to_param (mul, &artist, &album, &year, &comment, &genre);
+
+	if (artist)
+	{
+		gtk_entry_set_text (gv1->artist, artist);
+		gtk_toggle_button_set_active (gv1->ck_artist, TRUE);
+		g_free (artist);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_artist, FALSE);
+	}
+
+	if (album)
+	{
+		gtk_entry_set_text (gv1->album, album);
+		gtk_toggle_button_set_active (gv1->ck_album, TRUE);
+		g_free (album);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_album, FALSE);
+	}
+
+	if (year)
+	{
+		gtk_spin_button_set_value (gv1->year, g_ascii_strtod (year, NULL));
+		gtk_toggle_button_set_active (gv1->ck_year, TRUE);
+		g_free (year);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_year, FALSE);
+	}
+
+	if (comment)
+	{
+		gtk_entry_set_text (gv1->comment, comment);
+		gtk_toggle_button_set_active (gv1->ck_comment, TRUE);
+		g_free (comment);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_comment, FALSE);
+	}
+
+	if (genre)
+	{
+		if (genre_valid (*genre))
+		{
+			gtk_combo_box_set_active (gv1->genre, *genre);
+		}
+		else
+		{
+			gtk_combo_box_set_active (gv1->genre, -1);
+		}
+		gtk_toggle_button_set_active (gv1->ck_genre, TRUE);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_genre, TRUE);
+	}
 }

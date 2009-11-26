@@ -18,4 +18,7 @@ gboolean gv1_is_sensitive (Gv1 *gv1);
 Id3v1 *gv1_write_to_id3v1 (Gv1 *gv1, Id3v1 *tag);
 Gv1 *gv1_read_from_id3v1 (Gv1 *gv1, Id3v1 *tag);
 
+void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul);
+void gv1_read_from_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul);
+
 #endif /* _GV1_H */

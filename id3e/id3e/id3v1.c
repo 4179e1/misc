@@ -599,6 +599,10 @@ void id3v1_assert (Id3v1 *tag)
 	g_assert ((&(tag->genre) - &(tag->track)) == 1);
 }
 
+/**********************************************
+ * Id3v1Multi
+ *********************************************/
+
 Id3v1Multi *id3v1_multi_new (void)
 {
 	Id3v1Multi *mul;
@@ -610,6 +614,73 @@ Id3v1Multi *id3v1_multi_new (void)
 	mul->genre_same = 1;
 	return mul;
 }
+
+Id3v1Multi *id3v1_multi_new_from_v1 (Id3v1 *tag)
+{
+	Id3v1Multi *mul;
+	mul = id3v1_multi_new();
+	id3v1_multi_copy_from_v1 (mul, tag);
+	return mul;
+}
+
+Id3v1Multi *id3v1_multi_copy_from_v1 (Id3v1Multi *mul, Id3v1 *tag)
+{
+	g_assert (mul != NULL);
+	g_assert (tag != NULL);
+	
+	memcpy (mul, tag, ID3V1_LEN);
+
+	/* clear title field */
+	id3v1_set_title ((Id3v1 *)mul, NULL);
+	mul->artist_same = 1;
+	mul->album_same = 1;
+	mul->year_same = 1;
+	mul->comment_same = 1;
+	mul->genre_same = 1;
+
+	return mul;
+}
+
+void id3v1_multi_write_to_v1 (Id3v1Multi *mul, Id3v1 *tag)
+{
+	g_assert (mul != NULL);
+	g_assert (tag != NULL);
+
+	gchar *artist;
+	gchar *album;
+	gchar *year;
+	gchar *comment;
+	/* take care this */
+	gchar genre_val;
+	gchar *genre = &genre_val;
+	id3v1_multi_get_content_to_param (mul, &artist, &album, &year, &comment, &genre);
+	if (artist)
+	{
+		id3v1_set_artist (tag, artist);
+		g_free (artist);
+	}
+	if (album)
+	{
+		id3v1_set_album (tag, album);
+		g_free (year);
+	}
+	if (year)
+	{
+		id3v1_set_year (tag, year);
+		g_free (year);
+	}
+	if (comment)
+	{
+		id3v1_set_comment (tag, comment);
+		g_free (comment);
+	}
+	if (genre)
+	{
+		id3v1_set_genre (tag, *genre);
+		/* take care this, don't free */
+	}
+}
+
 void id3v1_multi_free (Id3v1Multi *mul)
 {
 	g_free (mul);
@@ -634,19 +705,187 @@ gboolean id3v1_multi_write_to_path (Id3v1Multi *mul, const gchar *path)
 
 gboolean id3v1_multi_write_to_file (Id3v1Multi *mul, FILE *file)
 {
+	Id3v1 *tag;
+
+	if (id3v1_multi_no_same (mul))
+	{
+		return TRUE;
+	}
+
+	if ((tag = id3v1_new_from_file (file)) != NULL)
+	{
+		id3v1_multi_write_to_v1 (mul, tag);
+		id3v1_write_tag_to_file (tag, file);
+		id3v1_free (tag);
+	}
 	return FALSE;
 }
 
-void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
-		gchar **album, gchar **year, gchar **comment, gchar *genre)
+void id3v1_multi_set_artist (Id3v1Multi *mul, const gchar *artist)
 {
 	g_assert (mul != NULL);
-	id3v1_get_content_to_param ((Id3v1 *)mul, NULL, artist, album, year, comment, NULL, genre);
+
+	if (artist)
+	{
+		id3v1_set_artist ((Id3v1 *)mul, artist);
+	}
+	else
+	{
+		mul->artist_same = 0;
+	}
+}
+
+void id3v1_multi_set_album (Id3v1Multi *mul, const gchar *album)
+{
+	if (album)
+	{
+		id3v1_set_album ((Id3v1 *)mul, album);
+		mul->album_same = 1;
+	}
+	else
+	{
+		mul->album_same = 0;
+	}
+}
+
+void id3v1_multi_set_year (Id3v1Multi *mul, const gchar *year)
+{
+	if (year)
+	{
+		id3v1_set_album ((Id3v1 *)mul, year);
+		mul->year_same = 1;
+	}
+	else
+	{
+		mul->year_same = 0;
+	}
+}
+
+void id3v1_multi_set_comment (Id3v1Multi *mul, const gchar *comment)
+{
+	if (comment)
+	{
+		id3v1_set_comment ((Id3v1 *)mul, comment);
+		mul->comment_same = 1;
+	}
+	else
+	{
+		mul->comment_same = 0;
+	}
+}
+
+void id3v1_multi_set_genre (Id3v1Multi *mul, const gchar *genre)
+{
+	if (genre)
+	{
+		mul->genre = *genre;
+		mul->genre_same = 1;
+	}
+	else
+	{
+		mul->genre_same = 0;
+	}
+}
+
+void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
+		gchar **album, gchar **year, gchar **comment, gchar **genre)
+{
+	g_assert (mul != NULL);
+	if (artist)
+	{
+		if (mul->artist_same)
+		{
+			*artist = g_strndup (mul->artist, ID3V1_ARTIST_LEN);
+		}
+		else
+		{
+			*artist = NULL;
+		}
+	}
+	if (album)
+	{
+		if (mul->album_same)
+		{
+			*album = g_strndup (mul->album, ID3V1_ALBUM_LEN);
+		}
+		else
+		{
+			*album = NULL;
+		}
+	}
+	if (year)
+	{
+		if (mul->year_same)
+		{
+			*year = g_strndup (mul->year, ID3V1_YEAR_LEN);
+		}
+		else
+		{
+			*year = NULL;
+		}
+	}
+	if (comment)
+	{
+		if (mul->comment_same)
+		{
+			*comment = g_strndup (mul->comment, ID3V1_COMMENT_LEN);
+		}
+		else
+		{
+			*comment = NULL;
+		}
+	}
+	if (genre)
+	{
+		if (mul->genre_same)
+		{
+			**genre = mul->genre;
+		}
+		else
+		{
+			*genre = NULL;
+		}
+	}
 }
 
 void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
 		const gchar *album, const gchar *year, const gchar *comment, const gchar *genre)
 {
 	g_assert (mul != NULL);
-	id3v1_set_content_from_param ((Id3v1 *)mul, NULL, artist, album, year, comment, NULL, genre);
+	id3v1_multi_set_artist (mul, artist);
+	id3v1_multi_set_album (mul, album);
+	id3v1_multi_set_year (mul, year);
+	id3v1_multi_set_comment (mul, comment);
+	id3v1_multi_set_genre (mul, genre);
+}
+
+gboolean id3v1_multi_no_same (Id3v1Multi *mul)
+{
+	return (mul->artist_same || mul->album_same || mul->year_same || mul->comment_same || mul->genre_same);
+}
+
+void id3v1_multi_dump (Id3v1Multi *mul, FILE *file)
+{
+	fprintf (file, "<ID3V1_MULTI");
+	if (mul->artist_same)
+	{
+		fprintf (file, " ARTIST=\"%s\"", mul->artist);
+	}
+	if (mul->album_same)
+	{
+		fprintf (file, " ALBUM=\"%s\"", mul->album);
+	}
+	if (mul->year_same)
+	{
+		fprintf (file, " YEAR=\"%s\"", mul->year);
+	}
+	if (mul->comment_same)
+	{
+		fprintf (file, " COMMENT=\"%s\"", mul->comment);
+	}
+	if (mul->genre_same)
+	{
+		fprintf (file, " GENRE=\"%d\"", mul->genre);
+	}
+	fprintf (file, ">");
 }

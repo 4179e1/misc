@@ -8,6 +8,8 @@
 #define DUMP_MODE "wb+"
 
 GObject *Gtk_builder_get_object (GtkBuilder *builder, const gchar *name);
+/* return NULL if the text is "" (just a '\0' in string) */
+const gchar *gtk_entry_get_text_ne (GtkEntry *entry);
 gchar *G_convert (const gchar *str, gssize len,
 		const gchar *to_codeset, const gchar *from_codeset,
 		gsize *bytes_read, gsize *bytes_written);
