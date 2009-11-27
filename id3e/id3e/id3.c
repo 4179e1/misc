@@ -209,7 +209,6 @@ Id3 *id3_multi_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboole
 	new = id3_new ();
 	if (id3->tag1)
 	{
-		g_message ("%s", __func__);
 		new->tag1 = (Id3v1 *)id3v1_multi_convert ((Id3v1Multi *)id3->tag1, to_codeset, from_codeset, &r1);
 	}
 	/* TODO: Id3v2 */
@@ -219,7 +218,6 @@ Id3 *id3_multi_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboole
 		*result = (r1 && r2);
 	}
 	
-	g_message ("%s do we reached here?", __func__);
 	return new;
 }
 

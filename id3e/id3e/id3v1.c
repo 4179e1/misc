@@ -104,7 +104,7 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 	}
 	else
 	{
-		/* if fail, stop, don't need to covert other string */
+		/* if fail, stop, don't need to covert other string? */
 		CONVERT_FAIL (title);
 		rt = FALSE;
 	}
@@ -150,8 +150,6 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 		*result = rt;
 	}
 
-/* return of function */	
-
 	g_free (title);
 	g_free (artist);
 	g_free (album);
@@ -181,12 +179,17 @@ gboolean id3v1_convert_file (FILE *file, const gchar *to_codeset, const gchar *f
 	Id3v1 *tag;
 	Id3v1 *tag_new;
 
-	tag = id3v1_new_from_file (file);
-	tag_new = id3v1_convert (tag, to_codeset, from_codeset, result);
-	id3v1_write_tag_to_file (tag_new, file);
-
-	id3v1_free (tag);
-	id3v1_free (tag_new);
+	if ((tag = id3v1_new_from_file (file)) != NULL)
+	{
+		tag_new = id3v1_convert (tag, to_codeset, from_codeset, result);
+		id3v1_write_tag_to_file (tag_new, file);
+		id3v1_free (tag);
+		id3v1_free (tag_new);
+	}
+	else
+	{
+		return FALSE;
+	}
 
 	return *result;
 }
@@ -600,7 +603,6 @@ Id3v1Multi *id3v1_multi_new (void)
 {
 	Id3v1Multi *mul;
 	mul = g_new0 (Id3v1Multi, 1);
-	id3v1_multi_assert (mul);
 	mul->artist_same = 1;
 	mul->album_same = 1;
 	mul->year_same = 1;
@@ -661,7 +663,7 @@ void id3v1_multi_write_to_v1 (Id3v1Multi *mul, Id3v1 *tag)
 	if (album)
 	{
 		id3v1_set_album (tag, album);
-		g_free (year);
+		g_free (album);
 	}
 	if (year)
 	{
@@ -695,15 +697,8 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 	gsize write;
 	gboolean rt = TRUE;
 
-	g_message ("%s beging", __func__);
-
 	new = id3v1_multi_new ();
-	g_message ("%s after new", __func__);
 	memcpy (new, mul, ID3V1_LEN);
-	g_message ("%s after memcpy", __func__);
-
-	id3v1_multi_dump (new, stdout);
-	g_message ("%s after dump", __func__);
 
 	if (id3v1_multi_no_same (mul))
 	{
@@ -728,8 +723,6 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 		{
 			id3v1_multi_set_artist (new, artist_new);
 			CONVERT (artist);
-			printf ("%s\n", artist_new);
-			g_print ("%s\n", artist_new);
 			g_free (artist_new);
 		}
 		else
@@ -739,9 +732,6 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 		}
 		g_free (artist);
 	}
-
-	id3v1_multi_dump (mul, stdout);
-
 	if (album)
 	{
 		read = write = ID3V1_ALBUM_LEN;
@@ -749,8 +739,6 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 		{
 			id3v1_multi_set_album (new, album_new);
 			CONVERT (album);
-			printf ("%s\n", album_new);
-			g_print ("%s\n", album_new);
 			g_free (album_new);
 		}
 		else
@@ -758,11 +746,8 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 			CONVERT_FAIL (album);
 			rt = FALSE;
 		}
-		g_free (artist);
+		g_free (album);
 	}
-
-	id3v1_multi_dump (mul, stdout);
-	
 	if (comment)
 	{
 		read = write = ID3V1_COMMENT_LEN;
@@ -770,8 +755,6 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 		{
 			id3v1_multi_set_comment (new, comment_new);
 			CONVERT (comment);
-			printf ("%s\n", comment_new);
-			g_print ("%s\n", comment_new);
 			g_free (comment_new);
 		}
 		else
@@ -786,10 +769,6 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 	{
 		*result = rt;
 	}
-
-	id3v1_multi_dump (new, stdout);
-
-	g_message ("%s ending", __func__);
 
 	return new;
 }
@@ -975,10 +954,10 @@ gboolean id3v1_multi_no_same (Id3v1Multi *mul)
 
 void id3v1_multi_dump (Id3v1Multi *mul, FILE *file)
 {
-	gchar *artist;
-	gchar *album;
-	gchar *year;
-	gchar *comment;
+	gchar *artist = NULL;
+	gchar *album = NULL;
+	gchar *year = NULL;
+	gchar *comment = NULL;
 	/* take care this!! */
 	gchar genre_val;
 	gchar *genre = &genre_val;

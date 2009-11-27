@@ -42,8 +42,6 @@ void on_edit_clicked (GtkButton *button, Id3e *id3e)
 G_MODULE_EXPORT
 void on_save_clicked (GtkButton *button, Id3e *id3e)
 {
-	g_message ("on_save_clicked");
-
 	gint selected_num;
 	Gva *gva;
 	Enc *enc;
@@ -123,15 +121,13 @@ void on_enc_changed (GtkComboBox *combo, Id3e *id3e)
 G_MODULE_EXPORT
 void on_enc_activate (GtkEntry *entry, Id3e *id3e)
 {
-	g_message ("on_enc_activate");
 	on_selection_changed (id3e_list_get_selection (id3e) , id3e);
 }
 
 G_MODULE_EXPORT
 void on_convert_clicked (GtkButton *button, Id3e *id3e)
 {
-	g_message ("on_convert_clicked");
-		gint selected_num;
+	gint selected_num;
 	Gva *gva;
 	Enc *enc;
 

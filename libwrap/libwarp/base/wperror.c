@@ -54,7 +54,16 @@ void wp_error_exit (int exit_status, const char *fmt, ...)
 	exit (exit_status);
 }
 
-void wp_sys_warning (const char *fmt, ...)
+void wp_error_sys_info (const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start (ap, fmt);
+	error_do (true, LOG_INFO, fmt, ap);
+	va_end (ap);
+}
+
+void wp_error_sys_warning (const char *fmt, ...)
 {
 	va_list ap;
 	

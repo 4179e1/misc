@@ -77,7 +77,7 @@ Id3 *gva_write_to_id3 (Gva *gva, Id3 *id3)
 	}
 	else if (gva->current == GVA_SELECTION_V2)
 	{
-		g_message ("nothing to do here");
+		g_message ("nothing to do with Id3v2 now");
 		/* TODO: Gv2 */
 	}
 	else
@@ -109,7 +109,7 @@ Id3 *gva_write_to_id3_multi (Gva *gva, Id3 *id3)
 	}
 	else if (gva->current == GVA_SELECTION_V2)
 	{
-		g_message ("nothint to do here");
+		g_message ("nothint to do with Id3v2 now");
 		/* TODO: Gv2 */
 	}
 	else
