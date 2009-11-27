@@ -5,7 +5,6 @@
 #include "list.h"
 #include "gva.h"
 
-
 G_MODULE_EXPORT 
 void on_sidebar_toggle (gpointer *widget, Id3e *id3e)
 {
@@ -65,44 +64,46 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 		GtkTreeIter iter;
 		gchar *path = NULL;
 		gchar *src;
+		gboolean result;
+		Id3 *tag;
+		Id3 *tag_new;
 
 		src = enc_get_src_text (enc);
 		model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 		list = id3e_list_get_selected_rows (id3e);
 		ptr = list;
+		tag = id3_new ();
 
 		if (selected_num == 1)
 		{
 			if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 			{
-				Id3 *tag;
-				Id3 *tag_new;
-				gboolean result;
-
 				gtk_tree_model_get (model, &iter, 1, &path, -1);
 				
-				tag = id3_new ();
 				gva_write_to_id3 (gva, tag);
-
 				tag_new = id3_convert (tag, src, "UTF-8", &result);
-				if (!result)
-				{
-					id3e_statusbar_message (id3e, "%s Convert from UTF-8 to %s fail", __func__, src);
-				}
-
 				id3_write_tag_to_path (tag_new, path);
 
-				id3_free (tag_new);
-				id3_free (tag);
 				g_free (path);
 			}
 		}
-		else
+		else /* selected two or more rows */
 		{
+			gva_write_to_id3_multi (gva, tag);
+			id3_multi_dump (tag, stdout);
+			tag_new = id3_multi_convert (tag, src, "UTF-8", &result);
+			id3_multi_dump (tag_new, stdout);
 		}
 
-		g_free (src);
+		if (!result)
+		{
+			id3e_statusbar_message (id3e, "%s Convert from UTF-8 to %s fail", __func__, src);
+		}
 
+		id3_free (tag_new);
+		id3_free (tag);
+
+		g_free (src);
 		g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (list);
 	}

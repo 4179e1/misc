@@ -69,7 +69,10 @@ Id3 *id3_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboolean *re
 	}
 	/* TODO: Id3v2 */
 
-	*result = (r1 && r2);
+	if (result)
+	{
+		*result = (r1 && r2);
+	}
 
 	return new;
 }
@@ -194,4 +197,39 @@ void id3_dump (Id3 *id3, FILE *file)
 	}
 	/* TODO: Id3v2 */
 	fprintf (file, "</ID3_TAG>\n");
+}
+
+Id3 *id3_multi_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboolean *result)
+{
+	Id3 *new;
+	gboolean r1 = FALSE;
+	/* TODO: don't init it if Id3v2 done */
+	gboolean r2 = TRUE;
+
+	new = id3_new ();
+	if (id3->tag1)
+	{
+		g_message ("%s", __func__);
+		new->tag1 = (Id3v1 *)id3v1_multi_convert ((Id3v1Multi *)id3->tag1, to_codeset, from_codeset, &r1);
+	}
+	/* TODO: Id3v2 */
+
+	if (result)
+	{
+		*result = (r1 && r2);
+	}
+	
+	g_message ("%s do we reached here?", __func__);
+	return new;
+}
+
+void id3_multi_dump (Id3 *id3, FILE *file)
+{
+	fprintf (file, "<ID3_MULTI_TAG>\n");
+	if (id3->tag1)
+	{
+		id3v1_multi_dump ((Id3v1Multi *)id3->tag1, file);
+	}
+	/* TODO: Id3v2 */
+	fprintf (file, "</ID3_MULTI_TAG>\n");
 }

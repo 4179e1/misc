@@ -170,6 +170,7 @@ void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 	if (gtk_toggle_button_get_active (gv1->ck_album))
 	{
 		id3v1_multi_set_album (mul, gtk_entry_get_text (gv1->album));
+		/* DEBUG */
 	}
 	else
 	{
@@ -178,11 +179,12 @@ void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 
 	if (gtk_toggle_button_get_active (gv1->ck_year))
 	{
-		/* TODO: */
-		gchar year[ID3V1_YEAR_LEN];
+		/* require an additioanl '\0' */
+		gchar year[ID3V1_YEAR_LEN + 1];
 		gdouble d_year = gtk_spin_button_get_value (gv1->year);
-		g_ascii_dtostr (year, ID3V1_YEAR_LEN, d_year);
+		g_ascii_dtostr (year, sizeof(year), d_year);
 		id3v1_multi_set_year (mul, year);
+		/* DEBUG */
 	}
 	else
 	{

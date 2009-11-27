@@ -28,5 +28,7 @@ Id3v1 *id3_get_id3v1 (Id3 *id3);
 void id3_set_id3v1 (Id3 *id3, Id3v1 *tag1);
 
 void id3_dump (Id3 *id3, FILE *file);
-
+void id3_multi_dump (Id3 *id3, FILE *file);
+/* multi */
+Id3 *id3_multi_convert (Id3 *id3, gchar *to_codeset, gchar *from_codeset, gboolean *result);
 #endif /* _ID3_H */

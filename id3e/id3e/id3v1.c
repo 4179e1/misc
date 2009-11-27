@@ -6,6 +6,10 @@
 #define ID3V1_LEN 128
 #define ID3V1_POS (-ID3V1_LEN)
 
+#define CONVERT_FAIL(X) (g_message ("converting \"%s\" from \"%s\" to \"%s\" failed", X, from_codeset, to_codeset))
+
+#define CONVERT(X) (g_message ("converted \"%s\" from \"%s\" to \"%s\" ", X, from_codeset, to_codeset))
+
 struct _id3v1
 {
 	gchar tag[ID3V1_TAG_LEN];			/* 3	3	*/
@@ -77,13 +81,9 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 
 	gsize read;
 	gsize written;
+	gboolean rt = TRUE;
 
 	g_assert (tag != NULL);
-
-	if (result)
-	{
-		*result = TRUE;
-	}
 
 	new = id3v1_copy (tag);
 
@@ -105,11 +105,8 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 	else
 	{
 		/* if fail, stop, don't need to covert other string */
-		g_message ("convert \"%s\" to %s failed", title, to_codeset);
-		if (result)
-		{
-			*result = FALSE;
-		}
+		CONVERT_FAIL (title);
+		rt = FALSE;
 	}
 
 	read = written = ID3V1_ARTIST_LEN;
@@ -120,11 +117,8 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 	}
 	else
 	{
-		g_message ("convert \"%s\" to %s failed", artist, to_codeset);
-		if (result)
-		{
-			*result = FALSE;
-		}
+		CONVERT_FAIL (artist);
+		rt = FALSE;
 	}
 
 	read = written = ID3V1_ALBUM_LEN;
@@ -135,11 +129,8 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 	}
 	else
 	{
-		g_message ("convert \"%s\" to %s failed", album, to_codeset);
-		if (result)
-		{
-			*result = FALSE;
-		}
+		CONVERT_FAIL (album);
+		rt = FALSE;
 	}
 
 	read = written = ID3V1_ALBUM_LEN;
@@ -150,11 +141,13 @@ Id3v1 *id3v1_convert (Id3v1 *tag, const gchar *to_codeset, const gchar *from_cod
 	}
 	else
 	{
-		g_message ("convert \"%s\" to %s failed", comment, to_codeset);
-		if (result)
-		{
-			*result = FALSE;
-		}
+		CONVERT_FAIL (comment);
+		rt = FALSE;
+	}
+
+	if (result)
+	{
+		*result = rt;
 	}
 
 /* return of function */	
@@ -607,12 +600,18 @@ Id3v1Multi *id3v1_multi_new (void)
 {
 	Id3v1Multi *mul;
 	mul = g_new0 (Id3v1Multi, 1);
+	id3v1_multi_assert (mul);
 	mul->artist_same = 1;
 	mul->album_same = 1;
 	mul->year_same = 1;
 	mul->comment_same = 1;
 	mul->genre_same = 1;
 	return mul;
+}
+
+void id3v1_multi_free (Id3v1Multi *mul)
+{
+	g_free (mul);
 }
 
 Id3v1Multi *id3v1_multi_new_from_v1 (Id3v1 *tag)
@@ -681,9 +680,118 @@ void id3v1_multi_write_to_v1 (Id3v1Multi *mul, Id3v1 *tag)
 	}
 }
 
-void id3v1_multi_free (Id3v1Multi *mul)
-{
-	g_free (mul);
+Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const gchar *from_codeset, gboolean *result)
+{	
+	g_assert (mul != NULL);
+
+	Id3v1Multi *new;
+	gchar *artist = NULL;
+	gchar *album = NULL;
+	gchar *comment = NULL;
+	gchar *artist_new;
+	gchar *album_new;
+	gchar *comment_new;
+	gsize read;
+	gsize write;
+	gboolean rt = TRUE;
+
+	g_message ("%s beging", __func__);
+
+	new = id3v1_multi_new ();
+	g_message ("%s after new", __func__);
+	memcpy (new, mul, ID3V1_LEN);
+	g_message ("%s after memcpy", __func__);
+
+	id3v1_multi_dump (new, stdout);
+	g_message ("%s after dump", __func__);
+
+	if (id3v1_multi_no_same (mul))
+	{
+		return new;
+	}
+
+	if ((to_codeset == NULL) || (from_codeset == NULL))
+	{
+		if (result)
+		{
+			*result = FALSE;
+		}
+		return new;
+	}
+
+	id3v1_multi_get_content_to_param (mul, &artist, &album, NULL, &comment, NULL);
+
+	if (artist)
+	{
+		read = write = ID3V1_ARTIST_LEN;
+		if ((artist_new = G_convert (artist, ID3V1_ARTIST_LEN, to_codeset, from_codeset, &read, &write)) != NULL)
+		{
+			id3v1_multi_set_artist (new, artist_new);
+			CONVERT (artist);
+			printf ("%s\n", artist_new);
+			g_print ("%s\n", artist_new);
+			g_free (artist_new);
+		}
+		else
+		{
+			CONVERT_FAIL (artist);
+			rt = FALSE;
+		}
+		g_free (artist);
+	}
+
+	id3v1_multi_dump (mul, stdout);
+
+	if (album)
+	{
+		read = write = ID3V1_ALBUM_LEN;
+		if ((album_new = G_convert (album, ID3V1_ALBUM_LEN, to_codeset, from_codeset, &read, &write)) != NULL)
+		{
+			id3v1_multi_set_album (new, album_new);
+			CONVERT (album);
+			printf ("%s\n", album_new);
+			g_print ("%s\n", album_new);
+			g_free (album_new);
+		}
+		else
+		{
+			CONVERT_FAIL (album);
+			rt = FALSE;
+		}
+		g_free (artist);
+	}
+
+	id3v1_multi_dump (mul, stdout);
+	
+	if (comment)
+	{
+		read = write = ID3V1_COMMENT_LEN;
+		if ((comment_new = G_convert (comment, ID3V1_COMMENT_LEN, to_codeset, from_codeset, &read, &write)) != NULL)
+		{
+			id3v1_multi_set_comment (new, comment_new);
+			CONVERT (comment);
+			printf ("%s\n", comment_new);
+			g_print ("%s\n", comment_new);
+			g_free (comment_new);
+		}
+		else
+		{
+			CONVERT_FAIL (comment);
+			rt = FALSE;
+		}
+		g_free (comment);
+	}
+
+	if (result)
+	{
+		*result = rt;
+	}
+
+	id3v1_multi_dump (new, stdout);
+
+	g_message ("%s ending", __func__);
+
+	return new;
 }
 
 gboolean id3v1_multi_write_to_path (Id3v1Multi *mul, const gchar *path)
@@ -728,6 +836,7 @@ void id3v1_multi_set_artist (Id3v1Multi *mul, const gchar *artist)
 	if (artist)
 	{
 		id3v1_set_artist ((Id3v1 *)mul, artist);
+		mul->artist_same = 1;
 	}
 	else
 	{
@@ -752,7 +861,7 @@ void id3v1_multi_set_year (Id3v1Multi *mul, const gchar *year)
 {
 	if (year)
 	{
-		id3v1_set_album ((Id3v1 *)mul, year);
+		id3v1_set_year ((Id3v1 *)mul, year);
 		mul->year_same = 1;
 	}
 	else
@@ -861,31 +970,66 @@ void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
 
 gboolean id3v1_multi_no_same (Id3v1Multi *mul)
 {
-	return (mul->artist_same || mul->album_same || mul->year_same || mul->comment_same || mul->genre_same);
+	return !(mul->artist_same || mul->album_same || mul->year_same || mul->comment_same || mul->genre_same);
 }
 
 void id3v1_multi_dump (Id3v1Multi *mul, FILE *file)
 {
+	gchar *artist;
+	gchar *album;
+	gchar *year;
+	gchar *comment;
+	/* take care this!! */
+	gchar genre_val;
+	gchar *genre = &genre_val;
+
+	id3v1_multi_get_content_to_param (mul, &artist, &album, &year, &comment, &genre);
+
 	fprintf (file, "<ID3V1_MULTI");
-	if (mul->artist_same)
+
+	if (artist)
 	{
-		fprintf (file, " ARTIST=\"%s\"", mul->artist);
+		fprintf (file, " ARTIST=\"%s\"", artist);
+		g_free (artist);
 	}
-	if (mul->album_same)
+	if (album)
 	{
-		fprintf (file, " ALBUM=\"%s\"", mul->album);
+		fprintf (file, " ALBUM=\"%s\"", album);
+		g_free (album);
 	}
-	if (mul->year_same)
+	if (year)
 	{
-		fprintf (file, " YEAR=\"%s\"", mul->year);
+		fprintf (file, " YEAR=\"%s\"", year);
+		g_free (year);
 	}
-	if (mul->comment_same)
+	if (comment)
 	{
-		fprintf (file, " COMMENT=\"%s\"", mul->comment);
+		fprintf (file, " COMMENT=\"%s\"", comment);
+		g_free (comment);
 	}
-	if (mul->genre_same)
+	if (genre)
 	{
-		fprintf (file, " GENRE=\"%d\"", mul->genre);
+		fprintf (file, " GENRE = \"%d\"", *genre);
+		/* don't free */
 	}
-	fprintf (file, ">");
+
+	fprintf (file, ">\n");
+}
+
+void id3v1_multi_assert (Id3v1Multi *mul)
+{
+	g_assert (sizeof (Id3v1Multi) == 128);
+	g_assert ((&(mul->artist_same) - (mul->tag)) == 3);
+	g_assert ((&(mul->album_same) - &(mul->artist_same)) == 1);
+	g_assert ((&(mul->year_same) - &(mul->album_same)) == 1);
+	g_assert ((&(mul->comment_same) - &(mul->year_same)) == 1);
+	g_assert ((&(mul->genre_same) - &(mul->comment_same)) == 1);
+	g_assert ((mul->padding2 - &(mul->genre_same)) == 1);
+	g_assert ((mul->artist - mul->padding2) == 25);
+	g_assert ((mul->album - mul->artist) == 30);
+	g_assert ((mul->year - mul->album) == 30);
+	g_assert ((mul->comment - mul->year) == 4);
+	g_assert ((&(mul->padding) - mul->comment) == 28);
+	g_assert ((&(mul->track) - &(mul->padding)) == 1);
+	g_assert ((&(mul->genre) - &(mul->track)) == 1);
 }

@@ -97,3 +97,35 @@ Gva *gva_read_from_id3 (Gva *gva, Id3 *id3)
 	/* TODO: Gv2 */
 	return gva;
 }
+
+Id3 *gva_write_to_id3_multi (Gva *gva, Id3 *id3)
+{
+	if (gva->current == GVA_SELECTION_V1)
+	{
+		Id3v1Multi *mtag1;
+		mtag1 = id3v1_multi_new ();
+		id3_set_id3v1 (id3, (Id3v1 *)mtag1);
+		gv1_write_to_id3v1_multi (gva->gv1, mtag1);
+	}
+	else if (gva->current == GVA_SELECTION_V2)
+	{
+		g_message ("nothint to do here");
+		/* TODO: Gv2 */
+	}
+	else
+	{
+		g_warning ("should not reach here");
+	}
+	return id3;
+}
+
+Gva *gva_read_from_id3_multi (Gva *gva, Id3 *id3)
+{
+	Id3v1Multi *mtag1;
+	if ((mtag1= (Id3v1Multi *)id3_get_id3v1 (id3)) != NULL)
+	{
+		gv1_read_from_id3v1_multi (gva->gv1, mtag1);
+	}
+	/* TODO: Gv2 */
+	return gva;
+}

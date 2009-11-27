@@ -94,6 +94,7 @@ void id3v1_multi_free (Id3v1Multi *mul);
 
 Id3v1Multi *id3v1_multi_new_from_v1 (Id3v1 *tag);
 Id3v1Multi *id3v1_multi_copy_from_v1 (Id3v1Multi *mul, Id3v1 *tag);
+Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const gchar *from_codeset, gboolean *result);
 
 gboolean id3v1_multi_write_to_path (Id3v1Multi *mul, const gchar *path);
 gboolean id3v1_multi_write_to_file (Id3v1Multi *mul, FILE *file);
@@ -111,4 +112,6 @@ void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
 
 gboolean id3v1_multi_no_same (Id3v1Multi *mul);
 void id3v1_multi_dump (Id3v1Multi *mul, FILE *file);
+void id3v1_multi_assert (Id3v1Multi *mul);
+
 #endif /* _ID3V1_H */

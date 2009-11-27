@@ -29,5 +29,7 @@ void gva_set_selection (Gva *gva, GvaSelection select);
 
 Id3 *gva_write_to_id3 (Gva *gva, Id3 *id3);
 Gva *gva_read_from_id3 (Gva *gva, Id3 *id3);
+Id3 *gva_write_to_id3_multi (Gva *gva, Id3 *id3);
+Gva *gva_read_from_id3_multi (Gva *gva, Id3 *id3);
 
 #endif /* _GVA_H */
