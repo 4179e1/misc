@@ -50,6 +50,7 @@ Id3v1 *id3v1_new (void)
 	tag =  g_new0 (Id3v1, 1);
 	strncpy (tag->tag, "TAG", ID3V1_TAG_LEN);
 
+	id3v1_assert (tag);
 	return tag;
 }
 
@@ -585,6 +586,7 @@ void id3v1_dump_path (Id3v1 *tag, const gchar *path)
 }
 void id3v1_assert (Id3v1 *tag)
 {
+	g_assert (sizeof (Id3v1) == 128);
 	g_assert ((tag->title - tag->tag) == 3);
 	g_assert ((tag->artist - tag->title) == 30);
 	g_assert ((tag->album - tag->artist) == 30);
@@ -623,6 +625,8 @@ Id3v1Multi *id3v1_multi_new_from_v1 (Id3v1 *tag)
 
 	mul = g_new0(Id3v1Multi, 1);
 	id3v1_multi_copy_from_v1 (mul, tag);
+
+	id3v1_multi_assert (mul);
 	return mul;
 }
 

@@ -82,6 +82,7 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 				tag_new = id3_convert (tag, src, "UTF-8", &result);
 				id3_write_tag_to_path (tag_new, path);
 
+				id3_free (tag_new);
 				g_free (path);
 			}
 		}
@@ -99,6 +100,7 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 					g_free (path);
 				}
 			}
+			id3_free (tag_new);
 		}
 
 		if (!result)
@@ -106,7 +108,6 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 			id3e_statusbar_message (id3e, "%s Convert from UTF-8 to %s fail", __func__, src);
 		}
 
-		id3_free (tag_new);
 		id3_free (tag);
 
 		g_free (src);

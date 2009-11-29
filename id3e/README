@@ -1,4 +1,6 @@
-ID3 Editor is developed under Gtk2-2.16, I didn't test if it works on  the previous version of gtk.
+ID3 Editor only support id3v1 now.
+
+It's developed under Gtk2-2.16, I didn't test if it works on  the previous version of gtk.
 
 To compile it, you need:
 	gtk2-devel	(recommand 2.16 or later, since I didn't test previous version)
