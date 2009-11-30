@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "array_sort.h"
-
-static void print_array (int *array, int len);
+#include "base.h"
 
 int main (void)
 {
@@ -27,15 +26,4 @@ int main (void)
 	print_array (array4, ARRAY_LEN(array4));
 
 	return 0;
-}
-
-static void print_array (int *array, int len)
-{
-	int i;
-	for (i = 0; i < len; i++)
-	{
-		printf (" %d", array[i]);
-	}
-
-	printf ("\tEOA\n");
 }

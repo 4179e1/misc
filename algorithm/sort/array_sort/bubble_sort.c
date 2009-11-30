@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "array_sort.h"
+#include "base.h"
 
 /**
  * @brief Bubble Sort for array.
