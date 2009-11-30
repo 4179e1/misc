@@ -86,11 +86,11 @@ int *heap_sort (int *array, int len)
 	assert (array != NULL);
 
 	h = heap_new_from_array (MAX_HEAP, array, len);
-	for (i = len; i > 0; i--)
+	for (i = len - 1; i > 0; i--)
 	{
 		swap (&array[0], &array[i]);
 		(h->card)--;
-		h->heapify_func (h, 1);
+		h->heapify_func (h, 0);
 	}
 
 	free (h);
@@ -107,7 +107,7 @@ static void max_heapify (Heap *h, int i)
 	l = HEAP_LEFT_INDEX (i);
 	r = HEAP_RIGHT_INDEX (i);
 
-	if ((l <= h->card) && (h->data[l] > h->data[i]))
+	if ((l < h->card) && (h->data[l] > h->data[i]))
 	{
 		largest = l;
 	}
@@ -116,7 +116,7 @@ static void max_heapify (Heap *h, int i)
 		largest = i;
 	}
 
-	if ((r <= h->card) && (h->data[r] > h->data[i]))
+	if ((r < h->card) && (h->data[r] > h->data[largest]))
 	{
 		largest = r;
 	}
@@ -135,7 +135,7 @@ static void min_heapify (Heap *h, int i)
 	assert (h != NULL);
 
 	l = HEAP_LEFT_INDEX (i);
-	if ((l <= h->card) && (h->data[l] < h->data[i]))
+	if ((l < h->card) && (h->data[l] < h->data[i]))
 	{
 		minimum = l;
 	}
@@ -144,7 +144,7 @@ static void min_heapify (Heap *h, int i)
 		minimum = i;
 	}
 
-	if ((r <= h->card) && (h->data[r] < h->data[minimum]))
+	if ((r < h->card) && (h->data[r] < h->data[minimum]))
 	{
 		minimum = r;
 	}
