@@ -1,7 +1,8 @@
 #include <fcntl.h>
 #include <unistd.h>
+#include <utime.h>
 #include "wpunixio.h"
-#include "../../base/wpbase.h"
+#include "wpbase.h"
 
 int wp_access (const char *pathname, int mode)
 {
@@ -59,7 +60,6 @@ int wp_dup2 (int filedes, int filedes2)
 	return fd;
 }
 
-#if defined __USE_BSD || defined __USE_XOPEN_EXTENDED
 int wp_fchmod (int filedes, mode_t mode)
 {
 	int n;
@@ -67,9 +67,7 @@ int wp_fchmod (int filedes, mode_t mode)
 		wp_error_sys_warning ("fchmod error");
 	return n;
 }
-#endif /* __USE_BSD || defined __USE_XOPEN_EXTENDED */
 
-#if defined __USE_BSD || defined __USE_XOPEN_EXTENDED
 int wp_fchown (int filedes, uid_t user, gid_t group)
 {
 	int n;
@@ -77,7 +75,6 @@ int wp_fchown (int filedes, uid_t user, gid_t group)
 		wp_error_sys_warning ("fchown error");
 	return n;
 }
-#endif /* __USE_BSD || defined __USE_XOPEN_EXTENDED */
 
 int wp_fcntl (int filedes, int cmd, int arg)
 {
@@ -87,7 +84,6 @@ int wp_fcntl (int filedes, int cmd, int arg)
 	return rt;
 }
 
-#if defined __USE_POSIX199309 || defined __USE_UNIX98
 int wp_fdatasync (int filedes)
 {
 	int rt;
@@ -95,7 +91,6 @@ int wp_fdatasync (int filedes)
 		wp_error_sys_warning ("fdatasync error");
 	return rt;
 }
-#endif /* __USE_POSIX199309 */
 
 int wp_fstat (int filedes, struct stat *buf)
 {
@@ -105,7 +100,6 @@ int wp_fstat (int filedes, struct stat *buf)
 	return n;
 }
 
-#if defined __USE_BSD || defined __USE_XOPEN || defined __USE_XOPEN2K
 int wp_fsync (int filedes)
 {
 	int n;
@@ -113,17 +107,14 @@ int wp_fsync (int filedes)
 		wp_error_sys_warning ("fsysnc error");
 	return n;
 }
-#endif /* Use BSD || X/Open || Unix98.  */
 
-#if defined __USE_BSD || defined __USE_XOPEN_EXTENDED
 int ftruncate (int filedes, off_t length)
 {
 	int n;
-	if ((n = ftuncate (filedes, length)) == -1)
+	if ((n = ftruncate (filedes, length)) == -1)
 		wp_error_sys_warning ("ftruncate error");
 	return n;
 }
-#endif /* __USE_BSD || defined __USE_XOPEN_EXTENDED */
 
 off_t wp_lseek (int filedes, off_t offset, int whence)
 {
@@ -133,7 +124,6 @@ off_t wp_lseek (int filedes, off_t offset, int whence)
 	return pos;
 }
 
-#if defined __USE_BSD || defined __USE_XOPEN_EXTENDED
 int wp_lchown (const char *pathname, uid_t owner, gid_t group)
 {
 	int n;
@@ -141,17 +131,22 @@ int wp_lchown (const char *pathname, uid_t owner, gid_t group)
 		wp_error_sys_warning ("lchown error");
 	return n;
 }
-#endif /* Use BSD || X/Open Unix.  */
 
-#if defined __USE_BSD || defined __USE_XOPEN_EXTENDED || defined __USE_XOPEN2K
-int wp_lstat (const char *restrict pathname, struct stat *restrict buf)
+int wp_link (const char *existingpath, const char *newpath)
+{
+	int n;
+	if ((n = link (existingpath, newpath)) == -1)
+		wp_error_sys_warning ("link error");
+	return n;
+}
+
+int wp_lstat (const char *pathname, struct stat *buf)
 {
 	int n;
 	if ((n = lstat (pathname, buf)) == -1)
 		wp_error_sys_warning ("lstat error");
 	return n;
 }
-#endif /* __USE_BSD || defined __USE_XOPEN_EXTENDED || defined __USE_XOPEN2K */
 
 int wp_ioctl (int filedes, int request, void *arg)
 {
@@ -177,7 +172,15 @@ ssize_t wp_read (int filedes, void *buf, size_t nbytes)
 	return n;
 }
 
-int wp_stat (const char *restrict pathname, struct stat *restrict buf)
+ssize_t wp_readlink (const char *pathname, char *buf, size_t bufsize)
+{
+	ssize_t n;
+	if ((n = readlink (pathname, buf, bufsize)) == -1)
+		wp_error_sys_warning ("readlink error");
+	return n;
+}
+
+int wp_stat (const char *pathname, struct stat *buf)
 {
 	int n;
 	if ((n = stat (pathname, buf)) == -1)
@@ -185,7 +188,14 @@ int wp_stat (const char *restrict pathname, struct stat *restrict buf)
 	return n;
 }
 
-#if defined __USE_BSD || defined __USE_XOPEN_EXTENDED
+int wp_symlink (const char *actualpath, const char *sympath)
+{
+	int n;
+	if ((n = symlink (actualpath, sympath)) == -1)
+		wp_error_sys_warning ("symlink error");
+	return n;
+}
+
 int wp_truncate (const char *pathname, off_t length)
 {
 	int n;
@@ -193,7 +203,22 @@ int wp_truncate (const char *pathname, off_t length)
 		wp_error_sys_warning ("truncate error");
 	return n;
 }
-#endif /* __USE_BSD || defined __USE_XOPEN_EXTENDED */
+
+int wp_unlink (const char *pathname)
+{
+	int n;
+	if ((n = unlink (pathname)) == -1)
+		wp_error_sys_warning ("unlink error");
+	return n;
+}
+
+int wp_utime (const char *pathname, const struct utimbuf *times)
+{
+	int n;
+	if ((n = utime (pathname, times)) == -1)
+		wp_error_sys_warning ("utime error");
+	return n;
+}
 
 ssize_t wp_write (int filedes, const void *buf, size_t nbytes)
 {

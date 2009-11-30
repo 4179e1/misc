@@ -1,8 +1,8 @@
 CC = gcc
 BASE_PATH = ../../base/
 CFLAGS = -Wall -I$(BASE_PATH)
-OBJ = wpfileio.o wpioutilities.o wpdir.o
-TAR = unixio.a
+OBJ = wpstdio.o
+TAR = stdio.a
 
 all: $(OBJ)
 	ar rcs $(TAR) $(OBJ)

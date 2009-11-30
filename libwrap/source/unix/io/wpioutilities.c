@@ -1,5 +1,6 @@
+#include <string.h>
 #include "wpunixio.h"
-#include "../../base/wpbase.h"
+#include "wpbase.h"
 
 int wp_fd_create (const char *pathname, mode_t mode)
 {
@@ -44,4 +45,38 @@ bool wp_fd_is_flag_set (int fd, int flag)
 
 	val = wp_fcntl (fd, F_GETFL, 0);
 	return (val & flag);
+}
+
+void wp_dopath (char *path, wp_dopath_func func, void *data)
+{
+	struct stat statbuf;
+	struct dirent *dirp;
+	DIR *dp;
+	char *ptr;
+
+	if (wp_lstat (path, &statbuf) == -1)
+		return;
+	if (S_ISDIR (statbuf.st_mode) == 0)
+		func (path, data);
+
+	ptr = path + strlen (path);
+	*ptr++ = '/';
+	*ptr = 0;
+
+	if ((dp = wp_opendir (path)) == NULL)
+		return;
+
+	while ((dirp = readdir (dp)) != NULL)
+	{
+		if (strcmp (dirp->d_name, ".") == 0 || 
+				strcmp (dirp->d_name, "..") == 0)
+			continue;
+
+		strcpy (ptr, dirp->d_name);
+		wp_dopath (path, func, data);
+	}
+
+	ptr[-1] = 0;
+
+	wp_closedir (dp);
 }
