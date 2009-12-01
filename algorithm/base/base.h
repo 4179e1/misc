@@ -18,5 +18,8 @@ void swap (int *a, int *b);
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
+#define INT_SENT_MAX 0x7fffffff
+#define INT_SENT_MIN 0x80000000
+
 void print_array (int *array, int len);
 #endif /* _BASE_H */
