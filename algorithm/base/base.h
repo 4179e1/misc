@@ -22,4 +22,9 @@ void swap (int *a, int *b);
 #define INT_SENT_MIN 0x80000000
 
 void print_array (int *array, int len);
+
+void random_init (void);
+int random (int a, int b);
+int dice (int num, int surface);
+
 #endif /* _BASE_H */
