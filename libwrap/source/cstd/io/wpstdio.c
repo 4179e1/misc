@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "wpstdio.h"
 #include "wpbase.h"
 
@@ -162,5 +163,125 @@ size_t wp_fwrite (const void *ptr, size_t size, size_t nobj, FILE *fp)
 	n = fwrite (ptr, size, nobj, fp);
 	if (ferror (fp) == 0)
 		wp_error_warning ("fwrite error");
+	return n;
+}
+
+long wp_ftell (FILE *fp)
+{
+	long n;
+	if ((n = ftell (fp)) == -1L)
+		wp_error_warning ("ftell error");
+	return n;
+}
+
+int wp_fseek (FILE *fp, long offset, int whence)
+{
+	int n;
+	if ((n = fseek (fp, offset, whence)) != 0)
+		wp_error_warning ("fseek error");
+	return n;
+}
+
+off_t wp_ftello (FILE *fp)
+{
+	off_t n;
+	if ((n = ftello (fp)) == -1)
+		wp_error_warning ("ftello error");
+	return n;
+}
+
+int wp_fseeko (FILE *fp, off_t offset, int whence)
+{
+	int n;
+	if ((n = fseeko (fp, offset, whence)) !=0)
+		wp_error_warning ("fseeko error");
+	return n;
+}
+
+int wp_fgetpos (FILE *fp, fpos_t *pos)
+{
+	int n;
+	if ((n = fgetpos (fp, pos)) != 0)
+		wp_error_warning ("fgetpos error");
+	return n;
+}
+
+int wp_fsetpos (FILE *fp, fpos_t *pos)
+{
+	int n;
+	if ((n = fsetpos (fp, pos)) != 0)
+		wp_error_warning ("fsetpos error");
+	return n;
+}
+
+int wp_vprintf (const char *fmt, va_list arg)
+{
+	int n;
+	if ((n = wp_vprintf (fmt, arg)) < 0)
+		wp_error_warning ("vprintf error");
+	return n;
+}
+
+int wp_vfprintf (FILE *fp, const char *fmt, va_list arg)
+{
+	int n;
+	if ((n = vfprintf (fp, fmt, arg)) < 0)
+		wp_error_warning ("vfprintf error");
+	return n;
+}
+
+int wp_vsprintf (char *buf, const char *fmt, va_list arg)
+{
+	int n;
+	if ((n = vsprintf (buf, fmt, arg)) < 0)
+		wp_error_warning ("vsprintf error");
+	return n;
+}
+
+int wp_vsnprintf (char *buf, size_t n, const char *fmt, va_list arg)
+{
+	int i;
+	if ((i = vsnprintf (buf, n, fmt, arg)) < 0)
+		wp_error_warning ("vsnprintf error");
+	return i;
+}
+
+int wp_vscanf (const char *format, va_list arg)
+{
+	int n;
+	if ((n = vscanf (format, arg)) < 0)
+		wp_error_warning ("vscanf error");
+	return n;
+}
+
+int wp_vfscanf (FILE *fp, const char *fmt, va_list arg)
+{
+	int n;
+	if ((n = vfscanf (fp, fmt, arg)) < 0)
+		wp_error_warning ("vfscanf error");
+	return n;
+}
+
+int wp_vsscanf (const char *buf, const char *fmt, va_list arg)
+{
+	int n;
+	if ((n = vsscanf (buf, fmt, arg)) < 0)
+		wp_error_warning ("vsscanf error");
+	return n;
+}
+
+FILE *wp_tmpfile (void)
+{
+	FILE *file;
+	if ((file = tmpfile ()) == NULL)
+		wp_error_warning ("tmpfile error");
+	return file;
+}
+
+int wp_mkstemp (char *template)
+{
+	int n;
+	if ((n = mkstemp (template)) == -1)
+		wp_error_warning ("mkstemp error");
 	return n;
 }
