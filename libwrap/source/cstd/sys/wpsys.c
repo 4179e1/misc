@@ -16,3 +16,11 @@ time_t wp_mktime (struct tm *tmptr)
 		wp_error_warning ("mktime error");
 	return t;
 }
+
+int wp_atexit (void (*func) (void))
+{
+	int n;
+	if ((n = atexit (func)) != 0)
+		wp_error_warning ("atexit error");
+	return n;
+}
