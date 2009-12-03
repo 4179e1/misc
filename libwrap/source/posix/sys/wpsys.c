@@ -103,3 +103,19 @@ int wp_gethostname (char *name, int namelen)
 		wp_error_sys_warning ("gethostname error");
 	return n;
 }
+
+int wp_getrlimit (int resource, struct rlimit *rlptr)
+{
+	int n;
+	if ((n = getrlimit (resource, rlptr)) != 0)
+		wp_error_warning ("getrlimit error");
+	return n;
+}
+
+int wp_setrlimit (int resource, const struct rlimit *rlptr)
+{
+	int n;
+	if ((n = setrlimit (resource, rlptr)) != 0)
+		wp_error_warning ("setrlimit error");
+	return n;
+}
