@@ -87,3 +87,19 @@ int wp_initgroups (const char *username, gid_t basegid)
 		wp_error_sys_warning ("initgroups error");
 	return n;
 }
+
+int wp_uname (struct utsname *name)
+{
+	int n;
+	if ((n = uname (name)) == -1)
+		wp_error_sys_warning ("uname error");
+	return n;
+}
+
+int wp_gethostname (char *name, int namelen)
+{
+	int n;
+	if ((n = gethostname (name, namelen)) == -1)
+		wp_error_sys_warning ("gethostname error");
+	return n;
+}

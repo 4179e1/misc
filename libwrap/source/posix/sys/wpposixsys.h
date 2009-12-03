@@ -4,6 +4,7 @@
 #include <shadow.h>
 #include <grp.h>
 #include <unistd.h>
+#include <sys/utsname.h>
 
 struct passwd *wp_getpwuid (uid_t uid);
 struct passwd *wp_getpwanam (const char *name);
@@ -19,4 +20,7 @@ struct group *wp_getgrent (void);
 int wp_getgroups (int gidsetsize, gid_t grouplist[]);
 int wp_setgroups (int ngroups, const gid_t grouplist[]);
 int wp_initgroups (const char *username, gid_t basegid);
+
+int wp_uname (struct utsname *name);
+int wp_gethostname (char *name, int namelen);
 #endif /* _WPPOSIXSYS_H */
