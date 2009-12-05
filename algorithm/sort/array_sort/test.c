@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "array_sort.h"
 #include "base.h"
 
@@ -39,6 +40,13 @@ int main (void)
 	printf ("tail quick sort\n");
 	tail_quick_sort (array7, 0, ARRAY_LEN(array7) - 1);
 	print_array (array7, ARRAY_LEN(array7));
+
+	int a[] = {2, 5, 3, 0, 2, 3, 0, 3};
+	int b[ARRAY_LEN(a)];
+	memset (b, 0, sizeof(b));
+	printf ("counting sort\n");
+	counting_sort (a, b, ARRAY_LEN(a), ARRAY_LEN(b), 5);
+	print_array (b, ARRAY_LEN(b));
 
 	return 0;
 }

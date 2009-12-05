@@ -1,4 +1,4 @@
-OBJ = test.o insert_sort.o selection_sort.o merge_sort.o bubble_sort.o quick_sort.o counting_sort.o
+OBJ = test.o min_maximum.o randomized_select.o
 CC = gcc
 BASE_PATH = ../../base/
 CFLAGS = -Wall -I$(BASE_PATH)

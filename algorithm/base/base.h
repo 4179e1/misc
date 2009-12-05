@@ -18,6 +18,9 @@ void swap (int *a, int *b);
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 
+#define IS_ODD(n) ((n % 2) != 0)
+#define IS_EVEN(n) ((n % 2) == 0)
+
 #define INT_SENT_MAX 0x7fffffff
 #define INT_SENT_MIN 0x80000000
 
@@ -27,4 +30,7 @@ void random_init (void);
 int random (int a, int b);
 int dice (int num, int surface);
 
+
+int partition (int *array, int p, int r);
+int randomized_partition (int *array, int p, int r);
 #endif /* _BASE_H */
