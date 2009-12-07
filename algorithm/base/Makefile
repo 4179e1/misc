@@ -1,4 +1,4 @@
-OBJ = base.o
+OBJ = base.o wrap.o
 CC = gcc
 CFLAGS = -Wall
 

@@ -1,6 +1,9 @@
 #ifndef _BASE_H
 #define _BASE_H
 
+#include <stdbool.h>
+#include "wrap.h"
+
 /**
  * @brief Macro to calculate array's length.
  * @param array It MUST be a array, passing a pointer won't work as you expact.
@@ -24,12 +27,13 @@ void swap (int *a, int *b);
 #define INT_SENT_MAX 0x7fffffff
 #define INT_SENT_MIN 0x80000000
 
+typedef bool (*foreach_func_t) (void *elem, void *data);
+
 void print_array (int *array, int len);
 
 void random_init (void);
 int random (int a, int b);
 int dice (int num, int surface);
-
 
 int partition (int *array, int p, int r);
 int randomized_partition (int *array, int p, int r);
