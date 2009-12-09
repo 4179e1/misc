@@ -113,8 +113,8 @@ void queue_push_head (Queue *q, void *data)
 		q->size += q->growing_factor;
 		(q->card)++;
 	}
-	q->head = prev (q->head, q->size);
 	q->data[q->head] = data;
+	q->head = prev (q->head, q->size);
 }
 
 void queue_push_tail (Queue *q, void *data)
@@ -149,7 +149,7 @@ void queue_push_tail (Queue *q, void *data)
 void *queue_head (Queue *q)
 {
 	assert (q != NULL);
-	return q->data[q->head];
+	return q->data[next(q->head, q->size)];
 }
 
 void *queue_tail (Queue *q)
@@ -160,13 +160,10 @@ void *queue_tail (Queue *q)
 
 void *queue_pop_head (Queue *q)
 {
-	void *tmp;
-
 	assert (q != NULL);
-	tmp = q->data[q->head];
 	q->head = next (q->head, q->size);
 	(q->card)--;
-	return tmp;
+	return q->data[q->head];
 }
 
 void *queue_pop_tail (Queue *q)
@@ -185,7 +182,7 @@ void queue_dump (Queue *q, FILE *file, write_func_t f)
 	int i, cur;
 	assert (q != NULL);
 	fprintf (file, "<QUEUE HEAD=\"%d\" TAIL=\"%d\" CARD=\"%d\" SIZE=\"%d\" GROWING_FACTOR=\"%d\">", q->head, q->tail, q->card, q->size, q->growing_factor);
-	for (i = 0, cur = q->head; i < q->card; i++, cur = next (cur, q->size))
+	for (i = 0, cur = next(q->head, q->size); i < q->card; i++, cur = next (cur, q->size))
 	{
 		fprintf (file, "<NODE REF=\"%p\" CUR=\"%d\">", q->data[cur], cur);
 		if (f)
@@ -196,12 +193,13 @@ void queue_dump (Queue *q, FILE *file, write_func_t f)
 	}
 	fprintf (file, "</QUEUE>\n");
 }
+
 void queue_foreach (Queue *q, foreach_func_t f, void *data)
 {
 	int i, cur;
 
 	assert (q != NULL);
-	for (i = 0, cur = q->head; i < q->card; i++, cur = next (cur, q->size))
+	for (i = 0, cur = next (q->head, q->size); i < q->card; i++, cur = next (cur, q->size))
 	{
 		if (f(q->data[cur], data) == false)
 		{

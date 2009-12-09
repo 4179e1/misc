@@ -10,7 +10,7 @@ int main(void)
 	int i;
 	for (i = 0; i < ARRAY_LEN (array); i++)
 	{
-		queue_push_head (q, &(array[i]));
+		queue_push_tail (q, &(array[i]));
 		queue_dump (q, stdout, NULL);
 	}
 
@@ -23,7 +23,7 @@ int main(void)
 		queue_dump (q, stdout, NULL);
 	}
 	printf ("im here");
-	//queue_free (q);
+	queue_free (q);
 #endif	
 
 	return 0;
