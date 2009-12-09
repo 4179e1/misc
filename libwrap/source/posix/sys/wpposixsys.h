@@ -27,4 +27,11 @@ int wp_gethostname (char *name, int namelen);
 
 int wp_getrlimit (int resource, struct rlimit *rlptr);
 int wp_setrlimit (int resource, const struct rlimit *rlptr);
+
+pid_t wp_fork (void);
+pid_t wp_wait (int *statloc);
+pid_t wp_waitpid (pid_t pid, int *statloc, int options);
+
+/* utilities */
+void wp_check_exit_status (int status);
 #endif /* _WPPOSIXSYS_H */

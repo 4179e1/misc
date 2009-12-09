@@ -1,3 +1,4 @@
+#include <sys/wait.h>
 #include "wpposixsys.h"
 #include "wpbase.h"
 
@@ -108,7 +109,7 @@ int wp_getrlimit (int resource, struct rlimit *rlptr)
 {
 	int n;
 	if ((n = getrlimit (resource, rlptr)) != 0)
-		wp_error_warning ("getrlimit error");
+		wp_error_sys_warning ("getrlimit error");
 	return n;
 }
 
@@ -116,6 +117,30 @@ int wp_setrlimit (int resource, const struct rlimit *rlptr)
 {
 	int n;
 	if ((n = setrlimit (resource, rlptr)) != 0)
-		wp_error_warning ("setrlimit error");
+		wp_error_sys_warning ("setrlimit error");
 	return n;
+}
+
+pid_t wp_fork (void)
+{
+	pid_t p;
+	if ((p = fork ()) < 0)
+		wp_error_sys_warning ("fork error");
+	return p;
+}
+
+pid_t wp_wait (int *statloc)
+{
+	pid_t p;
+	if ((p = wait (statloc)) == -1)
+		wp_error_sys_warning ("wait error");
+	return p;
+}
+
+pid_t wp_waitpid (pid_t pid, int *statloc, int options)
+{
+	pid_t p;
+	if ((p = waitpid (pid, statloc, options)) == -1)
+		wp_error_sys_warning ("waitpid error");
+	return p;
 }
