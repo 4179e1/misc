@@ -1,4 +1,5 @@
 #include <sys/wait.h>
+#include <stdlib.h>
 #include "wpposixsys.h"
 #include "wpbase.h"
 
@@ -144,3 +145,80 @@ pid_t wp_waitpid (pid_t pid, int *statloc, int options)
 		wp_error_sys_warning ("waitpid error");
 	return p;
 }
+
+int wp_setuid (uid_t uid)
+{
+	int n;
+	if ((n = setuid (uid)) ==-1)
+		wp_error_sys_warning ("setuid error");
+	return n;
+}
+
+int wp_setgid (gid_t gid)
+{
+	int n;
+	if ((n = setgid (gid)) == -1)
+		wp_error_sys_warning ("setgid error");
+	return n;
+}
+
+int wp_setreuid (uid_t ruid, uid_t euid)
+{
+	int n;
+	if ((n = setreuid (ruid, euid)) == -1)
+		wp_error_sys_warning ("setreuid error");
+	return n;
+}
+
+int wp_setregid (gid_t rgid, gid_t egid)
+{
+	int n;
+	if ((n = setregid (rgid, egid)) == -1)
+		wp_error_sys_warning ("setregid error");
+	return n;
+}
+int wp_seteuid (uid_t uid)
+{
+	int n;
+	if ((n = seteuid (uid)) == -1)
+		wp_error_sys_warning ("seteuid error");
+	return n;
+}
+
+int wp_setegid (gid_t gid)
+{
+	int n;
+	if ((n = setgid (gid)) == -1)
+		wp_error_sys_warning ("setegid error");
+	return n;
+}
+
+int wp_system (const char *cmd)
+{
+	int n;
+	n = system (cmd);
+	if (n == -1)
+		wp_error_sys_warning ("system error: fork fail");
+	else if (n == 127)
+		wp_error_sys_warning ("system error: execl error");
+
+	return n;
+}
+
+char *wp_getlogin (void)
+{
+	char *p;
+	if ((p = getlogin ()) == NULL)
+		wp_error_sys_warning ("getlogin error");
+	return p;
+}
+
+clock_t wp_times (struct tms *buf)
+{
+	clock_t t;
+	if ((t = times (buf)) == -1)
+		wp_error_sys_warning ("times error");
+	return t;
+}
+
+

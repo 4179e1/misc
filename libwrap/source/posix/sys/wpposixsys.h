@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+#include <sys/times.h>
 
 struct passwd *wp_getpwuid (uid_t uid);
 struct passwd *wp_getpwanam (const char *name);
@@ -31,6 +32,19 @@ int wp_setrlimit (int resource, const struct rlimit *rlptr);
 pid_t wp_fork (void);
 pid_t wp_wait (int *statloc);
 pid_t wp_waitpid (pid_t pid, int *statloc, int options);
+
+int wp_setuid (uid_t uid);
+int wp_setgid (gid_t gid);
+int wp_setreuid (uid_t ruid, uid_t euid);
+int wp_setregid (gid_t rgid, gid_t egid);
+int wp_seteuid (uid_t uid);
+int wp_setegid (gid_t gid);
+
+int wp_system (const char *cmd);
+
+char *wp_getlogin (void);
+
+clock_t wp_times (struct tms *buf);
 
 /* utilities */
 void wp_check_exit_status (int status);
