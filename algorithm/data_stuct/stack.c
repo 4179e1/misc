@@ -122,7 +122,7 @@ void stack_dump (Stack *s, FILE *file, write_func_t f)
 	fprintf (file, "<STACK SIZE=\"%d\" CARD=\"%d\" GROWING_FACTOR=\"%d\">", s->size, s->card, s->growing_factor);
 	for (i = 0; i < (s->card); i++)
 	{
-		fprintf (file, "<NODE REF=\"%p\">", s->data[i]);
+		fprintf (file, "<NODE CONTENT=\"%p\">", s->data[i]);
 		if (f)
 		{
 			f(s->data[i], file);

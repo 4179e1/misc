@@ -12,7 +12,12 @@ struct _list_node
 
 ListNode *list_node_new (void)
 {
-	return (ListNode *)Malloc (sizeof (ListNode));
+	ListNode *node;
+	node = (ListNode *)Malloc (sizeof (ListNode));
+	node->data = NULL;
+	node->prev = NULL;
+	node->next = NULL;
+	return node;
 }
 
 void list_node_free (ListNode *n)
@@ -82,5 +87,5 @@ void list_node_dump (ListNode *node, FILE *file, write_func_t f)
 	{
 		f(node->data, file);
 	}
-	fprintf (file, "</LIST_NODE>");
+	fprintf (file, "</LIST_NODE>\n");
 }

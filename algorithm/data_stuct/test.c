@@ -1,30 +1,18 @@
 #include "stack.h"
-#include "queue.h"
+#include "ListNode.h"
 
 int main(void)
 {
-	Queue *q;
-	q = queue_new (1);
-	
-	int array[] = {1, 2, 3, 4, 5};
-	int i;
-	for (i = 0; i < ARRAY_LEN (array); i++)
-	{
-		queue_push_head (q, &(array[i]));
-		queue_dump (q, stdout, NULL);
-	}
+	ListNode *n1 = list_node_new ();
+	ListNode *n2 = list_node_new ();
+	list_node_link (n1, n2);
+	list_node_dump (n1, stdout, NULL);
+	list_node_dump (n2, stdout, NULL);
+	list_node_unlink (n1, n2);
+	list_node_dump (n1, stdout, NULL);
 
-	printf ("------------------------\n");
-
-#if 1
-	while (!queue_is_empty (q))
-	{
-		printf ("%d", *(int *)(queue_pop_tail (q)));
-		queue_dump (q, stdout, NULL);
-	}
-	printf ("im here");
-	queue_free (q);
-#endif	
+	list_node_free (n1);
+	list_node_free (n2);
 
 	return 0;
 }

@@ -6,7 +6,6 @@
 
 static int prev (int cur, int size);
 static int next (int cur, int size);
-static int queue_position (Queue *q, int nth);
 
 struct _queue
 {
@@ -184,7 +183,7 @@ void queue_dump (Queue *q, FILE *file, write_func_t f)
 	fprintf (file, "<QUEUE HEAD=\"%d\" TAIL=\"%d\" CARD=\"%d\" SIZE=\"%d\" GROWING_FACTOR=\"%d\">", q->head, q->tail, q->card, q->size, q->growing_factor);
 	for (i = 0, cur = q->head; i < q->card; i++, cur = next (cur, q->size))
 	{
-		fprintf (file, "<NODE REF=\"%p\" CUR=\"%d\">", q->data[cur], cur);
+		fprintf (file, "<NODE CONTENT=\"%p\" CUR=\"%d\">", q->data[cur], cur);
 		if (f)
 		{
 			f(q->data[cur], file);
@@ -219,9 +218,4 @@ static int next (int cur, int size)
 static int prev (int cur, int size)
 {
 	return ((cur + size - 1) % size);
-}
-
-static int queue_position (Queue *q, int nth)
-{
-	return ((q->head - nth + q->size) % q->size);
 }
