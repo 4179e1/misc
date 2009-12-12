@@ -1,4 +1,4 @@
-OBJ = test.o stack.o queue.o
+OBJ = test.o stack.o queue.o listnode.o
 CC = gcc
 BASE_PATH = ../base/
 CFLAGS = -Wall -I$(BASE_PATH)

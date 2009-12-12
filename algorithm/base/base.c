@@ -27,7 +27,7 @@ void random_init (void)
 	srand ((unsigned int)time (NULL));
 }
 
-int random (int a, int b)
+int random_range (int a, int b)
 {
 	return (rand()%(b - a + 1) + a);
 }
@@ -41,7 +41,7 @@ int dice (int num, int surface)
 	printf ("Dice(%dD%d): ", num, surface);
 	for (i = 0; i < num; i++)
 	{
-		ran = random (1, surface);
+		ran = random_range (1, surface);
 		printf ("%d + ", ran);
 		cnt += ran;
 	}
@@ -88,7 +88,7 @@ int partition (int *array, int p, int r)
  */
 int randomized_partition (int *array, int p, int r)
 {
-	int i = random (p, r);
+	int i = random_range (p, r);
 	swap (&array[i], &array[r]);
 	return partition (array, p, r);
 }

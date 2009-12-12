@@ -33,7 +33,7 @@ typedef bool (*write_func_t) (void *elem, FILE *file);
 void print_array (int *array, int len);
 
 void random_init (void);
-int random (int a, int b);
+int random_range (int a, int b);
 int dice (int num, int surface);
 
 int partition (int *array, int p, int r);

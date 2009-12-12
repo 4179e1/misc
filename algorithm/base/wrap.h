@@ -1,5 +1,6 @@
 #ifndef _WRAP_H
 #define _WRAP_H
+#include <stdio.h>
 
 void *Malloc (size_t size);
 void *Realloc (void *ptr, size_t size);
