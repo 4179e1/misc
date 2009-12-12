@@ -6,7 +6,16 @@
  *		"No."
  * I didn't say more. How would they think a queue wrote in 5 minutes have
  * any usability? It may explosive at any second. I could worte a complete
- * and safe queue in 1 hour, but not one uncomplete & unsafe in 5 minutes.
+ * and safe queue in 2 hour, but not one uncomplete & unsafe in 5 minutes.
+ */
+
+/**
+ *           q->head      q->tail 
+ *              |            |
+ * BEGIN -------+++++++++++++----------- END
+ * 
+ * + elements in queue
+ * - not used spaces in array
  */
 
 #ifndef _QUEUE_H
