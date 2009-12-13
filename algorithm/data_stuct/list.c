@@ -3,6 +3,9 @@
 #include "list.h"
 #include "listnode.h"
 
+static ListNode *list_merge_sort (List *l, ListNode *u, ListNode *z);
+static ListNode *list_merge (List *l, ListNode *s, ListNode *t, ListNode *z);
+
 struct _list
 {
 	ListNode *sent;
@@ -38,7 +41,10 @@ List *list_new (compare_func_t f)
 		return NULL;
 	}
 
+	
 	list_node_link (l->sent, l->end);
+	list_node_set_prev (l->sent, l->sent);
+	list_node_set_next (l->end, l->end);
 
 	l->card = 0;
 
@@ -322,7 +328,14 @@ void *list_search_min (List *l)
 void list_sort (List *l)
 {
 	assert (l != NULL);
-	/*TODO */
+
+	if (l->cmp_func == NULL)
+	{
+		fprintf (stderr, "List: compare func is NULL\n");
+		return;
+	}
+
+	list_node_link (l->sent, list_merge_sort (l, list_node_get_next (l->sent), l->end));
 }
 
 void list_dump (List *l, FILE *file, write_func_t f)
@@ -350,4 +363,80 @@ void list_foreach (List *l, foreach_func_t f, void *data)
 			break;
 		}
 	}
+}
+
+/* private func */
+
+static ListNode *list_merge_sort (List *l, ListNode *u, ListNode *z)
+{
+	ListNode *s;
+	ListNode *t;
+
+	if (list_node_get_next (u) == z)
+	{
+		return u;
+	}
+
+	s = u;
+	t = list_node_get_next (list_node_get_next (list_node_get_next (u)));
+	/* t run twice faster than u, when t meet z, u is at the middle of the list */
+	while (t != z)
+	{
+		u = list_node_get_next (u);
+		t = list_node_get_next (list_node_get_next (t));
+	}
+
+	/* so we link two sub-list to z */
+	t = list_node_get_next (u);
+	list_node_set_next (u, z);
+
+	return list_merge (l, list_merge_sort (l, s, z), list_merge_sort (l, t, z), l->end);
+}
+
+static ListNode *list_merge (List *l, ListNode *s, ListNode *t, ListNode *z)
+{
+	/* 
+	 * the node u is the last element of the new list begin from z
+	 * s------->
+	 *          z------>u
+	 * t------->
+	 */
+	ListNode *u = z;
+
+	do {
+		if (t == z)
+		{
+			list_node_link (u, s);
+			u = s;
+			s = list_node_get_next (s);
+			continue;
+		}
+
+		if (s == z)
+		{
+			list_node_link (u, t);
+			u = t;
+			t = list_node_get_next (t);
+			continue;
+		}
+
+		if (l->cmp_func (list_node_get_content (s), list_node_get_content (t)) <= 0)
+		{
+			list_node_link (u, s);
+			u = s;
+			s = list_node_get_next (s);
+		}
+		else
+		{
+			list_node_link (u, t);
+			u = t;
+			t = list_node_get_next (t);
+		}
+	} while (u != z);
+
+	/* now u is the begining of list, and we fix the broken sentinal z */
+	u = list_node_get_next (z);
+	list_node_set_next (z, z);
+
+	return u;
 }
