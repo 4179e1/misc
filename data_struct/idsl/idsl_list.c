@@ -71,8 +71,8 @@ idsl_list_alloc (const char* name, idsl_alloc_func_t alloc_func, idsl_free_func_
 	}
 
 	_idsl_node_link (list->d, list->z);
-	_idsl_node_set_succ (list->z, list->d);
-	_idsl_node_set_pred (list->d, list->z);
+	_idsl_node_set_succ (list->z, list->z);
+	_idsl_node_set_pred (list->d, list->d);
 
 	list->card = 0UL;
 	list->alloc_func = alloc_func ? alloc_func : default_alloc;

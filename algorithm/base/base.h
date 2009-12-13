@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "wrap.h"
+#include "int_func.h"
 
 /**
  * @brief Macro to calculate array's length.
@@ -29,6 +30,7 @@ void swap (int *a, int *b);
 
 typedef bool (*foreach_func_t) (void *elem, void *data);
 typedef bool (*write_func_t) (void *elem, FILE *file);
+typedef int (*compare_func_t) (void *elem1, void *elem2);
 
 void print_array (int *array, int len);
 
