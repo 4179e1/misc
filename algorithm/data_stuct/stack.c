@@ -132,7 +132,7 @@ void stack_dump (const Stack *s, FILE *file, write_func_t f)
 	fprintf (file, "</STACK>\n");
 }
 
-void stack_foreach (Stack *s, foreach_func_t f, void *data)
+void stack_foreach (const Stack *s, foreach_func_t f, void *data)
 {
 	int i;
 	for (i = 0; i < (s->card); i++)

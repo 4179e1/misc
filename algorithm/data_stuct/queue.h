@@ -9,15 +9,6 @@
  * and safe queue in 2 hour, but not one uncomplete & unsafe in 5 minutes.
  */
 
-/**
- *           q->head      q->tail 
- *              |            |
- * BEGIN -------+++++++++++++----------- END
- * 
- * + elements in queue
- * - not used spaces in array
- */
-
 #ifndef _QUEUE_H
 #define _QUEUE_H
 #include <stdbool.h>
@@ -35,14 +26,14 @@ int queue_get_card (const Queue *q);
 int queue_get_growing_factor (const Queue *q);
 void queue_set_growing_factor (Queue *q, int value);
 
-void queue_push_head (Queue *q, const void *data);
-void queue_push_tail (Queue *q, const void *data);
+void queue_push_head (Queue *q, void *data);
+void queue_push_tail (Queue *q, void *data);
 void *queue_head (const Queue *q);
 void *queue_tail (const Queue *q);
 void *queue_pop_head (Queue *q);
 void *queue_pop_tail (Queue *q);
 
 void queue_dump (const Queue *q, FILE *file, write_func_t f);
-void queue_foreach (Queue *q, foreach_func_t f, void *data);
+void queue_foreach (const Queue *q, foreach_func_t f, void *data);
 
 #endif /* _QUEUE_H */

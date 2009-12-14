@@ -43,19 +43,19 @@ void list_node_set_prev (ListNode *node, ListNode *prev)
 	node->prev = prev;
 }
 
-void *list_node_get_content (ListNode *node)
+void *list_node_get_content (const ListNode *node)
 {
 	assert (node != NULL);
 	return node->data;
 }
 
-ListNode *list_node_get_next (ListNode *node)
+ListNode *list_node_get_next (const ListNode *node)
 {
 	assert (node != NULL);
 	return node->next;
 }
 
-ListNode *list_node_get_prev (ListNode *node)
+ListNode *list_node_get_prev (const ListNode *node)
 {
 	assert (node != NULL);
 	return node->prev;
@@ -77,7 +77,7 @@ void list_node_unlink (ListNode *prev, ListNode *next)
 	next->prev = NULL;
 }
 
-void list_node_dump (ListNode *node, FILE *file, write_func_t f)
+void list_node_dump (const ListNode *node, FILE *file, write_func_t f)
 {
 	assert (node != NULL);
 	assert (file != NULL);

@@ -22,6 +22,6 @@ void *stack_pop (Stack *stack);
 void *stack_top (const Stack *stack);
 
 void stack_dump (const Stack *s, FILE *file, write_func_t f);
-void stack_foreach (Stack *s, foreach_func_t f, void *data);
+void stack_foreach (const Stack *s, foreach_func_t f, void *data);
 
 #endif /* _STACK_H */

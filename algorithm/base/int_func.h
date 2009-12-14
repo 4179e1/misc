@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-int int_cmp (void *i, void *j);
-void int_write (void *i, FILE *file);
+int int_cmp (const void *i, const void *j);
+void int_write (const void *i, FILE *file);
 
 #endif /* _INT_FUNC_H */

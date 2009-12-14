@@ -12,6 +12,16 @@ void *Malloc (size_t size)
 	return ptr;
 }
 
+void *Calloc (size_t count, size_t size)
+{
+	void *ptr;
+	if ((ptr = calloc (count, size)) == NULL)
+	{
+		fprintf (stderr, "calloc error\n");
+	}
+	return ptr;
+}
+
 void *Realloc (void *ptr, size_t size)
 {
 	void *p;

@@ -4,6 +4,15 @@
 #include "queue.h"
 #include "base.h"
 
+/**
+ *           q->head      q->tail 
+ *              |            |
+ * BEGIN -------+++++++++++++----------- END
+ * 
+ * + elements in queue
+ * - not used spaces in array
+ */
+
 static int prev (int cur, int size);
 static int next (int cur, int size);
 
@@ -87,7 +96,7 @@ void queue_set_growing_factor (Queue *q, int value)
 	q->growing_factor = value;
 }
 
-void queue_push_head (Queue *q, const void *data)
+void queue_push_head (Queue *q, void *data)
 {
 	assert (q != NULL);
 	(q->card)++;
@@ -116,7 +125,7 @@ void queue_push_head (Queue *q, const void *data)
 	q->data[q->head] = data;
 }
 
-void queue_push_tail (Queue *q, const void *data)
+void queue_push_tail (Queue *q, void *data)
 {
 	assert (q != NULL);
 	(q->card++);
@@ -193,7 +202,7 @@ void queue_dump (const Queue *q, FILE *file, write_func_t f)
 	fprintf (file, "</QUEUE>\n");
 }
 
-void queue_foreach (Queue *q, foreach_func_t f, void *data)
+void queue_foreach (const Queue *q, foreach_func_t f, void *data)
 {
 	int i, cur;
 
