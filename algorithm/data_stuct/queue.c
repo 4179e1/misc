@@ -57,25 +57,25 @@ void queue_flush (Queue *q)
 	q->card = 0;
 }
 
-bool queue_is_empty (Queue *q)
+bool queue_is_empty (const Queue *q)
 {
 	assert (q != NULL);
 	return (q->card == 0);
 }
 
-int queue_get_size (Queue *q)
+int queue_get_size (const Queue *q)
 {
 	assert (q != NULL);
 	return q->size;
 }
 
-int queue_get_card (Queue *q)
+int queue_get_card (const Queue *q)
 {
 	assert (q != NULL);
 	return q->card;
 }
 
-int queue_get_growing_factor (Queue *q)
+int queue_get_growing_factor (const Queue *q)
 {
 	assert (q != NULL);
 	return q->growing_factor;
@@ -87,7 +87,7 @@ void queue_set_growing_factor (Queue *q, int value)
 	q->growing_factor = value;
 }
 
-void queue_push_head (Queue *q, void *data)
+void queue_push_head (Queue *q, const void *data)
 {
 	assert (q != NULL);
 	(q->card)++;
@@ -116,7 +116,7 @@ void queue_push_head (Queue *q, void *data)
 	q->data[q->head] = data;
 }
 
-void queue_push_tail (Queue *q, void *data)
+void queue_push_tail (Queue *q, const void *data)
 {
 	assert (q != NULL);
 	(q->card++);
@@ -145,13 +145,13 @@ void queue_push_tail (Queue *q, void *data)
 	q->tail = next (q->tail, q->size);
 }
 
-void *queue_head (Queue *q)
+void *queue_head (const Queue *q)
 {
 	assert (q != NULL);
 	return q->data[q->head];
 }
 
-void *queue_tail (Queue *q)
+void *queue_tail (const Queue *q)
 {
 	assert (q != NULL);
 	return q->data[next (q->tail, q->size)];
@@ -176,7 +176,7 @@ void *queue_pop_tail (Queue *q)
 	return q->data[q->tail];
 }
 
-void queue_dump (Queue *q, FILE *file, write_func_t f)
+void queue_dump (const Queue *q, FILE *file, write_func_t f)
 {
 	int i, cur;
 	assert (q != NULL);

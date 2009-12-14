@@ -29,20 +29,20 @@ Queue *queue_new(int size);
 void queue_free (Queue *q);
 void queue_flush (Queue *q);
 
-bool queue_is_empty (Queue *q);
-int queue_get_size (Queue *q);
-int queue_get_card (Queue *q);
-int queue_get_growing_factor (Queue *q);
+bool queue_is_empty (const Queue *q);
+int queue_get_size (const Queue *q);
+int queue_get_card (const Queue *q);
+int queue_get_growing_factor (const Queue *q);
 void queue_set_growing_factor (Queue *q, int value);
 
-void queue_push_head (Queue *q, void *data);
-void queue_push_tail (Queue *q, void *data);
-void *queue_head (Queue *q);
-void *queue_tail (Queue *q);
+void queue_push_head (Queue *q, const void *data);
+void queue_push_tail (Queue *q, const void *data);
+void *queue_head (const Queue *q);
+void *queue_tail (const Queue *q);
 void *queue_pop_head (Queue *q);
 void *queue_pop_tail (Queue *q);
 
-void queue_dump (Queue *q, FILE *file, write_func_t f);
+void queue_dump (const Queue *q, FILE *file, write_func_t f);
 void queue_foreach (Queue *q, foreach_func_t f, void *data);
 
 #endif /* _QUEUE_H */

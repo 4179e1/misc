@@ -48,25 +48,25 @@ void stack_flush (Stack *s)
 	s->card = 0;
 }
 
-bool stack_is_empty (Stack *s)
+bool stack_is_empty (const Stack *s)
 {
 	assert (s != NULL);
 	return (s->card == 0);
 }
 
-int stack_get_size (Stack *s)
+int stack_get_size (const Stack *s)
 {
 	assert (s != NULL);
 	return s->size;
 }
 
-int stack_get_card (Stack *s)
+int stack_get_card (const Stack *s)
 {
 	assert (s != NULL);
 	return s->card;
 }
 
-int stack_get_growing_factor (Stack *s)
+int stack_get_growing_factor (const Stack *s)
 {
 	assert (s != NULL);
 	return s->growing_factor;
@@ -106,7 +106,7 @@ void *stack_pop (Stack *s)
 	return s->data[s->card];
 }
 
-void *stack_top (Stack *s)
+void *stack_top (const Stack *s)
 {
 	if (s->card == 0)
 	{
@@ -116,7 +116,7 @@ void *stack_top (Stack *s)
 	return s->data[s->card - 1];
 }
 
-void stack_dump (Stack *s, FILE *file, write_func_t f)
+void stack_dump (const Stack *s, FILE *file, write_func_t f)
 {
 	int i;
 	fprintf (file, "<STACK SIZE=\"%d\" CARD=\"%d\" GROWING_FACTOR=\"%d\">", s->size, s->card, s->growing_factor);
