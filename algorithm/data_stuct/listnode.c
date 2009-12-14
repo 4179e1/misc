@@ -87,5 +87,5 @@ void list_node_dump (ListNode *node, FILE *file, write_func_t f)
 	{
 		f(node->data, file);
 	}
-	fprintf (file, "</LIST_NODE>\n");
+	fprintf (file, "</LIST_NODE>");
 }

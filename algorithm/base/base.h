@@ -29,7 +29,7 @@ void swap (int *a, int *b);
 #define INT_SENT_MIN 0x80000000
 
 typedef bool (*foreach_func_t) (void *elem, void *data);
-typedef bool (*write_func_t) (void *elem, FILE *file);
+typedef void (*write_func_t) (void *elem, FILE *file);
 typedef int (*compare_func_t) (void *elem1, void *elem2);
 
 void print_array (int *array, int len);

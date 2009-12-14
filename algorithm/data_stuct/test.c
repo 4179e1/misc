@@ -1,18 +1,31 @@
-#include "stack.h"
-#include "ListNode.h"
+#include "list.h"
+#include "base.h"
 
 int main(void)
 {
-	ListNode *n1 = list_node_new ();
-	ListNode *n2 = list_node_new ();
-	list_node_link (n1, n2);
-	list_node_dump (n1, stdout, NULL);
-	list_node_dump (n2, stdout, NULL);
-	list_node_unlink (n1, n2);
-	list_node_dump (n1, stdout, NULL);
+	List *l;
 
-	list_node_free (n1);
-	list_node_free (n2);
+	l = list_new (int_cmp);
+
+	int a[] = {1, 2, 3, 4, 5};
+
+	int i;
+	for (i = 0; i < ARRAY_LEN (a); i++)
+	{
+		list_insert_tail (l, &a[i]);
+	}
+	list_sort (l);
+
+	list_dump (l, stdout, int_write);
+
+	while (!list_is_empty(l))
+	{
+		printf ("%d\t", *(int *)list_delete_tail(l));
+	}
+
+	list_dump (l, stdout, NULL);
+
+	list_free (l);
 
 	return 0;
 }

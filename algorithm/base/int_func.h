@@ -1,6 +1,9 @@
 #ifndef _INT_FUNC_H
 #define _INT_FUNC_H
 
-int int_cmp (int *i, int *j);
+#include <stdio.h>
+
+int int_cmp (void *i, void *j);
+void int_write (void *i, FILE *file);
 
 #endif /* _INT_FUNC_H */

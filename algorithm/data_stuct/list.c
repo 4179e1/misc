@@ -179,12 +179,12 @@ void *list_delete_tail (List *l)
 	tail = list_node_get_prev (l->end);
 	tmp = list_node_get_prev (tail);
 
-	list_node_link (tail, tmp);
+	list_node_link (tmp, l->end);
 	(l->card)--;
 
 	data = list_node_get_content (tail);
 	list_node_free (tail);
-	return tail;
+	return data;
 }
 
 void *list_delete (List *l, void *data)
