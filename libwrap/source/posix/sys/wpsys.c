@@ -1,4 +1,5 @@
 #include <sys/wait.h>
+#include <signal.h>
 #include <stdlib.h>
 #include "wpposixsys.h"
 #include "wpbase.h"
@@ -221,4 +222,36 @@ clock_t wp_times (struct tms *buf)
 	return t;
 }
 
+int wp_setpgid (pid_t pid, pid_t pgid)
+{
+	int n;
+	if ((n = setpgid (pid, pgid)) == -1)
+		wp_error_sys_warning ("setpgid error");
+	return n;
+}
 
+pid_t wp_setsid (void)
+{
+	pid_t n;
+	if ((n = setsid ()) == -1)
+		wp_error_sys_warning ("setsid error");
+	return n;
+}
+
+void (*wp_signal (int signo, void (*func)(int)))(int)
+{
+	void (*f)(int) ;
+	if ((f = signal (signo, func)) == SIG_ERR)
+		wp_error_sys_warning ("signal error");
+	return f;
+}
+
+#if 0
+pid_t wp_getsid (pid_t pid)
+{
+	pid_t n;
+	if ((n = getsid (pid)) == -1)
+		wp_error_sys_warning ("getsid error");
+	return n;
+}
+#endif

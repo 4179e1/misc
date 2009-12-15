@@ -46,6 +46,13 @@ char *wp_getlogin (void);
 
 clock_t wp_times (struct tms *buf);
 
+int wp_setpgid (pid_t pid, pid_t pgid);
+
+pid_t wp_setsid (void);
+pid_t wp_getsid (pid_t pid);
+
+void (*wp_signal (int signo, void (*func)(int)))(int);
+
 /* utilities */
 void wp_check_exit_status (int status);
 #endif /* _WPPOSIXSYS_H */
