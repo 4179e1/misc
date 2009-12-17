@@ -137,13 +137,13 @@ void list_insert_tail (List *l, void *data)
 	(l->card)++;
 }
 
-void *list_head (const List *l)
+void *list_head (List *l)
 {
 	assert (l != NULL);
 	return list_node_get_content (list_node_get_next (l->sent));
 }
 
-void *list_tail (const List *l)
+void *list_tail (List *l)
 {
 	assert (l != NULL);
 	return list_node_get_content (list_node_get_prev (l->end));
@@ -179,12 +179,12 @@ void *list_delete_tail (List *l)
 	tail = list_node_get_prev (l->end);
 	tmp = list_node_get_prev (tail);
 
-	list_node_link (tmp, l->end);
+	list_node_link (tail, tmp);
 	(l->card)--;
 
 	data = list_node_get_content (tail);
 	list_node_free (tail);
-	return data;
+	return tail;
 }
 
 void *list_delete (List *l, void *data)
@@ -217,55 +217,7 @@ void *list_delete (List *l, void *data)
 	return NULL;
 }
 
-void *list_search (const List *l, const void *data)
-{
-	ListNode *node;
-
-	node = list_search_node (l, data);
-
-	return (node ? list_node_get_content (node) : NULL);
-}
-
-void *list_search_by_position (const List *l, int pos)
-{
-	ListNode *node;
-
-	node = list_search_node_by_position (l, pos);
-
-	return (node ? list_node_get_content (node) : NULL);
-}
-
-void *list_search_max (const List *l)
-{
-	ListNode *max;
-	
-	max = list_search_max_node (l);
-
-	return (max ? list_node_get_content (max) : NULL);
-}
-
-void *list_search_min (const List *l)
-{
-	ListNode *min;
-
-	min = list_search_min_node (l);
-
-	return (min ? list_node_get_content (min) : NULL);
-}
-
-ListNode *list_head_node (const List *l)
-{
-	assert (l != NULL);
-	return list_node_get_next (l->sent);
-}
-
-ListNode *list_tail_node (const List *l)
-{
-	assert (l != NULL);
-	return list_node_get_prev (l->end);
-}
-
-ListNode *list_search_node (const List *l, const void *data)
+void *list_search (List *l, void *data)
 {
 	ListNode *tmp;
 
@@ -281,14 +233,14 @@ ListNode *list_search_node (const List *l, const void *data)
 	{
 		if (l->cmp_func (list_node_get_content (tmp), data) == 0)
 		{
-			return tmp;
+			return list_node_get_content (tmp);
 		}
 	}
 
 	return NULL;
 }
 
-ListNode *list_search_node_by_position (const List *l, int pos)
+void *list_search_by_position (List *l, int pos)
 {
 	ListNode *node;
 	int i;
@@ -297,7 +249,6 @@ ListNode *list_search_node_by_position (const List *l, int pos)
 	
 	if (pos < 0 || pos >= (l->card))
 	{
-		fprintf (stderr, "List search: invalid position\n");
 		return NULL;
 	}
 
@@ -307,10 +258,10 @@ ListNode *list_search_node_by_position (const List *l, int pos)
 		node = list_node_get_next (node);
 	}
 
-	return node;
+	return list_node_get_content (node);
 }
 
-ListNode *list_search_max_node (const List *l)
+void *list_search_max (List *l)
 {
 	ListNode *max;
 	ListNode *tmp;
@@ -340,10 +291,10 @@ ListNode *list_search_max_node (const List *l)
 		}
 	}
 
-	return max;
+	return list_node_get_content (max);
 }
 
-ListNode *list_search_min_node (const List *l)
+void *list_search_min (List *l)
 {
 	ListNode *min;
 	ListNode *tmp;
@@ -371,7 +322,7 @@ ListNode *list_search_min_node (const List *l)
 		}
 	}
 
-	return min;
+	return list_node_get_content (min);
 }
 
 void list_sort (List *l)
@@ -387,7 +338,7 @@ void list_sort (List *l)
 	list_node_link (l->sent, list_merge_sort (l, list_node_get_next (l->sent), l->end));
 }
 
-void list_dump (const List *l, FILE *file, write_func_t f)
+void list_dump (List *l, FILE *file, write_func_t f)
 {
 	ListNode *node;
 	assert (l != NULL);
@@ -400,7 +351,7 @@ void list_dump (const List *l, FILE *file, write_func_t f)
 	fprintf (file, "</LIST>\n");
 }
 
-void list_foreach (const List *l, foreach_func_t f, void *data)
+void list_foreach (List *l, foreach_func_t f, void *data)
 {
 	ListNode *node;
 	assert (l != NULL);

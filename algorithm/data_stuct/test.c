@@ -1,47 +1,35 @@
 #include <stdio.h>
-#include "treenode.h"
+#include "list.h"
 #include "base.h"
 
 int main(void)
 {
-	TreeNode *node;
-	TreeNode *p;
+	int a[] = {1, 2, 3, 4, 5};
 
-	
-	node = tree_node_new ();
-	p = tree_node_new ();
+	List *l;
 
-	tree_node_set_parent (node, p);
+	l = list_new (int_cmp);
 
-	tree_node_dump (p, stdout, NULL);
-	tree_node_dump (node, stdout, NULL);
-	rb_tree_node_dump (node, stdout, NULL);
-	printf ("\n");
-
-	tree_node_set_black (node);
-	tree_node_dump (p, stdout, NULL);
-	tree_node_dump (node, stdout, NULL);
-	rb_tree_node_dump (node, stdout, NULL);
-	printf ("\n");
-
-	if (tree_node_is_black (node))
+	int i;
+	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
-		printf ("it's black\n");
+		list_insert_head (l, &a[i]);
 	}
 
-	tree_node_set_red (node);
-	tree_node_dump (p, stdout, NULL);
-	tree_node_dump (node, stdout, NULL);
-	rb_tree_node_dump (node, stdout, NULL);
-	printf ("\n");
+	list_dump (l, stdout, int_write);
 
-	if (tree_node_is_red (node))
+	list_sort (l);
+
+	list_dump (l, stdout, int_write);
+
+	while (!list_is_empty (l))
 	{
-		printf ("it's red\n");
+		list_delete_head (l);
 	}
 
-	tree_node_free (node);
-	tree_node_free (p);
+	list_dump (l, stdout, int_write);
+
+	list_free (l);
 
 	return 0;
 }

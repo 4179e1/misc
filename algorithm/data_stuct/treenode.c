@@ -3,18 +3,18 @@
 #include "treenode.h"
 
 /* it only works on 32-bit pc */
-#define RB_RED 0x00000000
-#define RB_BLACK 0x00000001
-#define RB_MASK 0x00000001
+#define RB_RED 0x0
+#define RB_BLACK 0x1
+#define RB_MASK 0x1
 
 struct _treenode
 {
 	void *content;
 	/* take care this, we use the last bit of the pointer to idicate the node is red or black */
-	void *parent;
-	void *left;
-	void *right;
-};
+	unsigned long parent;
+	TreeNode *left;
+	TreeNode *right;
+} __attribute__((aligned(sizeof(long))));
 
 TreeNode *tree_node_new (void)
 {
@@ -27,7 +27,7 @@ TreeNode *tree_node_new_from_param (void *content, TreeNode *parent, TreeNode *l
 
 	node = (TreeNode *)Malloc (sizeof (TreeNode));
 	node->content = content;
-	node->parent = parent;
+	node->parent = (unsigned long)parent;
 	node->left = left;
 	node->right = right;
 
@@ -50,8 +50,8 @@ void tree_node_set_parent (TreeNode *node, TreeNode *parent)
 {
 	int rb_status;
 	assert (node != NULL);
-	rb_status = ((int)(node->parent) & RB_MASK);
-	node->parent = (void *) ((int)(parent) | rb_status);
+	rb_status = ((node->parent) & RB_MASK);
+	node->parent = (unsigned long) ((unsigned long)(parent) | rb_status);
 }
 
 void tree_node_set_left (TreeNode *node, TreeNode *left)
@@ -75,7 +75,7 @@ void *tree_node_get_content (const TreeNode *node)
 TreeNode *tree_node_get_parent (const TreeNode *node)
 {
 	assert (node != NULL);
-	return (TreeNode *)((int)(node->parent) & (~RB_MASK));
+	return (TreeNode *)((node->parent) & (~RB_MASK));
 }
 
 TreeNode *tree_node_get_left (const TreeNode *node)
@@ -94,25 +94,25 @@ TreeNode *tree_node_get_right (const TreeNode *node)
 void tree_node_set_red (TreeNode *node)
 {
 	assert (node != NULL);
-	node->parent = (TreeNode *)((int)(node->parent) & (~RB_BLACK));
+	node->parent &= (~RB_BLACK);
 }
 
 void tree_node_set_black (TreeNode *node)
 {
 	assert (node != NULL);
-	node->parent = (TreeNode *)((int)(node->parent) | RB_BLACK);
+	node->parent |= RB_BLACK;
 }
 
 bool tree_node_is_red (const TreeNode *node)
 {
 	assert (node != NULL);
-	return (((int)(node->parent) & RB_MASK ) == RB_RED);
+	return (((node->parent) & RB_MASK ) == RB_RED);
 }
 
 bool tree_node_is_black (const TreeNode *node)
 {
 	assert (node != NULL);
-	return (((int)(node->parent) & RB_MASK ) == RB_BLACK);
+	return (((node->parent) & RB_MASK ) == RB_BLACK);
 }
 
 void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f)
