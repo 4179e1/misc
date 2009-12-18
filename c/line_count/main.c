@@ -5,6 +5,7 @@
 
 static gint files = 0;
 static gint rows = 0;
+static gulong bytes = 0;
 
 static gint get_rows (const gchar *filename)
 {
@@ -21,6 +22,7 @@ static gint get_rows (const gchar *filename)
 
 	while ((c = getc (fp)) != EOF)
 	{
+		bytes++;
 		if ( '\n' == c )
 			count++;
 	}
@@ -119,8 +121,13 @@ int main(int argc, char *argv[])
 
 	listfile(path);
 
-	g_print ("\n%d lines in %d files, average %d linse in a file\n",
-			rows, files, (files == 0 ? 0 : (rows/files)));
+	g_print ("\n%lu bytes %d lines in %d files. ", 
+			bytes, rows, files);
+
+	g_print ("average %lu bytes %d lines in a file, ", 
+			(bytes == 0 ? 0 : (bytes/(gulong)files)), (files == 0 ? 0 : (rows/files)));
+
+	g_print ("%lu bytes per line\n", (bytes == 0 ? 0 : (bytes/(gulong)rows)));
 
 	g_free (path);
 
