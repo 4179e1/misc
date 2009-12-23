@@ -53,6 +53,9 @@ pid_t wp_getsid (pid_t pid);
 
 void (*wp_signal (int signo, void (*func)(int)))(int);
 
+int wp_kill (pid_t pid, int signo);
+int wp_raise (int signo);
+
 /* utilities */
 void wp_check_exit_status (int status);
 #endif /* _WPPOSIXSYS_H */

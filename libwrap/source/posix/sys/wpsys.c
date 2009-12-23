@@ -246,12 +246,19 @@ void (*wp_signal (int signo, void (*func)(int)))(int)
 	return f;
 }
 
-#if 0
-pid_t wp_getsid (pid_t pid)
+int wp_kill (pid_t pid, int signo)
 {
-	pid_t n;
-	if ((n = getsid (pid)) == -1)
-		wp_error_sys_warning ("getsid error");
+	int n;
+	if ((n = kill (pid, signo)) == -1)
+		wp_error_sys_warning ("kill error");
 	return n;
 }
-#endif
+
+int wp_raise (int signo)
+{
+	int n;
+	if ((n = raise (signo)) == -1)
+		wp_error_sys_warning ("raise error");
+	return n;
+}
+
