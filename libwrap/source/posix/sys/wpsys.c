@@ -262,3 +262,66 @@ int wp_raise (int signo)
 	return n;
 }
 
+int wp_sigemptyset (sigset_t *set)
+{
+	int n;
+	if ((n = sigemptyset (set)) == -1)
+		wp_error_sys_warning ("sigemptyset error");
+	return n;
+}
+
+int wp_sigfillset (sigset_t *set)
+{
+	int n;
+	if ((n = sigfillset (set)) == -1)
+		wp_error_sys_warning ("sigfillset error");
+	return n;
+}
+
+int wp_sigaddset (sigset_t *set, int signo)
+{
+	int n;
+	if ((n = sigaddset (set, signo)) == -1)
+		wp_error_sys_warning ("sigaddset error");
+	return n;
+}
+
+int wp_sigdelset (sigset_t *set, int signo)
+{
+	int n;
+	if ((n = sigdelset (set, signo)) == -1)
+		wp_error_sys_warning ("sigdelset error");
+	return n;
+}
+
+int wp_sigismember (const sigset_t *set, int signo)
+{
+	int n;
+	if ((n = sigismember (set, signo)) == -1)
+		wp_error_sys_warning ("sigismember fail");
+	return n;
+}
+
+int wp_sigprocmask (int how, const sigset_t *set, sigset_t *oset)
+{
+	int n;
+	if ((n = sigprocmask (how, set, oset)) == -1)
+		wp_error_sys_warning ("sigprocmask error");
+	return n;
+}
+
+int wp_sigpending (sigset_t *set)
+{
+	int n;
+	if ((n = sigpending (set)) == -1)
+		wp_error_sys_warning ("sigpending error");
+	return n;
+}
+
+int wp_sigaction (int signo, const struct sigaction *act, struct sigaction *oact)
+{
+	int n;
+	if ((n = sigaction (signo, act, oact)) == -1)
+		wp_error_sys_warning ("sigaction error");
+	return n;
+}
