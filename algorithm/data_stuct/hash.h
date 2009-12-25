@@ -27,5 +27,7 @@ void *hash_delete (Hash *h, void *data);
 void hash_dump (const Hash *h, FILE *file, write_func_t f);
 void key_foreach (Hash *h, foreach_func_t f, void *data);
 
-int sum_hash (void *data, int len);
+int sum_key (void *data, int len);
+
+
 #endif /* _HASH_H */

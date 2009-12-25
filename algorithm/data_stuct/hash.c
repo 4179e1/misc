@@ -3,6 +3,14 @@
 #include "hash.h"
 #include "list.h"
 
+typedef int (*hash_func_t) (int key, int size);
+
+#define MULTI_HASH_FACTOR 0.6180339887
+
+int divide_hash (int key, int size);
+int multi_hash (int key, int size);
+
+
 struct _hash
 {
 	List **lists;
@@ -11,6 +19,7 @@ struct _hash
 	int growing_factor;
 	key_func_t key_f;
 	compare_func_t cmp_f;
+	hash_func_t hash_f;
 };
 
 Hash *hash_new (int list_size, key_func_t key_f, compare_func_t cmp_f)
@@ -55,6 +64,7 @@ Hash *hash_new (int list_size, key_func_t key_f, compare_func_t cmp_f)
 	h->growing_factor = 10;
 	h->key_f = key_f;
 	h->cmp_f = cmp_f;
+	h->hash_f = divide_hash;
 
 	return h;
 }
@@ -127,7 +137,7 @@ void hash_insert (Hash *h, void *data)
 
 	assert (h != NULL);
 
-	key = (h->key_f (data)) % h->list_size;
+	key = h->hash_f (h->key_f (data), h->list_size);
 
 	if ((found = list_search (h->lists[key], data)) == NULL)
 	{
@@ -148,7 +158,7 @@ void *hash_search (const Hash *h, void *data)
 
 	assert (h != NULL);
 	
-	key = (h->key_f (data)) % (h->list_size);
+	key = h->hash_f (h->key_f (data), h->list_size);
 
 	return list_search (h->lists[key], data);
 }
@@ -160,7 +170,7 @@ void *hash_delete (Hash *h, void *data)
 
 	assert (h != NULL);
 
-	key = (h->key_f (data)) % (h->list_size);
+	key = h->hash_f (h->key_f (data), h->list_size);
 
 	rst = list_delete (h->lists[key], data);
 
@@ -213,4 +223,20 @@ int sum_key (void *data, int len)
 	}
 
 	return val;
+}
+
+int divide_hash (int key, int size)
+{
+	return (key % size);
+}
+
+int multi_hash (int key, int size)
+{
+	double d;
+
+	d = (double)key;
+	d *= MULTI_HASH_FACTOR;
+	d -= (int)d;
+	
+	return (int)(size * d);
 }
