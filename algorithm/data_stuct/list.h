@@ -11,7 +11,7 @@ void list_free (List *l);
 void list_flush (List *l);
 
 bool list_is_empty (List *l);
-int list_get_size (List *l);
+int list_get_card (List *l);
 void list_set_compare_func (List *l, compare_func_t f);
 
 void list_insert_head (List *l, void *data);
