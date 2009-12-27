@@ -1,35 +1,36 @@
 #include <stdio.h>
-#include "list.h"
 #include "base.h"
+#include "hash.h"
+
+int int_key (void *data)
+{
+	return sum_key(data, sizeof(int));
+}
 
 int main(void)
 {
-	int a[] = {1, 2, 3, 4, 5};
+	int a[] = {1, 2, 3, 4, 5, 12, 14, 16, 18, 20, 123456};
 
-	List *l;
+	Hash *h;
 
-	l = list_new (int_cmp);
+	h = hash_new (10, int_key, int_cmp);
 
 	int i;
 	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
-		list_insert_head (l, &a[i]);
+		hash_insert (h, &a[i]);
 	}
+	
+	hash_dump (h, stdout, int_write);
 
-	list_dump (l, stdout, int_write);
-
-	list_sort (l);
-
-	list_dump (l, stdout, int_write);
-
-	while (!list_is_empty (l))
+	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
-		list_delete_head (l);
+		printf ("%d\n", *(int *)hash_delete (h, &a[i]));
 	}
 
-	list_dump (l, stdout, int_write);
+	hash_dump (h, stdout, int_write);
 
-	list_free (l);
+	hash_free (h);
 
 	return 0;
 }

@@ -10,8 +10,8 @@ typedef int (*key_func_t)(void *data);
 typedef struct _hash Hash;
 
 Hash *hash_new (int size, key_func_t key_f, compare_func_t cmp_f);
-void key_free (Hash *h);
-void key_flush (Hash *h);
+void hash_free (Hash *h);
+void hash_flush (Hash *h);
 
 bool hash_is_empty (const Hash *h);
 int hash_get_card (const Hash *h);

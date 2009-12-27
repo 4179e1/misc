@@ -10,7 +10,6 @@ typedef int (*hash_func_t) (int key, int size);
 int divide_hash (int key, int size);
 int multi_hash (int key, int size);
 
-
 struct _hash
 {
 	List **lists;
@@ -64,18 +63,18 @@ Hash *hash_new (int list_size, key_func_t key_f, compare_func_t cmp_f)
 	h->growing_factor = 10;
 	h->key_f = key_f;
 	h->cmp_f = cmp_f;
-	h->hash_f = divide_hash;
+	h->hash_f = multi_hash;
 
 	return h;
 }
 
-void key_free (Hash *h)
+void hash_free (Hash *h)
 {
 	int i;
 
 	assert (h != NULL);
 
-	key_flush (h);
+	hash_flush (h);
 	
 	for (i = 0; i < (h->list_size); i++)
 	{
@@ -86,7 +85,7 @@ void key_free (Hash *h)
 	free (h);
 }
 
-void key_flush (Hash *h)
+void hash_flush (Hash *h)
 {
 	int i;
 
@@ -132,13 +131,17 @@ void hash_set_compare_func (Hash *h, compare_func_t cmp_f)
 
 void hash_insert (Hash *h, void *data)
 {
-	int key;
-	void *found;
+	int index;
 
 	assert (h != NULL);
 
-	key = h->hash_f (h->key_f (data), h->list_size);
+	index = h->hash_f (h->key_f (data), h->list_size);
 
+	list_insert_head (h->lists[index], data);
+	(h->card)++;
+
+#if 0	
+	void *found;
 	if ((found = list_search (h->lists[key], data)) == NULL)
 	{
 		list_insert_head (h->lists[key], data);
@@ -148,31 +151,30 @@ void hash_insert (Hash *h, void *data)
 	{
 		printf ("elements already in hash table\n");
 	}
-
-	return;
+#endif
 }
 
 void *hash_search (const Hash *h, void *data)
 {
-	int key;
+	int index;
 
 	assert (h != NULL);
 	
-	key = h->hash_f (h->key_f (data), h->list_size);
+	index = h->hash_f (h->key_f (data), h->list_size);
 
-	return list_search (h->lists[key], data);
+	return list_search (h->lists[index], data);
 }
 
 void *hash_delete (Hash *h, void *data)
 {
-	int key;
+	int index;
 	void *rst;
 
 	assert (h != NULL);
 
-	key = h->hash_f (h->key_f (data), h->list_size);
+	index = h->hash_f (h->key_f (data), h->list_size);
 
-	rst = list_delete (h->lists[key], data);
+	rst = list_delete (h->lists[index], data);
 
 	if (rst != NULL)
 	{
@@ -197,7 +199,7 @@ void hash_dump (const Hash *h, FILE *file, write_func_t f)
 	fprintf (file, "</HASH>\n");
 }
 
-void key_foreach (Hash *h, foreach_func_t f, void *data)
+void hash_foreach (Hash *h, foreach_func_t f, void *data)
 {
 	int i;
 
