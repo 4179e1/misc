@@ -8,7 +8,7 @@
 typedef struct _treenode TreeNode;
 
 TreeNode *tree_node_new (void);
-TreeNode *tree_node_new_from_param (void *content, TreeNode *parent, TreeNode *left, TreeNode *right);
+TreeNode *tree_node_new_full (void *content, TreeNode *parent, TreeNode *left, TreeNode *right);
 void tree_node_free (TreeNode *node);
 
 void tree_node_set_content (TreeNode *node, void *data);
@@ -20,6 +20,9 @@ void *tree_node_get_content (const TreeNode *node);
 TreeNode *tree_node_get_parent (const TreeNode *node);
 TreeNode *tree_node_get_left (const TreeNode *node);
 TreeNode *tree_node_get_right (const TreeNode *node);
+
+bool tree_node_is_leaf (const TreeNode *node);
+bool tree_node_is_root (const TreeNode *node);
 
 /* For Red-Black Tree */
 void tree_node_set_red (TreeNode *node);

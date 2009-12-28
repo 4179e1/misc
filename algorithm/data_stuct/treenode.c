@@ -2,7 +2,7 @@
 #include <assert.h>
 #include "treenode.h"
 
-/* it only works on 32-bit pc */
+/* it may only works on ia-32 */
 #define RB_RED 0x0
 #define RB_BLACK 0x1
 #define RB_MASK 0x1
@@ -21,7 +21,7 @@ TreeNode *tree_node_new (void)
 	return (TreeNode *)Calloc (1, sizeof (TreeNode));
 }
 
-TreeNode *tree_node_new_from_param (void *content, TreeNode *parent, TreeNode *left, TreeNode *right)
+TreeNode *tree_node_new_full (void *content, TreeNode *parent, TreeNode *left, TreeNode *right)
 {
 	TreeNode *node;
 
@@ -88,6 +88,18 @@ TreeNode *tree_node_get_right (const TreeNode *node)
 {
 	assert (node != NULL);
 	return node->right;
+}
+
+bool tree_node_is_leaf (const TreeNode *node)
+{
+	assert (node != NULL);
+	return ((node->left == NULL) && (node->right == NULL));
+}
+
+bool tree_node_is_root (const TreeNode *node)
+{
+	assert (node != NULL);
+	return (tree_node_get_parent (node) == NULL);
 }
 
 /* For Red-Black Tree */
