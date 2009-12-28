@@ -325,3 +325,11 @@ int wp_sigaction (int signo, const struct sigaction *act, struct sigaction *oact
 		wp_error_sys_warning ("sigaction error");
 	return n;
 }
+
+int wp_sigsuspend (const sigset_t *sigmask)
+{
+	int n;
+	if ((n = sigsuspend (sigmask)) == -1)
+		wp_error_sys_warning ("sigsuspend error");
+	return n;
+}

@@ -64,6 +64,8 @@ int wp_sigismember (const sigset_t *set, int signo);
 int wp_sigprocmask (int how, const sigset_t *set, sigset_t *oset);
 int wp_sigpending (sigset_t *set);
 int wp_sigaction (int signo, const struct sigaction *act, struct sigaction *oact);
+
+int wp_sigsuspend (const sigset_t *sigmask);
 /* utilities */
 void wp_check_exit_status (int status);
 #endif /* _WPPOSIXSYS_H */
