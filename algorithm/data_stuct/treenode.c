@@ -34,6 +34,17 @@ TreeNode *tree_node_new_full (void *content, TreeNode *parent, TreeNode *left, T
 	return node;
 }
 
+void tree_node_copy (TreeNode *dest, const TreeNode *src)
+{
+	assert (dest != NULL);
+	assert (src != NULL);
+
+	dest->content = src->content;
+	dest->parent = src->parent;
+	dest->left = src->left;
+	dest->right = src->right;
+}
+
 void tree_node_free (TreeNode *node)
 {
 	assert (node != NULL);
@@ -132,7 +143,7 @@ void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f)
 	fprintf (file, "<TREE_NODE REF=\"%p\" CONTENT=\"%p\" PARENT=\"%p\" LEFT=\"%p\" RIGHT=\"%p\">", (void *)node, (void *)node->content, (void *)tree_node_get_parent (node), (void *)node->left, (void *)node->right);
 	if (f)
 	{
-		f (file, node->content);
+		f (node->content, file);
 	}
 	fprintf (file, "</TREE_NODE>\n");
 }
@@ -143,7 +154,7 @@ void rb_tree_node_dump (const TreeNode *node, FILE *file, write_func_t f)
 			(tree_node_is_black (node) ? "BLACK" : "RED"), (void *)node, (void *)node->content, (void *)tree_node_get_parent (node), (void *)node->left, (void *)node->right);
 	if (f)
 	{
-		f (file, node->content);
+		f (node->content, file);
 	}
 	fprintf (file, "</TREE_NODE>\n");
 }

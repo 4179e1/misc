@@ -9,6 +9,7 @@ typedef struct _treenode TreeNode;
 
 TreeNode *tree_node_new (void);
 TreeNode *tree_node_new_full (void *content, TreeNode *parent, TreeNode *left, TreeNode *right);
+void tree_node_copy (TreeNode *dest, const TreeNode *src);
 void tree_node_free (TreeNode *node);
 
 void tree_node_set_content (TreeNode *node, void *data);

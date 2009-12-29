@@ -1,36 +1,34 @@
 #include <stdio.h>
 #include "base.h"
-#include "hash.h"
+#include "bintree.h"
 
-int int_key (void *data)
-{
-	return sum_key(data, sizeof(int));
-}
 
 int main(void)
 {
-	int a[] = {1, 2, 3, 4, 5, 12, 14, 16, 18, 20, 123456};
+	int a[] = {5, 2, 1, 3, 4, 9, 8, 7};
+	int b = 123;
 
-	Hash *h;
+	BinTree *t;
 
-	h = hash_new (10, int_key, int_cmp);
+	t = bin_tree_new (int_cmp);
 
 	int i;
+
 	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
-		hash_insert (h, &a[i]);
+		bin_tree_insert (t, &a[i]);
 	}
 	
-	hash_dump (h, stdout, int_write);
+	bin_tree_dump (t, stdout, int_write);
 
 	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
-		printf ("%d\n", *(int *)hash_delete (h, &a[i]));
+		printf ("%d\t", *(int *)bin_tree_delete (t, &a[i]));
 	}
 
-	hash_dump (h, stdout, int_write);
+	bin_tree_dump (t, stdout, int_write);
 
-	hash_free (h);
+	bin_tree_free (t);
 
 	return 0;
 }
