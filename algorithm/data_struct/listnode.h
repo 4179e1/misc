@@ -7,6 +7,7 @@
 typedef struct _list_node ListNode;
 
 ListNode *list_node_new (void);
+ListNode *list_node_new_full (void *data, ListNode *p, ListNode *n);
 void list_node_free (ListNode *n);
 
 void list_node_set_content (ListNode *node, void *data);
@@ -19,6 +20,9 @@ ListNode *list_node_get_prev (const ListNode *node);
 
 void list_node_link (ListNode *prev, ListNode *next);
 void list_node_unlink (ListNode *prev, ListNode *next);
+
+void list_node_insert_before (ListNode *n, ListNode *prev);
+void list_node_insert_after (ListNode *n, ListNode *next);
 
 void list_node_dump (const ListNode *node, FILE *file, write_func_t f);
 

@@ -25,13 +25,13 @@ TreeNode *tree_node_get_right (const TreeNode *node);
 bool tree_node_is_leaf (const TreeNode *node);
 bool tree_node_is_root (const TreeNode *node);
 
+void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f);
+
 /* For Red-Black Tree */
 void tree_node_set_red (TreeNode *node);
 void tree_node_set_black (TreeNode *node);
 bool tree_node_is_red (const TreeNode *node);
 bool tree_node_is_black (const TreeNode *node);
-
-void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f);
 void rb_tree_node_dump (const TreeNode *node, FILE *file, write_func_t f);
 
 #endif /* _TREENODE_H */

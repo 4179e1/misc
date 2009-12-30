@@ -3,6 +3,8 @@
 #include "list.h"
 #include "listnode.h"
 
+static ListNode *list_search_node (List *l, void *data);
+static ListNode *list_search_node_by_position (List *l, int pos);
 static ListNode *list_merge_sort (List *l, ListNode *u, ListNode *z);
 static ListNode *list_merge (List *l, ListNode *s, ListNode *t, ListNode *z);
 
@@ -12,6 +14,12 @@ struct _list
 	ListNode *end;
 	int card;
 	compare_func_t cmp_func;
+};
+
+struct _list_cursor
+{
+	List *l;
+	ListNode *n;
 };
 
 List *list_new (compare_func_t f)
@@ -223,39 +231,26 @@ void *list_search (List *l, void *data)
 
 	assert (l != NULL);
 
-	if (l->cmp_func == NULL)
+	tmp = list_search_node (l, data);
+	if (tmp == NULL)
 	{
-		fprintf (stderr, "List: compare func is NULL\n");
 		return NULL;
 	}
 
-	for (tmp = list_node_get_next (l->sent); tmp != l->end; tmp = list_node_get_next (tmp))
-	{
-		if (l->cmp_func (list_node_get_content (tmp), data) == 0)
-		{
-			return list_node_get_content (tmp);
-		}
-	}
-
-	return NULL;
+	return list_node_get_content (tmp);
 }
+
 
 void *list_search_by_position (List *l, int pos)
 {
 	ListNode *node;
-	int i;
 
 	assert (l != NULL);
-	
-	if (pos < 0 || pos >= (l->card))
+
+	node = list_search_node_by_position (l, pos);
+	if (node == NULL)
 	{
 		return NULL;
-	}
-
-	node = list_node_get_next (l->sent);
-	for (i = 0; i < pos; i++)
-	{
-		node = list_node_get_next (node);
 	}
 
 	return list_node_get_content (node);
@@ -267,8 +262,6 @@ void *list_search_max (List *l)
 	ListNode *tmp;
 
 	assert (l != NULL);
-
-
 
 	if (l->cmp_func == NULL)
 	{
@@ -365,7 +358,278 @@ void list_foreach (List *l, foreach_func_t f, void *data)
 	}
 }
 
+/* List Cursor */
+ListCursor *list_cursor_new (List *l)
+{
+	ListCursor *lc;
+
+	assert (l != NULL);
+
+	lc = (ListCursor *)Malloc (sizeof (ListCursor));
+	if (lc == NULL)
+	{
+		return NULL;
+	}
+
+	lc->l = l;
+	lc->n = list_node_get_next (l->sent);
+
+	return lc;
+}
+
+void list_cursor_free (ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	free (lc);
+}
+
+bool list_cursor_is_head (const ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	if (list_is_empty (lc->l))
+	{
+		return false;
+	}
+
+	return (lc->n == list_node_get_next (lc->l->sent));
+}
+
+bool list_cursor_is_tail (const ListCursor *lc)
+{
+	assert (lc != NULL);
+	if (list_is_empty (lc->l))
+	{
+		return false;
+	}
+
+	return (lc->n == list_node_get_prev (lc->l->sent));
+}
+			
+void list_cursor_move_to_head (ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	lc->n = list_node_get_next (lc->l->sent);
+}
+
+void list_cursor_move_to_tail (ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	lc->n = list_node_get_prev (lc->l->end);
+}
+
+void list_cursor_step_forward (ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	lc->n = list_node_get_next (lc->n);
+}
+
+void list_cursor_step_backward (ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	lc->n = list_node_get_prev (lc->n);
+}
+
+void *list_cursor_move_to_value (ListCursor *lc, void *value);
+void *list_cursor_move_to_position (ListCursor *lc, int i);
+
+void list_cursor_set_content (ListCursor *lc, void *data)
+{
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return;
+	}
+
+	list_node_set_content (lc->n ,data);
+}
+
+void *list_cursor_get_content (ListCursor *lc)
+{
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return NULL;
+	}
+
+	return list_node_get_content (lc->n);
+}
+
+void list_cursor_insert_before (ListCursor *lc, void *data)
+{
+	ListNode *tmp;
+
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return;
+	}
+
+	tmp = list_node_new_full (data, NULL, NULL);
+	if (tmp == NULL)
+	{
+		return;
+	}
+
+	list_node_insert_before (lc->n, tmp);
+	(lc->l->card)++;
+}
+	
+void list_cursor_insert_after (ListCursor *lc, void *data)
+{
+	ListNode *tmp;
+
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return;
+	}
+
+	tmp = list_node_new_full (data, NULL, NULL);
+	if (tmp == NULL)
+	{
+		return;
+	}
+
+	list_node_insert_after (lc->n, tmp);
+	(lc->l->card)++;
+}
+
+void *list_cursor_remove (ListCursor *lc)
+{
+	ListNode *p;
+	ListNode *n;
+	void *data;
+
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return NULL;
+	}
+
+	n = list_node_get_next (lc->n);
+	if (n == lc->l->end)
+	{
+		return NULL;
+	}
+	p = list_node_get_prev (lc->n);
+
+	data = list_node_get_content (lc->n);
+	list_node_free (lc->n);
+	list_node_link (p, n);
+	(lc->l->card)--;
+	
+	lc->n = n;
+
+	return data;
+}
+
+void *list_cursor_remove_before (ListCursor *lc)
+{
+	ListNode *tmp;
+	ListNode *p;
+	void *data;
+
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return NULL;
+	}
+
+	tmp = list_node_get_prev (lc->n);
+	if (tmp == lc->l->sent)
+	{
+		return NULL;
+	}
+
+	p = list_node_get_prev (tmp);
+	data = list_node_get_content (tmp);
+	list_node_free (tmp);
+	list_node_link (p, lc->n);
+	(lc->l->card)--;
+
+	return data;
+}
+	
+void *list_cursor_remove_after (ListCursor *lc)
+{
+	ListNode *tmp;
+	ListNode *n;
+	void *data;
+	
+	assert (lc != NULL);
+
+	if ((lc->n == lc->l->sent) || (lc->n == lc->l->end))
+	{
+		return NULL;
+	}
+
+	tmp = list_node_get_next (lc->n);
+	if (tmp == lc->l->end)
+	{
+		return NULL;
+	}
+
+	n = list_node_get_next (tmp);
+	data = list_node_get_content (tmp);
+	list_node_free (tmp);
+	list_node_link (lc->n, n);
+	(lc->l->card)--;
+
+	return data;
+}
+
 /* private func */
+static ListNode *list_search_node (List *l, void *data)
+{
+	ListNode *tmp;
+
+	if (l->cmp_func == NULL)
+	{
+		fprintf (stderr, "List: compare func is NULL\n");
+		return NULL;
+	}
+
+	for (tmp = list_node_get_next (l->sent); tmp != l->end; tmp = list_node_get_next (tmp))
+	{
+		if (l->cmp_func (list_node_get_content (tmp), data) == 0)
+		{
+			return tmp;
+		}
+	}
+
+	return NULL;
+}
+
+static ListNode *list_search_node_by_position (List *l, int pos)
+{
+	ListNode *node;	
+	int i;
+
+	if (pos < 0 || pos >= (l->card))
+	{
+		return NULL;
+	}
+
+	node = list_node_get_next (l->sent);
+	for (i = 0; i < pos; i++)
+	{
+		node = list_node_get_next (node);
+	}
+
+	return node;
+}
 
 static ListNode *list_merge_sort (List *l, ListNode *u, ListNode *z)
 {

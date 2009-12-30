@@ -14,9 +14,27 @@ ListNode *list_node_new (void)
 {
 	ListNode *node;
 	node = (ListNode *)Malloc (sizeof (ListNode));
+	if (node == NULL)
+	{
+		return NULL;
+	}
 	node->data = NULL;
 	node->prev = NULL;
 	node->next = NULL;
+	return node;
+}
+
+ListNode *list_node_new_full (void *data, ListNode *p, ListNode *n)
+{
+	ListNode *node;
+	node = (ListNode *)Malloc (sizeof (ListNode));
+	if (node == NULL)
+	{
+		return NULL;
+	}
+	node->data = data;
+	node->prev = p;
+	node->next = n;
 	return node;
 }
 
@@ -75,6 +93,40 @@ void list_node_unlink (ListNode *prev, ListNode *next)
 	assert (prev != NULL);
 	prev->next = NULL;
 	next->prev = NULL;
+}
+
+void list_node_insert_before (ListNode *n, ListNode *prev)
+{
+	ListNode *tmp;
+
+	assert (n != NULL);
+	assert (prev != NULL);
+
+	tmp = n->prev;
+	list_node_link (prev, n);
+
+	prev->prev = tmp;
+	if (tmp)
+	{
+		tmp->next = prev;
+	}
+}
+
+void list_node_insert_after (ListNode *n, ListNode *next)
+{
+	ListNode *tmp;
+	
+	assert (n != NULL);
+	assert (next != NULL);
+
+	tmp = n->next;
+	list_node_link (n, next);
+
+	next->next = tmp;
+	if (tmp)
+	{
+		tmp->prev = next;
+	}
 }
 
 void list_node_dump (const ListNode *node, FILE *file, write_func_t f)
