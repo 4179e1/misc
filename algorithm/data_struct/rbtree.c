@@ -146,7 +146,7 @@ void rb_tree_insert (RbTree *t, void *data)
 
 	tree_node_set_red (z);
 
-	//rb_insert_fixup (t, z);
+	rb_insert_fixup (t, z);
 
 	(t->card)++;
 }
@@ -259,7 +259,7 @@ static void right_rotate (RbTree *t, TreeNode *x)
 	assert (x != NULL);
 
 	/* Set y */
-	y = tree_node_get_left (y);
+	y = tree_node_get_left (x);
 	assert (y != NULL);
 
 	/* Turn y's right subtree into x's left subtree */
@@ -299,6 +299,9 @@ static void rb_insert_fixup (RbTree *t, TreeNode *z)
 	TreeNode *y;	/* z's uncle */
 	TreeNode *pz;	/* z's parent */
 	TreeNode *ppz;	/* z's parent's parent */
+
+	static int i = 0;
+	i++;
 
 	while (tree_node_is_red (tree_node_get_parent (z))) /* so that p[p[z]] is black */
 	{

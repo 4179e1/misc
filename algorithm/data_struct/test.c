@@ -17,16 +17,14 @@ int main(void)
 	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
 		rb_tree_insert (t, &a[i]);
-		rb_tree_dump (t, stdout, int_write);
 	}
 
+	rb_tree_dump (t, stdout, int_write);
 
-#if 0	
 	rb_tree_flush (t);
 	rb_tree_dump (t, stdout, int_write);
 
 	rb_tree_free (t);
-#endif
 
 	return 0;
 }
