@@ -20,12 +20,12 @@ void *rb_tree_get_maximum (const RbTree *t);
 
 void rb_tree_insert (RbTree *t, void *data);
 void *rb_tree_search (const RbTree *t, void *data);
-void *rb_tree_delete (rbtree *t, void *data);
+void *rb_tree_delete (RbTree *t, void *data);
 
 void rb_tree_map_prefix (const RbTree *t, FILE *file, write_func_t f);
 void rb_tree_map_infix (const RbTree *t, FILE *file, write_func_t f);
-void rb_tree_map_postfix (cosnt RbTree *t, FILE *file, write_func_t f);
+void rb_tree_map_postfix (const RbTree *t, FILE *file, write_func_t f);
 
-void rb_tree_dump (cosnt RbTree *t, FILE *file, write_func_t f);
+void rb_tree_dump (const RbTree *t, FILE *file, write_func_t f);
 void rb_tree_foreach (RbTree *t, foreach_func_t f, void *data);
 #endif /* _RBTREE_H */

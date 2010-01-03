@@ -50,6 +50,7 @@ void bin_tree_flush (BinTree *t)
 	assert (t != NULL);
 
 	_bin_tree_flush (tree_node_get_right (t->sent), NULL);
+	tree_node_set_right (t->sent, NULL);
 	t->card = 0;
 }
 

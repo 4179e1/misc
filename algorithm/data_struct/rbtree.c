@@ -1,16 +1,21 @@
 #include <assert.h>
+#include <stdlib.h>
 #include "treenode.h"
 #include "_bintree.h"
+#include "rbtree.h"
+
+#define TREE_ROOT(T) (tree_node_get_right (T->sent))
 
 static void left_rotate (RbTree *t, TreeNode *x);
 static void right_rotate (RbTree *t, TreeNode *x);
+static void rb_insert_fixup (RbTree *t, TreeNode *z);
 
 struct _rbtree
 {
 	TreeNode *sent;
 	int card;
 	compare_func_t cmp_f;
-}
+};
 
 RbTree *rb_tree_new (compare_func_t cmp_f)
 {
@@ -30,6 +35,7 @@ RbTree *rb_tree_new (compare_func_t cmp_f)
 		free (t);
 		return NULL;
 	}
+	tree_node_set_right (t->sent, t->sent);
 	tree_node_set_black (t->sent);
 
 	t->card = 0;
@@ -42,14 +48,16 @@ void rb_tree_free (RbTree *t)
 {
 	assert (t != NULL);
 	rb_tree_flush (t);
-	free (rb->sent);
-	free (rb);
+	free (t->sent);
+	free (t);
 }
 
 void rb_tree_flush (RbTree *t)
 {
 	assert (t != NULL);
 	_bin_tree_flush (tree_node_get_right (t->sent), t->sent);
+	tree_node_set_right (t->sent, t->sent);
+	t->card = 0;
 }
 
 bool rb_tree_is_empty (const RbTree *t)
@@ -88,9 +96,70 @@ void *rb_tree_get_maximum (const RbTree *t)
 	return _bin_tree_maximum (tree_node_get_right (t->sent), t->sent);
 }
 
-void rb_tree_insert (RbTree *t, void *data);
-void *rb_tree_search (const RbTree *t, void *data);
-void *rb_tree_delete (rbtree *t, void *data);
+void rb_tree_insert (RbTree *t, void *data)
+{
+	TreeNode *x;
+	TreeNode *y;
+	TreeNode *z;
+	
+	assert (t != NULL);
+
+	x = tree_node_get_right (t->sent);
+	y = t->sent;
+
+	z = tree_node_new_full (data, NULL, y, y);
+	if (z == NULL)
+	{
+		return;
+	}
+
+	while (x != t->sent)
+	{
+		y = x;
+		if (t->cmp_f (data, tree_node_get_content (x)) < 0)
+		{
+			x = tree_node_get_left (x);
+		}
+		else
+		{
+			x = tree_node_get_right (x);
+		}
+	}
+
+	tree_node_set_parent (z, y);
+
+	if (y == t->sent)	/* root */
+	{
+		tree_node_set_right (t->sent, z);
+	}
+	else
+	{
+		if (t->cmp_f (data, tree_node_get_content (y)) < 0)
+		{
+			tree_node_set_left (y, z);
+		}
+		else
+		{
+			tree_node_set_right (y, z);
+		}
+	}
+
+	tree_node_set_red (z);
+
+	//rb_insert_fixup (t, z);
+
+	(t->card)++;
+}
+
+void *rb_tree_search (const RbTree *t, void *data)
+{
+	return NULL;
+}
+
+void *rb_tree_delete (RbTree *t, void *data)
+{
+	return NULL;
+}
 
 void rb_tree_map_prefix (const RbTree *t, FILE *file, write_func_t f)
 {
@@ -108,7 +177,7 @@ void rb_tree_map_infix (const RbTree *t, FILE *file, write_func_t f)
 	_bin_tree_map_infix (tree_node_get_right (t->sent), t->sent, file, f);
 }
 
-void rb_tree_map_postfix (cosnt RbTree *t, FILE *file, write_func_t f)
+void rb_tree_map_postfix (const RbTree *t, FILE *file, write_func_t f)
 {
 	assert (t != NULL);
 	assert (file != NULL);
@@ -116,13 +185,13 @@ void rb_tree_map_postfix (cosnt RbTree *t, FILE *file, write_func_t f)
 	_bin_tree_map_postfix (tree_node_get_right (t->sent), t->sent, file, f);
 }
 
-void rb_tree_dump (cosnt RbTree *t, FILE *file, write_func_t f)
+void rb_tree_dump (const RbTree *t, FILE *file, write_func_t f)
 {
 	assert (t != NULL);
 	assert (file != NULL);
-	fprintf (file, "<RB_TREE REF=\"%p\" CARD=\"%d\" SENT=\"%p\">", (void *)t, t->card, (void *)(t->sent));
+	fprintf (file, "<RB_TREE REF=\"%p\" CARD=\"%d\" SENT=\"%p\">\n", (void *)t, t->card, (void *)(t->sent));
 
-	_bin_tree_dump (tree_node_get_right (t->sent), NULL, file, f, RB_TREE);
+	_bin_tree_dump (tree_node_get_right (t->sent), t->sent, file, f, RB_TREE);
 
 	fprintf (file, "</RB_TREE>\n");	
 }
@@ -194,11 +263,11 @@ static void right_rotate (RbTree *t, TreeNode *x)
 	assert (y != NULL);
 
 	/* Turn y's right subtree into x's left subtree */
-	ry = tree_node_get_riht (y);
+	ry = tree_node_get_right (y);
 	tree_node_set_left (x, ry);
 	if (ry != t->sent)
 	{
-		tree_node_get_parent (ry, x);
+		tree_node_set_parent (ry, x);
 	}
 
 	/* Link x's parent to y */
@@ -223,4 +292,74 @@ static void right_rotate (RbTree *t, TreeNode *x)
 	/* Put x on y's right */
 	tree_node_set_right (y, x);
 	tree_node_set_parent (x, y);
+}
+
+static void rb_insert_fixup (RbTree *t, TreeNode *z)
+{
+	TreeNode *y;	/* z's uncle */
+	TreeNode *pz;	/* z's parent */
+	TreeNode *ppz;	/* z's parent's parent */
+
+	while (tree_node_is_red (tree_node_get_parent (z))) /* so that p[p[z]] is black */
+	{
+		pz = tree_node_get_parent (z);
+		ppz = tree_node_get_parent (pz);
+		if (pz == tree_node_get_left (ppz))
+		{
+			y = tree_node_get_right (ppz);
+
+			if (tree_node_is_red (y))
+			{
+				tree_node_set_black (pz);
+				tree_node_set_black (y);
+				tree_node_set_red (ppz);
+				z = ppz;
+			}
+			else /* tree_node_is_black (y) */
+			{
+				if (z == tree_node_get_right (pz))
+				{
+					z = pz;
+					left_rotate (t, z);
+				}
+				/* take care, z may has been changed */
+				pz = tree_node_get_parent (z);
+				ppz = tree_node_get_parent (pz);
+	
+				tree_node_set_black (pz);
+				tree_node_set_red (ppz);
+				right_rotate (t, ppz);
+			}
+
+		}
+		else /* pz == tree_node_get_right (ppz) */
+		{
+			y = tree_node_get_left (ppz);
+
+			if (tree_node_is_red (y))
+			{
+				tree_node_set_black (pz);
+				tree_node_set_black (y);
+				tree_node_set_red (ppz);
+				z = ppz;
+			}
+			else /* tree_node_is_black (y) */
+			{
+				if (z == tree_node_get_left (pz))
+				{
+					z = pz;
+					right_rotate (t, z);
+				}
+				/* take care, z may has been changed */
+				pz = tree_node_get_parent (z);
+				ppz = tree_node_get_parent (pz);
+				
+				tree_node_set_black (pz);
+				tree_node_set_red (ppz);
+				left_rotate (t, ppz);
+			}
+		}
+	}
+
+	tree_node_set_black (tree_node_get_right (t->sent));
 }
