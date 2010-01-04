@@ -177,3 +177,193 @@ int wp_pthread_cond_broadcast (pthread_cond_t *cond)
 		wp_error_warning ("pthread_cond_broadcast() error: %s", strerror(n));
 	return n;
 }
+
+
+int wp_pthread_attr_init (pthread_attr_t *attr)
+{
+	int n;
+	if ((n = pthread_attr_init (attr)) != 0)
+		wp_error_warning ("pthread_attr_init() error: %s", strerror(n));
+	return n;
+}
+
+int wp_pthread_attr_destroy (pthread_attr_t *attr)
+{
+	int n;
+	if ((n = pthread_attr_destroy (attr)) != 0)
+		wp_error_warning ("pthread_attr_destroy() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_attr_getdetachstate (const pthread_attr_t *attr, int *detachstate)
+{
+	int n;
+	if ((n = pthread_attr_getdetachstate (attr, detachstate)) != 0)
+		wp_error_warning ("pthread_attr_getdetachstate() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_attr_setdetachstate (pthread_attr_t *attr, int detachstate)
+{
+	int n;
+	if ((n = pthread_attr_setdetachstate (attr, detachstate)) != 0)
+		wp_error_warning ("pthread_attr_setdetachstate() error: %s", strerror (n));
+	return n;
+}
+	
+int wp_pthread_attr_getstack (const pthread_attr_t *attr, void **stackaddr, size_t *stacksize)
+{
+	int n;
+	if ((n = pthread_attr_getstack (attr, stackaddr, stacksize)) != 0)
+		wp_error_warning ("pthread_attr_getstack() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_attr_setstack (pthread_attr_t *attr, void *stackaddr, size_t stacksize)
+{
+	int n;
+	if ((n = pthread_attr_setstack (attr, stackaddr, stacksize)) != 0)
+		wp_error_warning ("pthread_attr_setstack() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_attr_getguardsize (const pthread_attr_t *attr, size_t *guardsize)
+{
+	int n;
+	if ((n = pthread_attr_getguardsize (attr, guardsize)) != 0)
+		wp_error_warning ("pthread_attr_getguardsize() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_attr_setguardsize (pthread_attr_t *attr, size_t guardsize)
+{
+	int n;
+	if ((n = pthread_attr_setguardsize (attr, guardsize)) != 0)
+		wp_error_warning ("pthread_attr_setguardsize() error: %s", strerror (n));
+	return n;
+}
+
+
+#ifdef __USE_UNIX98
+int wp_pthread_setconcurrency (int level)
+{
+	int n;
+	if ((n = pthread_setconcurrency (level)) != 0)
+		wp_error_warning ("pthread_attr_setconcurrency() error: %s", strerror(n));
+	return n;
+}
+#endif /* __USE_UNIX98 */
+
+int wp_pthread_mutexattr_init (pthread_mutexattr_t *attr)
+{
+	int n;
+	if ((n = pthread_mutexattr_init (attr)) != 0)
+		wp_error_warning ("pthread_mutexattr_init() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_mutexattr_destroy (pthread_mutexattr_t *attr)
+{
+	int n;
+	if ((n = pthread_mutexattr_destroy (attr)) != 0)
+		wp_error_warning ("pthread_mutexattr_destroy() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_mutexattr_getpshared (const pthread_mutexattr_t *attr, int *pshared)
+{
+	int n;
+	if ((n = pthread_mutexattr_getpshared (attr, pshared)) != 0)
+		wp_error_warning ("pthread_mutexattr_getpshared() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_mutexattr_setpshared (pthread_mutexattr_t *attr, int pshared)
+{
+	int n;
+	if ((n = pthread_mutexattr_setpshared (attr, pshared)) != 0)
+		wp_error_warning ("pthread_mutexattr_setpshared() error: %s", strerror (n));
+	return n;
+}
+
+#ifdef __USE_UNIX98
+int wp_pthread_mutexattr_gettype (const pthread_mutexattr_t *attr, int *type)
+{
+	int n;
+	if ((n = pthread_mutexattr_gettype (attr, type)) != 0)
+		wp_error_warning ("pthread_mutexattr_gettype() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_mutexattr_settype (pthread_mutexattr_t *attr, int type)
+{
+	int n;
+	if ((n = pthread_mutexattr_settype (attr, type)) != 0)
+		wp_error_warning ("pthread_mutexattr_settype() error: %s", strerror (n));
+	return n;
+}
+#endif /* __USE_UNIX98 */
+
+int wp_pthread_rwlockattr_init (pthread_rwlockattr_t *attr)
+{
+	int n;
+	if ((n = pthread_rwlockattr_init (attr)) != 0)
+		wp_error_warning ("pthread_rwlockattr_init() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_rwlockattr_destroy (pthread_rwlockattr_t *attr)
+{
+	int n;
+	if ((n = pthread_rwlockattr_destroy (attr)) != 0)
+		wp_error_warning ("pthread_rwlockattr_destroy() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_rwlockattr_getpshared (const pthread_rwlockattr_t *attr, int *pshared)
+{
+	int n;
+	if ((n = pthread_rwlockattr_getpshared (attr, pshared)) != 0)
+		wp_error_warning ("pthread_rwlockattr_getpshared() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_rwlockattr_setpshared (pthread_rwlockattr_t *attr, int pshared)
+{
+	int n;
+	if ((n = pthread_rwlockattr_setpshared (attr, pshared)) != 0)
+		wp_error_warning ("pthread_rwlockattr_setpshared() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_condattr_init (pthread_condattr_t *attr)
+{
+	int n;
+	if ((n = pthread_condattr_init (attr)) != 0)
+		wp_error_warning ("pthread_condattr_init() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_condattr_destroy (pthread_condattr_t *attr)
+{
+	int n;
+	if ((n = pthread_condattr_destroy (attr)) != 0)
+		wp_error_warning ("pthread_condattr_destroy() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_condattr_getpshared (const pthread_condattr_t *attr, int *pshared)
+{
+	int n;
+	if ((n = pthread_condattr_getpshared (attr, pshared)) != 0)
+		wp_error_warning ("pthread_condattr_getpshared() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_condattr_setpshared (pthread_condattr_t *attr, int pshared)
+{
+	int n;
+	if ((n = pthread_condattr_setpshared (attr, pshared)) != 0)
+		wp_error_warning ("pthread_condattr_setpshared() error: %s", strerror (n));
+	return n;
+}
