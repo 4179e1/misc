@@ -3,18 +3,15 @@
 #include "_bintree.h"
 #include "base.h"
 
+#define USE_JUMP_TABLE
+
 #ifdef USE_JUMP_TABLE
 typedef void (*tree_node_dump_func)(const TreeNode *node, FILE *file, write_func_t write_f);
-typedef struct _dump_action
-{
-	BinTreeType type;
-	tree_node_dump_func func;
-} DumpAction;
 
-struct _dump_action action[] =
+tree_node_dump_func action[] =
 {
-	{BIN_TREE, tree_node_dump},
-	{RB_TREE, rb_tree_node_dump},
+	tree_node_dump,		/* BIN_TREE */
+	rb_tree_node_dump,	/* RB_TREE */
 };
 
 #endif /* USE_JUMP_TABLE */
@@ -111,7 +108,7 @@ TreeNode *_bin_tree_successor (TreeNode *n, TreeNode *sent)
 	}
 
 	y = tree_node_get_parent (n);
-	while ((y != NULL) && (n == tree_node_get_right (y)))
+	while ((y != sent) && (n == tree_node_get_right (y)))
 	{
 		n = y;
 		y = tree_node_get_parent (y);
@@ -125,13 +122,13 @@ TreeNode *_bin_tree_predecessor (TreeNode *n, TreeNode *sent)
 	TreeNode *l;
 	TreeNode *y;
 	
-	if ((l = tree_node_get_left (n)) != NULL)
+	if ((l = tree_node_get_left (n)) != sent)
 	{
 		return (_bin_tree_maximum (l, sent));
 	}
 
 	y = tree_node_get_parent (n);
-	while ((y != NULL) && (n == tree_node_get_left (y)))
+	while ((y != sent) && (n == tree_node_get_left (y)))
 	{
 		n = y;
 		y = tree_node_get_parent (y);
@@ -187,7 +184,7 @@ void _bin_tree_dump (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, Bi
 		_bin_tree_dump (tree_node_get_left (n), sent, file, f, type);
 
 #if defined USE_JUMP_TABLE
-		action[type].func (n, file, f);
+		action[type](n, file, f);
 #else
 		switch (type)
 		{

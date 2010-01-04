@@ -7,6 +7,12 @@
 
 typedef struct _treenode TreeNode;
 
+typedef enum _rb_tree_node_cloor
+{
+	RB_TREE_RED = 0,
+	RB_TREE_BLACK,
+} RbTreeNodeColor;
+
 TreeNode *tree_node_new (void);
 TreeNode *tree_node_new_full (void *content, TreeNode *parent, TreeNode *left, TreeNode *right);
 void tree_node_copy (TreeNode *dest, const TreeNode *src);
@@ -32,6 +38,9 @@ void tree_node_set_red (TreeNode *node);
 void tree_node_set_black (TreeNode *node);
 bool tree_node_is_red (const TreeNode *node);
 bool tree_node_is_black (const TreeNode *node);
+RbTreeNodeColor tree_node_get_color (const TreeNode *node);
+void tree_node_set_color (TreeNode *node, RbTreeNodeColor color);
+void tree_node_copy_color (TreeNode *dest, const TreeNode *src);
 void rb_tree_node_dump (const TreeNode *node, FILE *file, write_func_t f);
 
 #endif /* _TREENODE_H */

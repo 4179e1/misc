@@ -21,7 +21,12 @@ int main(void)
 
 	rb_tree_dump (t, stdout, int_write);
 
-	rb_tree_flush (t);
+	for (i = 0; i < ARRAY_LEN (a); i++)
+	{
+		printf ("%d\t", *(int *)rb_tree_delete (t, &a[i]));
+	}
+
+	printf ("after delete\n");
 	rb_tree_dump (t, stdout, int_write);
 
 	rb_tree_free (t);

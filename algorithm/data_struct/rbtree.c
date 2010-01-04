@@ -9,6 +9,7 @@
 static void left_rotate (RbTree *t, TreeNode *x);
 static void right_rotate (RbTree *t, TreeNode *x);
 static void rb_insert_fixup (RbTree *t, TreeNode *z);
+static void rb_delete_fixup (RbTree *t, TreeNode *x);
 
 struct _rbtree
 {
@@ -153,12 +154,82 @@ void rb_tree_insert (RbTree *t, void *data)
 
 void *rb_tree_search (const RbTree *t, void *data)
 {
-	return NULL;
+	TreeNode *tmp;
+
+	assert (t != NULL);
+
+	tmp = _bin_tree_search (tree_node_get_right (t->sent), t->sent, t->cmp_f, data);
+	
+	return (tmp == NULL) ? NULL : tree_node_get_content (tmp);
 }
 
 void *rb_tree_delete (RbTree *t, void *data)
 {
-	return NULL;
+	TreeNode *x;	/* y's not SENTINEL child, or SENTINEL if y don't have child */
+	TreeNode *y;	/* the node actually delete */
+	TreeNode *z;	/* the node contain data */
+	TreeNode *py;	/* parent of y */
+
+	assert (t != NULL);
+
+	z = _bin_tree_search (tree_node_get_right (t->sent), t->sent, t->cmp_f, data);
+	if (z == NULL)
+	{
+		fprintf (stderr, "warning!, return an NULL\n");
+		return NULL;
+	}
+
+	if ((tree_node_get_left (z) == t->sent) || (tree_node_get_right (z) == t->sent))
+	{
+		y = z;
+	}
+	else
+	{
+		y = _bin_tree_successor (z, t->sent);
+	}
+
+	if (tree_node_get_left (y) != t->sent)
+	{
+		x = tree_node_get_left (y);
+	}
+	else
+	{
+		x = tree_node_get_right (y);
+	}
+
+	py = tree_node_get_parent (y);
+	tree_node_set_parent (x, py);
+
+	if (py == t->sent)
+	{
+		tree_node_set_right (t->sent, x);
+	}
+	else
+	{
+		if (y == tree_node_get_left (py))
+		{
+			tree_node_set_left (py, x);
+		}
+		else
+		{
+			tree_node_set_right (py, x);
+		}
+	}
+
+	if (y != z)
+	{
+		tree_node_set_content (z, tree_node_get_content (y));
+	}
+
+	if (tree_node_is_black (y))
+	{
+		//rb_delete_fixup (t, x);
+	}
+
+	tree_node_free (y);
+	(t->card)--;
+
+	return data;
 }
 
 void rb_tree_map_prefix (const RbTree *t, FILE *file, write_func_t f)
@@ -352,10 +423,10 @@ static void rb_insert_fixup (RbTree *t, TreeNode *z)
 				{
 					z = pz;
 					right_rotate (t, z);
+
+					pz = tree_node_get_parent (z);
+					ppz = tree_node_get_parent (pz);
 				}
-				/* take care, z may has been changed */
-				pz = tree_node_get_parent (z);
-				ppz = tree_node_get_parent (pz);
 				
 				tree_node_set_black (pz);
 				tree_node_set_red (ppz);
@@ -365,4 +436,97 @@ static void rb_insert_fixup (RbTree *t, TreeNode *z)
 	}
 
 	tree_node_set_black (tree_node_get_right (t->sent));
+}
+
+static void rb_delete_fixup (RbTree *t, TreeNode *x)
+{
+	TreeNode *px;	/* x's parent */
+	TreeNode *w;	/* x's brother */
+	TreeNode *lw;
+	TreeNode *rw;
+	TreeNode *root;
+
+	root = tree_node_get_right (t->sent);
+	while ((x != root) && tree_node_is_black (x))
+	{
+		/* x is DOUBLE-BLACK now */
+		px = tree_node_get_parent (x);
+		if (x == tree_node_get_left (px))
+		{
+			w = tree_node_get_right (px);
+			if (tree_node_is_red (w))
+			{
+				tree_node_set_black (w);
+				tree_node_set_red (px);
+				left_rotate (t, px);
+				w = tree_node_get_right (px);
+			}
+
+			lw = tree_node_get_left (w);
+			rw = tree_node_get_right (w);
+			if (tree_node_is_black (lw) && tree_node_is_black (rw)) /* both child are black, so w can be red */
+			{
+				tree_node_set_red (w);
+				x = px;
+			}
+			else /* one child or none are black, at least one is red */
+			{
+				if (tree_node_is_black (rw))	/* so that lw is red */
+				{
+					tree_node_set_black (lw);
+					tree_node_set_red (w);
+					right_rotate (t, w);
+					w = tree_node_get_right (px);
+					lw = tree_node_get_left (w);
+					rw = tree_node_get_right (rw);
+				}
+
+				/* now rw is red */
+				tree_node_is_red (px) ? tree_node_set_red (w) : tree_node_set_black (w);
+				tree_node_set_black (px);
+				tree_node_set_black (rw);
+				left_rotate (t, px);
+				x = root;
+			}
+		}
+		else /* x == tree_node_get_right (px) */
+		{
+			w == tree_node_get_left (px);
+			if (tree_node_is_red (w))
+			{
+				tree_node_set_black (w);
+				tree_node_set_red (px);
+				right_rotate (t, px);
+				w = tree_node_get_left (px);
+			}
+
+			lw = tree_node_get_left (w);
+			rw = tree_node_get_right (w);
+			if (tree_node_is_black (lw) && tree_node_is_black (rw))
+			{
+				tree_node_set_red (w);
+				x = px;
+			}
+			else /* one child or none are black, at least one is red */
+			{
+				if (tree_node_is_black (lw))
+				{
+					tree_node_set_black (rw);
+					tree_node_set_red (w);
+					left_rotate (t, w);
+					w = tree_node_get_left (px);
+					lw = tree_node_get_left (w);
+					rw = tree_node_get_right (w);
+				}
+
+				/* now lw is red */
+				tree_node_is_red (px) ? tree_node_set_red (w) : tree_node_set_black (w);
+				tree_node_set_black (px);
+				tree_node_set_black (lw);
+				right_rotate (t, px);
+				x = root;
+			}
+		}
+	}
+	tree_node_set_black (x);
 }

@@ -2,10 +2,7 @@
 #include <assert.h>
 #include "treenode.h"
 
-/* it may only works on ia-32 */
-#define RB_RED 0x0
-#define RB_BLACK 0x1
-#define RB_MASK 0x1
+#define RB_TREE_MASK 0x1
 
 struct _treenode
 {
@@ -61,7 +58,7 @@ void tree_node_set_parent (TreeNode *node, TreeNode *parent)
 {
 	int rb_status;
 	assert (node != NULL);
-	rb_status = ((node->parent) & RB_MASK);
+	rb_status = ((node->parent) & RB_TREE_MASK);
 	node->parent = (unsigned long) ((unsigned long)(parent) | rb_status);
 }
 
@@ -86,7 +83,7 @@ void *tree_node_get_content (const TreeNode *node)
 TreeNode *tree_node_get_parent (const TreeNode *node)
 {
 	assert (node != NULL);
-	return (TreeNode *)((node->parent) & (~RB_MASK));
+	return (TreeNode *)((node->parent) & (~RB_TREE_MASK));
 }
 
 TreeNode *tree_node_get_left (const TreeNode *node)
@@ -117,25 +114,50 @@ bool tree_node_is_root (const TreeNode *node)
 void tree_node_set_red (TreeNode *node)
 {
 	assert (node != NULL);
-	node->parent &= (~RB_BLACK);
+	node->parent &= (~RB_TREE_BLACK);
 }
 
 void tree_node_set_black (TreeNode *node)
 {
 	assert (node != NULL);
-	node->parent |= RB_BLACK;
+	node->parent |= RB_TREE_BLACK;
 }
 
 bool tree_node_is_red (const TreeNode *node)
 {
 	assert (node != NULL);
-	return (((node->parent) & RB_MASK ) == RB_RED);
+	return (((node->parent) & RB_TREE_MASK ) == RB_TREE_RED);
 }
 
 bool tree_node_is_black (const TreeNode *node)
 {
 	assert (node != NULL);
-	return (((node->parent) & RB_MASK ) == RB_BLACK);
+	return (((node->parent) & RB_TREE_MASK ) == RB_TREE_BLACK);
+}
+
+RbTreeNodeColor tree_node_get_color (const TreeNode *node)
+{
+	assert (node != NULL);
+
+	return (node->parent & RB_TREE_MASK);
+}
+
+void tree_node_set_color (TreeNode *node, RbTreeNodeColor color)
+{
+	assert (node != NULL);
+	if (color == RB_TREE_RED)
+	{
+		node->parent &= (~RB_TREE_BLACK);
+	}
+	else /* color = RB_TREE_BLACK */
+	{
+		node->parent |= RB_TREE_BLACK;
+	}
+}
+
+void tree_node_copy_color (TreeNode *dest, const TreeNode *src)
+{
+	tree_node_set_color (dest, tree_node_get_color (src));
 }
 
 void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f)
