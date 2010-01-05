@@ -63,4 +63,13 @@ int wp_pthread_condattr_init (pthread_condattr_t *attr);
 int wp_pthread_condattr_destroy (pthread_condattr_t *attr);
 int wp_pthread_condattr_getpshared (const pthread_condattr_t *attr, int *pshared);
 int wp_pthread_condattr_setpshared (pthread_condattr_t *attr, int pshared);
+
+int wp_pthread_key_create (pthread_key_t *keyp, void (*destroctor)(void *));
+int wp_pthread_key_delete (pthread_key_t key);
+int wp_pthread_once (pthread_once_t *initflag, void (*initfn)(void));
+void *wp_pthread_getspecific (pthread_key_t key);
+int wp_pthread_setspecific (pthread_key_t key, const void *value);
+
+int wp_pthread_setcancelstate (int state, int *oldstate);
+int wp_pthread_setcanceltype (int type, int *oldtype);
 #endif /* _WPPOSIXTHREAD_H */

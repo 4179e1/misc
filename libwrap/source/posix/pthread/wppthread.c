@@ -367,3 +367,59 @@ int wp_pthread_condattr_setpshared (pthread_condattr_t *attr, int pshared)
 		wp_error_warning ("pthread_condattr_setpshared() error: %s", strerror (n));
 	return n;
 }
+
+int wp_pthread_key_create (pthread_key_t *keyp, void (*destroctor)(void *))
+{
+	int n;
+	if ((n = pthread_key_create(keyp, destroctor)) != 0)
+		wp_error_warning ("pthread_key_create() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_key_delete (pthread_key_t key)
+{
+	int n;
+	if ((n = pthread_key_delete (key)) != 0)
+		wp_error_warning ("pthread_key_delete() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_once (pthread_once_t *initflag, void (*initfn)(void))
+{
+	int n;
+	if ((n = pthread_once (initflag, initfn)) != 0)
+		wp_error_warning ("pthread_once() error: %s", strerror (n));
+	return n;
+}
+
+void *wp_pthread_getspecific (pthread_key_t key)
+{
+	void *p;
+	if ((p = pthread_getspecific (key)) == NULL)
+		wp_error_warning ("pthread_getspecific() error");
+	return p;
+}
+
+int wp_pthread_setspecific (pthread_key_t key, const void *value)
+{
+	int n;
+	if ((n = pthread_setspecific (key, value)) != 0)
+		wp_error_warning ("pthrad_setspecific() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_setcancelstate (int state, int *oldstate)
+{
+	int n;
+	if ((n = pthread_setcancelstate (state, oldstate)) != 0)
+		wp_error_warning ("pthread_setcancelstate() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_setcanceltype (int type, int *oldtype)
+{
+	int n;
+	if ((n = pthread_setcanceltype (type, oldtype)) != 0)
+		wp_error_warning ("pthread_setcanceltype() error: %s", strerror (n));
+	return n;
+}
