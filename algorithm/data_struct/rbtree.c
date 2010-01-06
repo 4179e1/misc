@@ -223,7 +223,7 @@ void *rb_tree_delete (RbTree *t, void *data)
 
 	if (tree_node_is_black (y))
 	{
-		//rb_delete_fixup (t, x);
+		rb_delete_fixup (t, x);
 	}
 
 	tree_node_free (y);
@@ -491,7 +491,7 @@ static void rb_delete_fixup (RbTree *t, TreeNode *x)
 		}
 		else /* x == tree_node_get_right (px) */
 		{
-			w == tree_node_get_left (px);
+			w = tree_node_get_left (px);
 			if (tree_node_is_red (w))
 			{
 				tree_node_set_black (w);

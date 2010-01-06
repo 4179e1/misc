@@ -23,7 +23,8 @@ int main(void)
 
 	for (i = 0; i < ARRAY_LEN (a); i++)
 	{
-		printf ("%d\t", *(int *)rb_tree_delete (t, &a[i]));
+		printf ("THE %d DELETE %d\t\n", i, *(int *)rb_tree_delete (t, &a[i]));
+		rb_tree_dump (t, stdout, int_write);
 	}
 
 	printf ("after delete\n");
