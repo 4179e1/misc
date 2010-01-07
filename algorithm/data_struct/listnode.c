@@ -129,7 +129,7 @@ void list_node_insert_after (ListNode *n, ListNode *next)
 	}
 }
 
-void list_node_dump (const ListNode *node, FILE *file, write_func_t f)
+void list_node_dump (const ListNode *node, FILE *file, write_func_t f, void *data)
 {
 	assert (node != NULL);
 	assert (file != NULL);
@@ -137,7 +137,7 @@ void list_node_dump (const ListNode *node, FILE *file, write_func_t f)
 	fprintf (file, "<LIST_NODE REF=\"%p\" CONTENT=\"%p\" PREV=\"%p\" NEXT=\"%p\">", (void *)node, (void *)node->data, (void *)node->prev, (void *)node->next);
 	if (f)
 	{
-		f(node->data, file);
+		f(node->data, file, data);
 	}
 	fprintf (file, "</LIST_NODE>\n");
 }

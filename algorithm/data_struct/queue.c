@@ -185,7 +185,7 @@ void *queue_pop_tail (Queue *q)
 	return q->data[q->tail];
 }
 
-void queue_dump (const Queue *q, FILE *file, write_func_t f)
+void queue_dump (const Queue *q, FILE *file, write_func_t f, void *data)
 {
 	int i, cur;
 	assert (q != NULL);
@@ -195,7 +195,7 @@ void queue_dump (const Queue *q, FILE *file, write_func_t f)
 		fprintf (file, "<NODE CONTENT=\"%p\" CUR=\"%d\">", q->data[cur], cur);
 		if (f)
 		{
-			f(q->data[cur], file);
+			f(q->data[cur], file, data);
 		}
 		fprintf (file, "</NODE>");
 	}

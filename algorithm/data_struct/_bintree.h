@@ -26,12 +26,12 @@ TreeNode *_bin_tree_maximum (TreeNode *n, TreeNode *sent);
 TreeNode *_bin_tree_successor (TreeNode *n, TreeNode *sent);
 TreeNode *_bin_tree_predecessor (TreeNode *n, TreeNode *sent);
 
-void _bin_tree_map_prefix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f);
-void _bin_tree_map_infix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f);
-void _bin_tree_map_postfix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f);
+void _bin_tree_map_prefix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data);
+void _bin_tree_map_infix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data);
+void _bin_tree_map_postfix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data);
 
 void _bin_tree_flush (TreeNode *n, TreeNode *sent);
-void _bin_tree_dump (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, BinTreeType type);
+void _bin_tree_dump (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data, BinTreeType type);
 void _bin_tree_foreach (TreeNode *n, TreeNode *sent, foreach_func_t f, void *data);
 
 #endif /* __BINTREE_H */

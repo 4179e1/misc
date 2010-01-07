@@ -24,6 +24,6 @@ void list_node_unlink (ListNode *prev, ListNode *next);
 void list_node_insert_before (ListNode *n, ListNode *prev);
 void list_node_insert_after (ListNode *n, ListNode *next);
 
-void list_node_dump (const ListNode *node, FILE *file, write_func_t f);
+void list_node_dump (const ListNode *node, FILE *file, write_func_t f, void *data);
 
 #endif /* _LIST_H */

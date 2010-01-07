@@ -6,7 +6,7 @@
 #define USE_JUMP_TABLE
 
 #ifdef USE_JUMP_TABLE
-typedef void (*tree_node_dump_func)(const TreeNode *node, FILE *file, write_func_t write_f);
+typedef void (*tree_node_dump_func)(const TreeNode *node, FILE *file, write_func_t write_f, void *data);
 
 tree_node_dump_func action[] =
 {
@@ -137,33 +137,33 @@ TreeNode *_bin_tree_predecessor (TreeNode *n, TreeNode *sent)
 	return y;
 }
 
-void _bin_tree_map_prefix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f)
+void _bin_tree_map_prefix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data)
 {
 	if (n != sent)
 	{
-		f (tree_node_get_content (n), file);
-		_bin_tree_map_prefix (tree_node_get_left (n), sent, file, f);
-		_bin_tree_map_prefix (tree_node_get_right (n), sent, file, f);
+		f (tree_node_get_content (n), file, data);
+		_bin_tree_map_prefix (tree_node_get_left (n), sent, file, f, data);
+		_bin_tree_map_prefix (tree_node_get_right (n), sent, file, f, data);
 	}
 }
 
-void _bin_tree_map_infix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f)
+void _bin_tree_map_infix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data)
 {
 	if (n != sent)
 	{
-		_bin_tree_map_infix (tree_node_get_left (n), sent, file, f);
-		f (tree_node_get_content (n), file);
-		_bin_tree_map_infix (tree_node_get_right (n), sent, file, f);
+		_bin_tree_map_infix (tree_node_get_left (n), sent, file, f, data);
+		f (tree_node_get_content (n), file, data);
+		_bin_tree_map_infix (tree_node_get_right (n), sent, file, f, data);
 	}
 }
 
-void _bin_tree_map_postfix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f)
+void _bin_tree_map_postfix (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data)
 {
 	if (n != sent)
 	{
-		_bin_tree_map_postfix (tree_node_get_left (n), sent, file, f);
-		_bin_tree_map_postfix (tree_node_get_right (n), sent, file, f);
-		f (tree_node_get_content (n), file);
+		_bin_tree_map_postfix (tree_node_get_left (n), sent, file, f, data);
+		_bin_tree_map_postfix (tree_node_get_right (n), sent, file, f, data);
+		f (tree_node_get_content (n), file, data);
 	}
 }
 
@@ -177,29 +177,29 @@ void _bin_tree_flush (TreeNode *n, TreeNode *sent)
 	}
 }
 
-void _bin_tree_dump (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, BinTreeType type)
+void _bin_tree_dump (TreeNode *n, TreeNode *sent, FILE *file, write_func_t f, void *data, BinTreeType type)
 {
 	if (n != sent)
 	{
-		_bin_tree_dump (tree_node_get_left (n), sent, file, f, type);
+		_bin_tree_dump (tree_node_get_left (n), sent, file, f, data, type);
 
 #if defined USE_JUMP_TABLE
-		action[type](n, file, f);
+		action[type](n, file, f, data);
 #else
 		switch (type)
 		{
 			case BIN_TREE:
-				tree_node_dump (n, file, f);
+				tree_node_dump (n, file, f, data);
 				break;
 			case RB_TREE:
-				rb_tree_node_dump (n, file, f);
+				rb_tree_node_dump (n, file, f, data);
 				break;
 			default:
 				fprintf (stderr, "oops! not such tree\n");
 				break;
 		}
 #endif /* USE_JUMP_TABLE */
-		_bin_tree_dump (tree_node_get_right (n), sent, file, f, type);
+		_bin_tree_dump (tree_node_get_right (n), sent, file, f, data, type);
 	}
 }
 

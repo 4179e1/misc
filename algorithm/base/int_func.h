@@ -4,6 +4,6 @@
 #include <stdio.h>
 
 int int_cmp (const void *i, const void *j);
-void int_write (const void *i, FILE *file);
+void int_write (const void *i, FILE *file, void *data);
 
 #endif /* _INT_FUNC_H */

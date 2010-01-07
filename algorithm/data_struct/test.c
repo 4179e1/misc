@@ -1,36 +1,122 @@
 #include <stdio.h>
 #include "base.h"
-#include "rbtree.h"
+#include "hash.h"
 
+char *a[] = 
+{
+	"AENC",
+	"APIC",
+	"ASPI",
+	"COMM",
+	"COMR",
+	"ENCR",
+	"EQU2",
+	"ETCO",
+	"GEOB",
+	"GRID",
+	"LINK",
+	"MCDI",
+	"MLLT",
+	"OWNE",
+	"PRIV",
+	"PCNT",
+	"POPM",
+	"POSS",
+	"RBUF",
+	"RVA2",
+	"RVRB",
+	"SEEK",
+	"SIGN",
+	"SYLT",
+	"SYTC",
+	"TALB",
+	"TBPM",
+	"TCOM",
+	"TCON",
+	"TCOP",
+	"TDEN",
+	"TDLY",
+	"TDOR",
+	"TDRC",
+	"TDRL",
+	"TDTG",
+	"TENC",
+	"TEXT",
+	"TFLT",
+	"TIPL",
+	"TIT1",
+	"TIT2",
+	"TIT3",
+	"TKEY",
+	"TLAN",
+	"TLEN",
+	"TMCL",
+	"TMED",
+	"TMOO",
+	"TOAL",
+	"TOFN",
+	"TOLY",
+	"TOPE",
+	"TOWN",
+	"TPE1",
+	"TPE2",
+	"TPE3",
+	"TPE4",
+	"TPOS",
+	"TPRO",
+	"TPUB",
+	"TRCK",
+	"TRSN",
+	"TRSO",
+	"TSOA",
+	"TSOP",
+	"TSOT",
+	"TSRC",
+	"TSSE",
+	"TSST",
+	"TXXX",
+	"UFID",
+	"USER",
+	"USLT",
+	"WCOM",
+	"WCOP",
+	"WOAF",
+	"WOAR",
+	"WOAS",
+	"WORS",
+	"WPAY",
+	"WPUB",
+	"WXXX",
+	NULL
+};
+
+void string_write (const void *elem, FILE *file, void *data)
+{
+
+	fprintf (file, "%s", *(char **)elem);
+}
 
 int main(void)
 {
-	int a[] = {5, 2, 1, 3, 4, 9, 8, 7};
-	int b = 6;
 
-	RbTree *t;
+	Hash *h;
 
-	t = rb_tree_new (int_cmp);
-	rb_tree_dump (t, stdout, int_write);
+	h = hash_new (40, NULL);
 
-	int i;
-	for (i = 0; i < ARRAY_LEN (a); i++)
+	char **ptr;
+	for (ptr = a; *ptr != NULL; ptr++)
 	{
-		rb_tree_insert (t, &a[i]);
+		hash_insert (h, *ptr, *ptr);
 	}
 
-	rb_tree_dump (t, stdout, int_write);
+	hash_dump (h, stdout, string_write, NULL);
 
-	for (i = 0; i < ARRAY_LEN (a); i++)
+	for (ptr = a; *ptr != NULL; ptr++)
 	{
-		printf ("THE %d DELETE %d\t\n", i, *(int *)rb_tree_delete (t, &a[i]));
-		rb_tree_dump (t, stdout, int_write);
+		printf ("%s\n", (char *)hash_search (h, *ptr));
 	}
 
-	printf ("after delete\n");
-	rb_tree_dump (t, stdout, int_write);
-
-	rb_tree_free (t);
+	hash_free (h);
 
 	return 0;
 }

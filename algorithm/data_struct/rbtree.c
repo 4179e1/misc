@@ -232,37 +232,37 @@ void *rb_tree_delete (RbTree *t, void *data)
 	return data;
 }
 
-void rb_tree_map_prefix (const RbTree *t, FILE *file, write_func_t f)
+void rb_tree_map_prefix (const RbTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (file != NULL);
 	assert (f != NULL);
-	_bin_tree_map_prefix (tree_node_get_right (t->sent), t->sent, file, f);
+	_bin_tree_map_prefix (tree_node_get_right (t->sent), t->sent, file, f, data);
 }
 	
-void rb_tree_map_infix (const RbTree *t, FILE *file, write_func_t f)
+void rb_tree_map_infix (const RbTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (file != NULL);
 	assert (f != NULL);
-	_bin_tree_map_infix (tree_node_get_right (t->sent), t->sent, file, f);
+	_bin_tree_map_infix (tree_node_get_right (t->sent), t->sent, file, f, data);
 }
 
-void rb_tree_map_postfix (const RbTree *t, FILE *file, write_func_t f)
+void rb_tree_map_postfix (const RbTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (file != NULL);
 	assert (f != NULL);
-	_bin_tree_map_postfix (tree_node_get_right (t->sent), t->sent, file, f);
+	_bin_tree_map_postfix (tree_node_get_right (t->sent), t->sent, file, f, data);
 }
 
-void rb_tree_dump (const RbTree *t, FILE *file, write_func_t f)
+void rb_tree_dump (const RbTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (file != NULL);
 	fprintf (file, "<RB_TREE REF=\"%p\" CARD=\"%d\" SENT=\"%p\">\n", (void *)t, t->card, (void *)(t->sent));
 
-	_bin_tree_dump (tree_node_get_right (t->sent), t->sent, file, f, RB_TREE);
+	_bin_tree_dump (tree_node_get_right (t->sent), t->sent, file, f, data, RB_TREE);
 
 	fprintf (file, "</RB_TREE>\n");	
 }

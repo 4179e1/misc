@@ -160,23 +160,23 @@ void tree_node_copy_color (TreeNode *dest, const TreeNode *src)
 	tree_node_set_color (dest, tree_node_get_color (src));
 }
 
-void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f)
+void tree_node_dump (const TreeNode *node, FILE *file, write_func_t f, void *data)
 {
 	fprintf (file, "<TREE_NODE REF=\"%p\" CONTENT=\"%p\" PARENT=\"%p\" LEFT=\"%p\" RIGHT=\"%p\">", (void *)node, (void *)node->content, (void *)tree_node_get_parent (node), (void *)node->left, (void *)node->right);
 	if (f)
 	{
-		f (node->content, file);
+		f (node->content, file, data);
 	}
 	fprintf (file, "</TREE_NODE>\n");
 }
 
-void rb_tree_node_dump (const TreeNode *node, FILE *file, write_func_t f)
+void rb_tree_node_dump (const TreeNode *node, FILE *file, write_func_t f, void *data)
 {
 	fprintf (file, "<TREE_NODE TYPE=\"%s\" REF=\"%p\" CONTENT=\"%p\" PARENT=\"%p\" LEFT=\"%p\" RIGHT=\"%p\">",
 			(tree_node_is_black (node) ? "BLACK" : "RED"), (void *)node, (void *)node->content, (void *)tree_node_get_parent (node), (void *)node->left, (void *)node->right);
 	if (f)
 	{
-		f (node->content, file);
+		f (node->content, file, data);
 	}
 	fprintf (file, "</TREE_NODE>\n");
 }

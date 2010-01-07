@@ -33,7 +33,7 @@ void *list_search_min (List *l, compare_func_t cmp_f);
 
 void list_sort (List *l, compare_func_t cmp_f);
 
-void list_dump (List *l, FILE *file, write_func_t f);
+void list_dump (List *l, FILE *file, write_func_t f, void *data);
 void list_foreach (List *l, foreach_func_t f, void *data);
 
 /* List Cursor */

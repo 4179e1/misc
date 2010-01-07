@@ -227,38 +227,38 @@ void *bin_tree_delete (BinTree *t, void *data)
 	return data;
 }
 
-void bin_tree_map_prefix (const BinTree *t, FILE *file, write_func_t f)
+void bin_tree_map_prefix (const BinTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (f != NULL);
 	assert (file != NULL);
-	_bin_tree_map_prefix (tree_node_get_right (t->sent), NULL, file, f);
+	_bin_tree_map_prefix (tree_node_get_right (t->sent), NULL, file, f, data);
 }
 
-void bin_tree_map_infix (const BinTree *t, FILE *file, write_func_t f)
+void bin_tree_map_infix (const BinTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (f != NULL);
 	assert (file != NULL);
-	_bin_tree_map_infix (tree_node_get_right (t->sent), NULL, file, f);
+	_bin_tree_map_infix (tree_node_get_right (t->sent), NULL, file, f, data);
 }
 	
-void bin_tree_map_postfix (const BinTree *t, FILE *file, write_func_t f)
+void bin_tree_map_postfix (const BinTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (f != NULL);
 	assert (file != NULL);
-	_bin_tree_map_postfix (tree_node_get_right (t->sent), NULL, file, f);
+	_bin_tree_map_postfix (tree_node_get_right (t->sent), NULL, file, f, data);
 }
 
 
-void bin_tree_dump (const BinTree *t, FILE *file, write_func_t f)
+void bin_tree_dump (const BinTree *t, FILE *file, write_func_t f, void *data)
 {
 	assert (t != NULL);
 	assert (file != NULL);
 	fprintf (file, "<BIN_TREE REF=\"%p\" CARD=\"%d\" SENT=\"%p\">", (void *)t, t->card, (void *)(t->sent));
 
-	_bin_tree_dump (tree_node_get_right (t->sent), NULL, file, f, BIN_TREE);
+	_bin_tree_dump (tree_node_get_right (t->sent), NULL, file, f, data, BIN_TREE);
 
 	fprintf (file, "</BIN_TREE>\n");
 }

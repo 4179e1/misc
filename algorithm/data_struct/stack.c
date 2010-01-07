@@ -116,7 +116,7 @@ void *stack_top (const Stack *s)
 	return s->data[s->card - 1];
 }
 
-void stack_dump (const Stack *s, FILE *file, write_func_t f)
+void stack_dump (const Stack *s, FILE *file, write_func_t f, void *data)
 {
 	int i;
 	fprintf (file, "<STACK SIZE=\"%d\" CARD=\"%d\" GROWING_FACTOR=\"%d\">", s->size, s->card, s->growing_factor);
@@ -125,7 +125,7 @@ void stack_dump (const Stack *s, FILE *file, write_func_t f)
 		fprintf (file, "<NODE CONTENT=\"%p\">", s->data[i]);
 		if (f)
 		{
-			f(s->data[i], file);
+			f(s->data[i], file, data);
 		}
 		fprintf (file, "</NODE>");
 	}

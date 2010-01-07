@@ -6,11 +6,22 @@
 
 #define MULTI_HASH_FACTOR 0.6180339887
 
-#define INDEX_FUNC(V, S) (index_by_multi((V), (S)))
+#define HASH_POWER_BASE 2
 
-int index_by_divide (int hash_value, int size);
-int index_by_multi (int hash_value, int size);
+
+#ifdef _USE_DIVIDE
+static int index_by_divide (int hash_value, int size);
+#define INDEX_FUNC(V, S) (index_by_divide((V), (S)))
+#else
+static int index_by_multi (int hash_value, int size);
+#define INDEX_FUNC(V, S) (index_by_multi((V), (S)))
+#endif /* _USE_DIVIDE */
+
 static int search_by_key (const void *data, const void *key);
+
+static int default_hash (const char *key);
+
+static void hash_dump_func (const void *elem, FILE *file, void *data);
 static bool hash_foreach_func (void *elem, void *data);
 
 struct _hash
@@ -19,29 +30,28 @@ struct _hash
 	int list_size;
 	int card;
 	int growing_factor;
-	key_func_t key_f;
 	hash_func_t hash_f;
 };
 
 typedef struct _hash_element
 {
-	const char *key;
+	char *key;
 	void *data;
 } HashElement;
 
 typedef struct _hash_info
 {
+	write_func_t write_f;
 	foreach_func_t f; 
 	void *data;
 } HashInfo;
 
-Hash *hash_new (int list_size, key_func_t key_f, hash_func_t hash_f)
+Hash *hash_new (int list_size, hash_func_t hash_f)
 {
 	Hash *h;
 	int i, j;
 
 	assert (list_size > 0);
-	assert (key_f != NULL);
 
 	h = (Hash *)Malloc (sizeof(Hash));
 	if (h == NULL)
@@ -75,8 +85,7 @@ Hash *hash_new (int list_size, key_func_t key_f, hash_func_t hash_f)
 	h->list_size = list_size;
 	h->card = 0;
 	h->growing_factor = 10;
-	h->key_f = key_f;
-	h->hash_f = hash_f;
+	h->hash_f = hash_f ? hash_f : default_hash;
 
 	return h;
 }
@@ -137,9 +146,10 @@ void hash_set_growing_factor (Hash *h, int value)
 }
 
 
-void *hash_insert (Hash *h, void *data)
+void *hash_insert (Hash *h, const char *key, void *data)
 {
 	int index;
+	int len;
 	HashElement *e;
 
 	assert (h != NULL);
@@ -150,12 +160,19 @@ void *hash_insert (Hash *h, void *data)
 		return NULL;
 	}
 
-	e->key = h->key_f (data);
+	len = strlen (key);
+	e->key = (void *)Malloc ((len + 1) * sizeof (char));
+	strncpy (e->key, key, len + 1);
+	if (e->key == NULL)
+	{
+		free (e);
+		return NULL;
+	}
 	e->data = data;
 
 	index = INDEX_FUNC (h->hash_f (e->key), h->list_size);
 
-	list_insert_head (h->lists[index], data);
+	list_insert_head (h->lists[index], e);
 	(h->card)++;
 
 	return data;
@@ -196,22 +213,27 @@ void *hash_delete (Hash *h, const char *key)
 	}
 
 	data = elem->data;
+	free (elem->key);
 	free (elem);
 	(h->card)--;
 	return data;
 }
 
-void hash_dump (const Hash *h, FILE *file, write_func_t f)
+void hash_dump (const Hash *h, FILE *file, write_func_t f, void *data)
 {
 	int i;
+	HashInfo info;
 
 	assert (h != NULL);
+
+	info.data = data;
+	info.write_f = f;
 
 	fprintf (file, "<HASH REF=\"%p\" LIST_SIZE=\"%d\" CARD=\"%d\" GROWING_FACTOR=\"%d\">",
 			(void *)h, h->list_size, h->card, h->growing_factor);
 	for (i = 0; i < h->list_size; i++)
 	{
-		//list_dump (h->lists[i], file, f);
+		list_dump (h->lists[i], file, hash_dump_func, &info);
 	}
 	fprintf (file, "</HASH>\n");
 }
@@ -220,23 +242,17 @@ void hash_dump (const Hash *h, FILE *file, write_func_t f)
 void hash_foreach (Hash *h, foreach_func_t f, void *data)
 {
 	int i;
-	HashInfo *info;
+	HashInfo info;
 
 	assert (h != NULL);
 	assert (f != NULL);
 
-	info = (HashInfo *)Malloc (sizeof (HashInfo));
-	if (info == NULL)
-	{
-		return;
-	}
-
-	info->data = data;
-	info->f = f;
+	info.data = data;
+	info.f = f;
 
 	for (i = 0; i < h->list_size; i++)
 	{
-		list_foreach (h->lists[i], hash_foreach_func, info);
+		list_foreach (h->lists[i], hash_foreach_func, &info);
 	}
 }
 
@@ -251,31 +267,41 @@ static bool hash_foreach_func (void *elem, void *data)
 {
 	HashElement *e = (HashElement *)elem;
 	HashInfo *i = (HashInfo *)data;
-	return i->f (e->data, i->data);
+	if (i->f)
+	{
+		return i->f (e->data, i->data);
+	}
+	return false;
 }
 
-int sum_key (void *data, int len)
+static void hash_dump_func (const void *elem, FILE *file, void *data)
 {
-	int i;
+	HashInfo *i = (HashInfo *)data;
+	i->write_f (elem, file, i->data);
+}
+
+static int default_hash (const char *key)
+{
 	int val = 0;
+	const char *ptr = key;
 
-	assert (data != NULL);
-
-	char *ptr = (char *)data;
-	for (i = 0; i < len; i++)
+	while (*ptr != '\0')
 	{
-		val += (*ptr);
+		val = val * HASH_POWER_BASE + (*ptr);
+		ptr++;
 	}
 
 	return val;
 }
 
-int index_by_divide (int hash_value, int size)
+#ifdef _USE_DIVIDE
+static int index_by_divide (int hash_value, int size)
 {
 	return (hash_value % size);
 }
+#endif /* _USE_DIVIDE */
 
-int index_by_multi (int hash_value, int size)
+static int index_by_multi (int hash_value, int size)
 {
 	double d;
 

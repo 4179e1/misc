@@ -23,11 +23,11 @@ void bin_tree_insert (BinTree *t, void *data);
 void *bin_tree_search (const BinTree *t, void *data);
 void *bin_tree_delete (BinTree *t, void *data);
 
-void bin_tree_map_prefix (const BinTree *t, FILE *file, write_func_t f);
-void bin_tree_map_infix (const BinTree *t, FILE *file, write_func_t f);
-void bin_tree_map_postfix (const BinTree *t, FILE *file, write_func_t f);
+void bin_tree_map_prefix (const BinTree *t, FILE *file, write_func_t f, void *data);
+void bin_tree_map_infix (const BinTree *t, FILE *file, write_func_t f, void *data);
+void bin_tree_map_postfix (const BinTree *t, FILE *file, write_func_t f, void *data);
 
-void bin_tree_dump (const BinTree *t, FILE *file, write_func_t f);
+void bin_tree_dump (const BinTree *t, FILE *file, write_func_t f, void *data);
 void bin_tree_foreach (BinTree *t, foreach_func_t f, void *data);
 
 #endif /* _BINTREE_H */

@@ -33,7 +33,7 @@ void *queue_tail (const Queue *q);
 void *queue_pop_head (Queue *q);
 void *queue_pop_tail (Queue *q);
 
-void queue_dump (const Queue *q, FILE *file, write_func_t f);
+void queue_dump (const Queue *q, FILE *file, write_func_t f, void *data);
 void queue_foreach (const Queue *q, foreach_func_t f, void *data);
 
 #endif /* _QUEUE_H */

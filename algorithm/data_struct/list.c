@@ -305,7 +305,7 @@ void list_sort (List *l, compare_func_t cmp_f)
 	list_node_link (l->sent, list_merge_sort (l, list_node_get_next (l->sent), l->end, cmp_f));
 }
 
-void list_dump (List *l, FILE *file, write_func_t f)
+void list_dump (List *l, FILE *file, write_func_t f, void *data)
 {
 	ListNode *node;
 	assert (l != NULL);
@@ -314,7 +314,7 @@ void list_dump (List *l, FILE *file, write_func_t f)
 	fprintf (file, "<LIST REF=\"%p\" CARD=\"%d\" SENT=\"%p\" END=\"%p\">", (void *)l, l->card, (void *)l->sent, (void *)l->end);
 	for (node = list_node_get_next (l->sent); node != l->end; node = list_node_get_next (node))
 	{
-		list_node_dump (node, file, f);
+		list_node_dump (node, file, f, data);
 	}
 	fprintf (file, "</LIST>\n");
 }
