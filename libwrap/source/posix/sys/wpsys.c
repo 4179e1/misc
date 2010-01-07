@@ -333,3 +333,11 @@ int wp_sigsuspend (const sigset_t *sigmask)
 		wp_error_sys_warning ("sigsuspend error");
 	return n;
 }
+
+int wp_sigwait (const sigset_t *set, int *signop)
+{
+	int n;
+	if ((n = sigwait (set, signop)) != 0)
+		wp_error_warning ("sigwait() error: %s", strerror (n));
+	return n;
+}

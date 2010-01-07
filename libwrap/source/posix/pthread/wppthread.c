@@ -423,3 +423,27 @@ int wp_pthread_setcanceltype (int type, int *oldtype)
 		wp_error_warning ("pthread_setcanceltype() error: %s", strerror (n));
 	return n;
 }
+
+int wp_phtread_sigmask (int how, const sigset_t *set, sigset_t *oset)
+{
+	int n;
+	if ((n = pthread_sigmask (how, set, oset)) != 0)
+		wp_error_warning ("pthread_sigmask() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_kill (pthread_t thread, int signo)
+{
+	int n;
+	if ((n = pthread_kill (thread, signo)) != 0)
+		wp_error_warning ("pthread_kill() error: %s", strerror (n));
+	return n;
+}
+
+int wp_pthread_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void))
+{
+	int n;
+	if ((n = pthread_atfork (prepare, parent, child)) != 0)
+		wp_error_warning ("pthread_atfork() error: %s", strerror (n));
+	return n;
+}

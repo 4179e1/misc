@@ -2,6 +2,7 @@
 #define _WPPOSIXTHREAD_H
 
 #include <pthread.h>
+#include <signal.h>
 
 int wp_pthread_create (pthread_t *tidp, const pthread_attr_t *attr, void *(*start_rtn) (void *), void *arg);
 int wp_pthread_join (pthread_t thread, void **rval_ptr);
@@ -72,4 +73,8 @@ int wp_pthread_setspecific (pthread_key_t key, const void *value);
 
 int wp_pthread_setcancelstate (int state, int *oldstate);
 int wp_pthread_setcanceltype (int type, int *oldtype);
+
+int wp_phtread_sigmask (int how, const sigset_t *set, sigset_t *oset);
+int wp_pthread_kill (pthread_t thread, int signo);
+int wp_pthread_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void));
 #endif /* _WPPOSIXTHREAD_H */
