@@ -19,9 +19,12 @@ int matrix_get_value (Matrix *m, int row, int column);
 
 void matrix_set_all_value (Matrix *m, int value);
 
-Matrix *matrix_multi (Matrix *a, Matrix *b);
+Matrix *matrix_multiply (Matrix *a, Matrix *b);
+Matrix *matrix_chain_multiply (Matrix *ma[], int len);
+void matrix_chain_print_optimal_multiply_parens (Matrix *ma[], int len);
 Matrix *matrix_add (Matrix *a, Matrix *b);
 
+void matrix_dump (Matrix *m, FILE *file);
 void matrix_write (Matrix *m, FILE *file);
 void matrix_foreach (Matrix *m, void (*f)(int *elem, void *data), void *data);
 
