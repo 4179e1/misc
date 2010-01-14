@@ -7,6 +7,8 @@
 #include <sys/utsname.h>
 #include <sys/resource.h>
 #include <sys/times.h>
+#include <sys/uio.h>
+#include <sys/mman.h>
 
 struct passwd *wp_getpwuid (uid_t uid);
 struct passwd *wp_getpwanam (const char *name);
@@ -68,6 +70,17 @@ int wp_sigaction (int signo, const struct sigaction *act, struct sigaction *oact
 int wp_sigsuspend (const sigset_t *sigmask);
 
 int wp_sigwait (const sigset_t *set, int *signop);
+
+ssize_t wp_readv (int filedes, const struct iovec *iov, int iovcnt);
+ssize_t wp_writev (int filedes, const struct iovec *iov, int iovcnt);
+
+void *wp_mmap (void *addr, size_t len, int prot, int flag, int filedes, off_t off);
+int wp_mprotect (void *addr, size_t len, int prot);
+int wp_msync (void *addr, size_t len, int flags);
+int wp_munmap (caddr_t addr, size_t len);
+
 /* utilities */
 void wp_check_exit_status (int status);
+ssize_t wp_readn (int fd, void *ptr, size_t n);
+ssize_t wp_writen (int fd, void *ptr, size_t n);
 #endif /* _WPPOSIXSYS_H */

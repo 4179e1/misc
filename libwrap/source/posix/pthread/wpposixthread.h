@@ -77,4 +77,7 @@ int wp_pthread_setcanceltype (int type, int *oldtype);
 int wp_phtread_sigmask (int how, const sigset_t *set, sigset_t *oset);
 int wp_pthread_kill (pthread_t thread, int signo);
 int wp_pthread_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void));
+
+ssize_t wp_readv (int filedes, const struct iovec *iov, int iovcnt);
+ssize_t wp_writev (int filedes, const struct iovec *iov, int iovcnt);
 #endif /* _WPPOSIXTHREAD_H */

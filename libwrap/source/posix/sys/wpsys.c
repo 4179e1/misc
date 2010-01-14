@@ -1,6 +1,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <string.h>
 #include "wpposixsys.h"
 #include "wpbase.h"
 
@@ -341,3 +342,52 @@ int wp_sigwait (const sigset_t *set, int *signop)
 		wp_error_warning ("sigwait() error: %s", strerror (n));
 	return n;
 }
+
+ssize_t wp_readv (int filedes, const struct iovec *iov, int iovcnt)
+{
+	ssize_t n;
+	if ((n = readv (filedes, iov, iovcnt)) == -1)
+		wp_error_sys_warning ("readv() error");
+	return n;
+}
+
+ssize_t wp_writev (int filedes, const struct iovec *iov, int iovcnt)
+{
+	ssize_t n;
+	if ((n = writev (filedes, iov, iovcnt)) == -1)
+		wp_error_sys_warning ("writev() error");
+	return n;
+}
+
+void *wp_mmap (void *addr, size_t len, int prot, int flag, int filedes, off_t off)
+{
+	void *p;
+	if ((p = mmap (addr, len, prot, flag, filedes, off)) == MAP_FAILED)
+		wp_error_sys_warning ("mmap() error");
+	return p;
+}
+
+int wp_mprotect (void *addr, size_t len, int prot)
+{
+	int n;
+	if ((n = mprotect (addr, len, prot)) == -1)
+		wp_error_sys_warning ("mprotect() error");
+	return n;
+}
+
+int wp_msync (void *addr, size_t len, int flags)
+{
+	int n;
+	if ((n = msync (addr, len, flags)) == -1)
+		wp_error_sys_warning ("msync() error");
+	return n;
+}
+
+int wp_munmap (caddr_t addr, size_t len)
+{
+	int n;
+	if ((n = munmap (addr, len)) == -1)
+		wp_error_sys_warning ("munmap() erro");
+	return n;
+}
+
