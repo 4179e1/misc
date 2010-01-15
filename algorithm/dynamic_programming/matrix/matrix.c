@@ -282,6 +282,7 @@ void matrix_write (Matrix *m, FILE *file)
 		{
 			fprintf (file, "%d\t", m->data[i * m->column + j]);
 		}
+		fprintf (file, "\n");
 	}
 }
 
