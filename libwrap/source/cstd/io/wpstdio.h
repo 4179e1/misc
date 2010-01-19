@@ -43,4 +43,7 @@ int wp_vsscanf (const char *buf, const char *fmt, va_list arg);
 
 FILE *wp_tmpfile (void);
 int wp_mkstemp (char *template);
+
+FILE *wp_popen (const char *cmdstring, const char *type);
+int wp_pclose (FILE *fp);
 #endif /* _WPSTDIO_H */

@@ -285,3 +285,20 @@ int wp_mkstemp (char *template)
 		wp_error_warning ("mkstemp error");
 	return n;
 }
+
+
+FILE *wp_popen (const char *cmdstring, const char *type)
+{
+	FILE *fp;
+	if ((fp = popen (cmdstring, type)) == NULL)
+		wp_error_warning ("popen() error");
+	return fp;
+}
+
+int wp_pclose (FILE *fp)
+{
+	int n;
+	if ((n = pclose (fp)) == -1)
+		wp_error_warning ("pclose() error");
+	return n;
+}

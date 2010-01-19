@@ -79,6 +79,8 @@ int wp_mprotect (void *addr, size_t len, int prot);
 int wp_msync (void *addr, size_t len, int flags);
 int wp_munmap (caddr_t addr, size_t len);
 
+int wp_pipe (int filedes[2]);
+
 /* utilities */
 void wp_check_exit_status (int status);
 ssize_t wp_readn (int fd, void *ptr, size_t n);

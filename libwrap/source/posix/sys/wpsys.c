@@ -387,7 +387,14 @@ int wp_munmap (caddr_t addr, size_t len)
 {
 	int n;
 	if ((n = munmap (addr, len)) == -1)
-		wp_error_sys_warning ("munmap() erro");
+		wp_error_sys_warning ("munmap() error");
 	return n;
 }
 
+int wp_pipe (int filedes[2])
+{
+	int n;
+	if ((n = pipe (filedes)) == -1)
+		wp_error_sys_warning ("pipe() error");
+	return n;
+}
