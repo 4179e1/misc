@@ -9,6 +9,11 @@
 #include <sys/times.h>
 #include <sys/uio.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/sem.h>
+#include <sys/shm.h>
 
 struct passwd *wp_getpwuid (uid_t uid);
 struct passwd *wp_getpwanam (const char *name);
@@ -80,6 +85,25 @@ int wp_msync (void *addr, size_t len, int flags);
 int wp_munmap (caddr_t addr, size_t len);
 
 int wp_pipe (int filedes[2]);
+
+int wp_mkfifo (const char *pathname, mode_t mode);
+
+key_t wp_ftok (const char *path, int id);
+
+int wp_msgget (key_t key, int flag);
+int wp_msgctl (int msqid, int cmd, struct msqid_ds *buf);
+int wp_msgsnd (int msqid, const void *ptr, size_t nbytes, int flag);
+ssize_t wp_msgrcv (int msqid, void *ptr, size_t nbytes, long type, int flag);
+
+int wp_semget (key_t key, int nsems, int flag);
+#if 0
+int wp_semctl (int semid, int semnum, int cmd, union semun arg);
+#endif
+int wp_semop (int semid, struct sembuf semoparray[], size_t nops);
+
+int wp_shmctl (int shmid, int cmd, struct shmid_ds *buf);
+void *wp_shmat (int shmid, const void *addr, int flag);
+int wp_shmdt (void *addr);
 
 /* utilities */
 void wp_check_exit_status (int status);

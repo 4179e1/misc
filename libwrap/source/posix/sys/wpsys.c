@@ -398,3 +398,100 @@ int wp_pipe (int filedes[2])
 		wp_error_sys_warning ("pipe() error");
 	return n;
 }
+
+int wp_mkfifo (const char *pathname, mode_t mode)
+{
+	int n;
+	if ((n = mkfifo (pathname, mode)) == -1)
+		wp_error_sys_warning ("mkfifo() error");
+	return n;
+}
+
+key_t wp_ftok (const char *path, int id)
+{
+	key_t k;
+	if ((k = ftok (path, id)) == (key_t)-1)
+		wp_error_sys_warning ("ftok() error");
+	return k;
+}
+
+int wp_msgget (key_t key, int flag)
+{
+	int n;
+	if ((n = msgget (key, flag)) == -1)
+		wp_error_sys_warning ("msgget() error");
+	return n;
+}
+int wp_msgctl (int msqid, int cmd, struct msqid_ds *buf)
+{
+	int n;
+	if ((n = msgctl (msqid, cmd, buf)) == -1)
+		wp_error_sys_warning ("msgctl() error");
+	return n;
+}
+
+int wp_msgsnd (int msqid, const void *ptr, size_t nbytes, int flag)
+{
+	int n;
+	if ((n = msgsnd (msqid, ptr, nbytes, flag)) == -1)
+		wp_error_sys_warning ("msgsnd() error");
+	return n;
+}
+
+ssize_t wp_msgrcv (int msqid, void *ptr, size_t nbytes, long type, int flag)
+{
+	int n;
+	if ((n = msgrcv (msqid, ptr, nbytes, type, flag)) == -1)
+		wp_error_sys_warning ("msgrcv() error");
+	return n;
+}
+
+int wp_semget (key_t key, int nsems, int flag)
+{
+	int n;
+	if ((n = semget (key, nsems, flag)) == -1)
+		wp_error_warning ("semget() error");
+	return n;
+}
+
+#if 0
+int wp_semctl (int semid, int semnum, int cmd, union semun arg)
+{
+	int n;
+	if ((n = semctl (semid, semnum, cmd, arg)) == -1)
+		wp_error_warning ("semctl() error");
+	return n;
+}
+#endif
+
+int wp_semop (int semid, struct sembuf semoparray[], size_t nops)
+{
+	int n;
+	if ((n = semop (semid, semoparray, nops)) == -1)
+		wp_error_warning ("semop() error");
+	return n;
+}
+
+int wp_shmctl (int shmid, int cmd, struct shmid_ds *buf)
+{
+	int n;
+	if ((n = shmctl (shmid, cmd, buf)) == -1)
+		wp_error_warning ("shmctl() error");
+	return n;
+}
+
+void *wp_shmat (int shmid, const void *addr, int flag)
+{
+	void *p;
+	if ((p = shmat (shmid, addr, flag)) == (void *)-1)
+		wp_error_warning ("shmat() error");
+	return p;
+}
+
+int wp_shmdt (void *addr)
+{
+	int n;
+	if ((n = shmdt (addr)) == -1)
+		wp_error_warning ("shmdt() error");
+	return n;
+}
