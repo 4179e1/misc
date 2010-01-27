@@ -131,3 +131,122 @@ int wp_getnameinfo (const struct sockaddr *addr, socklen_t alen, char *host, soc
 	return n;
 }
 
+int wp_bind (int sockfd, const struct sockaddr *addr, socklen_t len)
+{
+	int n;
+	if ((n = bind (sockfd, addr, len)) == -1)
+		wp_error_warning ("bind() error");
+	return n;
+}
+
+int wp_getsockname (int sockfd, struct sockaddr *addr, socklen_t *alenp)
+{
+	int n;
+	if ((n = getsockname (sockfd, addr, alenp)) == -1)
+		wp_error_warning ("getsockname() error");
+	return n;
+}
+
+int wp_getpeername (int sockfd, struct sockaddr *addr, socklen_t *alenp)
+{
+	int n;
+	if ((n = getpeername (sockfd, addr, alenp)) == -1)
+		wp_error_warning ("getpeername() error");
+	return n;
+}
+
+int wp_connect (int sockfd, const struct sockaddr *addr, socklen_t len)
+{
+	int n;
+	if ((n = connect (sockfd, addr, len)) == -1)
+		wp_error_warning ("connect() error");
+	return n;
+}
+
+int wp_listen (int sockfd, int backlog)
+{
+	int n;
+	if ((n = listen (sockfd, backlog)) == -1)
+		wp_error_warning ("listen() error");
+	return n;
+}
+
+int wp_accept (int sockfd, struct sockaddr *addr, socklen_t *len)
+{
+	int n;
+	if ((n = accept (sockfd, addr, len)) == -1)
+		wp_error_warning ("accept() error");
+	return n;
+}
+
+ssize_t wp_send (int sockfd, const void *buf, size_t nbytes, int flags)
+{
+	ssize_t n;
+	if ((n = send (sockfd, buf, nbytes, flags)) == -1)
+		wp_error_warning ("send() error");
+	return n;
+}
+
+ssize_t wp_sendto (int sockfd, const void *buf, size_t nbytes, int flags, const struct sockaddr *destaddr, socklen_t destlen)
+{
+	ssize_t n;
+	if ((n = sendto (sockfd, buf, nbytes, flags, destaddr, destlen)) == -1)
+		wp_error_warning ("sendto() error");
+	return n;
+}
+
+ssize_t wp_sendmsg (int sockfd, const struct msghdr *msg, int flags)
+{
+	ssize_t n;
+	if ((n = sendmsg (sockfd, msg, flags)) == -1)
+		wp_error_warning ("sendmsg() error");
+	return n;
+}
+
+ssize_t wp_recv (int sockfd, void *buf, size_t nbytes, int flags)
+{
+	ssize_t n;
+	if ((n = recv (sockfd, buf, nbytes, flags)) == -1)
+		wp_error_warning ("recv() error");
+	return n;
+}
+
+ssize_t wp_recvfrom (int sockfd, void *buf, int flags, struct sockaddr *addr, socklen_t *addrlen)
+{
+	ssize_t n;
+	if ((n = recvfrom (sockfd, buf, flags, addr, addrlen)) == -1)
+		wp_error_warning ("recvfrom() error");
+	return n;
+}
+
+ssize_t wp_recvmsg (int sockfd, struct msghdr *msg, int flags)
+{
+	ssize_t n;
+	if ((n = recvmsg (sockfd, msg, flags)) == -1)
+		wp_error_warnig ("recvmsg() error");
+	return n;
+}
+
+int wp_setsockopt (int sockfd, int level, int option, const void *val, socklen_t len)
+{
+	int n;
+	if ((n = setsockopt (sockfd, level, option, val, len)) == -1)
+		wp_error_warning ("setsockopt() error");
+	return n;
+}
+
+int wp_getsockopt (int sockfd, int level, int option, void *val, socklen_t *lenp)
+{
+	int n;
+	if ((n = getsockopt (sockfd, level, option, val, lenp)) == -1)
+		wp_error_warning ("getsockopt() error");
+	return n;
+}
+
+int wp_sockatmark (int sockfd)
+{
+	int n;
+	if ((n = sockatmark (sockfd)) == -1)
+		wp_error_warning ("sockatmark() error");
+	return n;
+}
