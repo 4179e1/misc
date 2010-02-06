@@ -105,6 +105,11 @@ gchar *enc_get_src_text (Enc *enc)
 {
 	gchar *text;
 	text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (enc->src));
+	if (*text == '\0')
+	{
+		enc_set_src_text (enc, DEFAULT_ENC);
+		return DEFAULT_ENC;
+	}
 	return text;
 }
 
@@ -112,6 +117,11 @@ gchar *enc_get_dest_text (Enc *enc)
 {
 	gchar *text;
 	text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (enc->dest));
+	if (*text == '\0')
+	{
+		enc_set_dest_text (enc, DEFAULT_ENC);
+		return DEFAULT_ENC;
+	}
 	return text;
 }
 

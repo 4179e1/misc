@@ -18,7 +18,7 @@
 #define ID3V1_GENRE_LEN 1
 
 typedef struct _id3v1 Id3v1;
-typedef struct _id3v1_multi Id3v1Multi;
+typedef struct _id3v1 Id3v1Multi;
 
 Id3v1 *id3v1_new (void);
 void id3v1_free (Id3v1 *tag);
@@ -115,6 +115,5 @@ void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
 
 gboolean id3v1_multi_no_same (Id3v1Multi *mul);
 void id3v1_multi_dump (Id3v1Multi *mul, FILE *file);
-void id3v1_multi_assert (Id3v1Multi *mul);
 
 #endif /* _ID3V1_H */

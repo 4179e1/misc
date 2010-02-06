@@ -63,7 +63,7 @@ Gv1 *gv1_reset (Gv1 *gv1)
 	gtk_entry_set_text (gv1->title, "");
 	gtk_entry_set_text (gv1->artist, "");
 	gtk_entry_set_text (gv1->album, "");
-	gtk_spin_button_set_value (gv1->year, 1970.0);
+	gtk_spin_button_set_value (gv1->year, 0.0);
 	gtk_entry_set_text (gv1->comment, "");
 	gtk_spin_button_set_value (gv1->track, 0.0);
 	gtk_combo_box_set_active (gv1->genre, -1);
@@ -92,7 +92,7 @@ Id3v1 *gv1_write_to_id3v1 (Gv1 *gv1, Id3v1 *tag)
 	const gchar *artist;
 	const gchar *album;
 	gdouble d_year;
-	gchar year[ID3V1_YEAR_LEN];
+	gchar year[ID3V1_YEAR_LEN + 1];
 	const gchar *comment;
 	gchar track;
 	gchar genre;
@@ -101,8 +101,8 @@ Id3v1 *gv1_write_to_id3v1 (Gv1 *gv1, Id3v1 *tag)
 	artist = gtk_entry_get_text (gv1->artist);
 	album = gtk_entry_get_text (gv1->album);
 
-	d_year = gtk_spin_button_get_value (gv1->track);
-	g_ascii_dtostr (year, ID3V1_YEAR_LEN, d_year);
+	d_year = gtk_spin_button_get_value (gv1->year);
+	g_ascii_dtostr (year, sizeof (year), d_year);
 
 	comment = gtk_entry_get_text (gv1->comment);
 	track = (gchar)gtk_spin_button_get_value (gv1->track);

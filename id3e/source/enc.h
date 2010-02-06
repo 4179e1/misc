@@ -8,6 +8,8 @@
 typedef struct _enc Enc;
 #endif /* _ID3E_ENC */
 
+#define DEFAULT_ENC "UTF-8"
+
 Enc *enc_new (void);
 void enc_free (Enc *enc);
 
