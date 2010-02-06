@@ -13,10 +13,12 @@ struct _gv1
 	GtkSpinButton *track;
 	GtkComboBox *genre;
 
+	GtkToggleButton *ck_title;
 	GtkToggleButton *ck_artist;
 	GtkToggleButton *ck_album;
 	GtkToggleButton *ck_year;
 	GtkToggleButton *ck_comment;
+	GtkToggleButton *ck_track;
 	GtkToggleButton *ck_genre;
 };
 
@@ -42,10 +44,12 @@ Gv1 *gv1_init (Gv1 *gv1, GtkBuilder *builder)
 	gv1->track = GTK_SPIN_BUTTON (Gtk_builder_get_object (builder, "gv1_track"));
 	gv1->genre = GTK_COMBO_BOX (Gtk_builder_get_object (builder, "gv1_genre"));
 
+	gv1->ck_title =GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_title"));
 	gv1->ck_artist = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_artist"));
 	gv1->ck_album = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_album"));
 	gv1->ck_year = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_year"));
 	gv1->ck_comment = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_comment"));
+	gv1->ck_track = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_track"));
 	gv1->ck_genre = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_genre"));
 
 	liststore = GTK_LIST_STORE (
@@ -158,6 +162,15 @@ void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 	g_assert (gv1 != NULL);
 	g_assert (mul != NULL);
 
+	if (gtk_toggle_button_get_active (gv1->ck_title))
+	{
+		id3v1_multi_set_title (mul, gtk_entry_get_text (gv1->title));
+	}
+	else
+	{
+		id3v1_multi_set_title (mul, NULL);
+	}
+
 	if (gtk_toggle_button_get_active (gv1->ck_artist))
 	{
 		id3v1_multi_set_artist (mul, gtk_entry_get_text (gv1->artist));
@@ -184,7 +197,6 @@ void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 		gdouble d_year = gtk_spin_button_get_value (gv1->year);
 		g_ascii_dtostr (year, sizeof(year), d_year);
 		id3v1_multi_set_year (mul, year);
-		/* DEBUG */
 	}
 	else
 	{
@@ -200,6 +212,16 @@ void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 		id3v1_multi_set_comment (mul, NULL);
 	}
 
+	if (gtk_toggle_button_get_active (gv1->ck_track))
+	{
+		gchar track = (gchar)gtk_spin_button_get_value (gv1->track);
+		id3v1_multi_set_track (mul, &track);
+	}
+	else
+	{
+		id3v1_multi_set_track (mul, NULL);
+	}
+
 	if (gtk_toggle_button_get_active (gv1->ck_genre))
 	{
 		gchar genre = gtk_combo_box_get_active (gv1->genre);
@@ -213,17 +235,28 @@ void gv1_write_to_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 
 void gv1_read_from_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 {
+	gchar *title;
 	gchar *artist;
 	gchar *album;
 	gchar *year;
 	gchar *comment;
+	gchar track_val;
+	gchar *track = &track_val;
 	gchar genre_val;
 	gchar *genre = &genre_val;
 
-	id3v1_multi_get_content_to_param (mul, &artist, &album, &year, &comment, &genre);
+	id3v1_multi_get_content_to_param (mul, &title, &artist, &album, &year, &comment, &track, &genre);
 
-	/* title should be empty */
-	gtk_entry_set_text (gv1->title, "");
+	if (title)
+	{
+		gtk_entry_set_text (gv1->title, title);
+		gtk_toggle_button_set_active (gv1->ck_title, TRUE);
+		g_free (title);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_title, FALSE);
+	}
 
 	if (artist)
 	{
@@ -269,8 +302,15 @@ void gv1_read_from_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 		gtk_toggle_button_set_active (gv1->ck_comment, FALSE);
 	}
 
-	/* no tracks, set to 0 */
-	gtk_spin_button_set_value (gv1->track, 0.0);
+	if (track)
+	{
+		gtk_spin_button_set_value (gv1->track, *track);
+		gtk_toggle_button_set_active (gv1->ck_track, TRUE);
+	}
+	else
+	{
+		gtk_toggle_button_set_active (gv1->ck_track, FALSE);
+	}
 
 	if (genre)
 	{

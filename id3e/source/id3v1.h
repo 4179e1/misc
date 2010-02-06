@@ -102,16 +102,18 @@ gboolean id3v1_multi_write_to_file (Id3v1Multi *mul, FILE *file);
 void id3v1_multi_set_from_path (Id3v1Multi *mul, const gchar *path);
 void id3v1_multi_set_from_file (Id3v1Multi *mul, FILE *file);
 
+void id3v1_multi_set_title (Id3v1Multi *mul, const gchar *title);
 void id3v1_multi_set_artist (Id3v1Multi *mul, const gchar *artist);
 void id3v1_multi_set_album (Id3v1Multi *mul, const gchar *album);
 void id3v1_multi_set_year (Id3v1Multi *mul, const gchar *year);
 void id3v1_multi_set_comment (Id3v1Multi *mul, const gchar *comment);
+void id3v1_multi_set_track (Id3v1Multi *mul, const gchar *track);
 void id3v1_multi_set_genre (Id3v1Multi *mul, const gchar *genre);
 
-void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
-		gchar **album, gchar **year, gchar **comment, gchar **genre/* take care this */);
-void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
-		const gchar *album, const gchar *year, const gchar *comment, const gchar *genre);
+void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **title, gchar **artist,
+		gchar **album, gchar **year, gchar **comment, gchar **track, gchar **genre/* take care this */);
+void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *titel, const gchar *artist,
+		const gchar *album, const gchar *year, const gchar *comment, const gchar *track, const gchar *genre);
 
 gboolean id3v1_multi_no_same (Id3v1Multi *mul);
 void id3v1_multi_dump (Id3v1Multi *mul, FILE *file);

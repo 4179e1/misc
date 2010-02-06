@@ -70,10 +70,10 @@ enum {
 #define ID3V1_MULTI_GENRE_SET_UNSAME(X)		((X) &= (~ID3V1_MULTI_GENRE))
 
 /* 
-   Currently not using ID3V1_MULTI_TITLE & ID3V1_MULTI_TRACK
-   So the bitmap is (0101 1110), that is 0x5E
+   Currently not using the higest bit
+   So the bitmap is (0111 1111), that is 0x7F
  */
-#define ID3V1_MULTI_ALL					0x5E
+#define ID3V1_MULTI_ALL					0x7F
 #define ID3V1_MULTI_ALL_SET_SAME(X)		((X) = ID3V1_MULTI_ALL)
 #define ID3V1_MULTI_ALL_SET_UNSAME(X)	((X) = 0x00)
 
@@ -669,8 +669,10 @@ Id3v1Multi *id3v1_multi_copy_from_v1 (Id3v1Multi *mul, Id3v1 *tag)
 	
 	memcpy (mul, tag, ID3V1_LEN);
 
+#if 0
 	/* clear title field */
 	id3v1_set_title ((Id3v1 *)mul, NULL);
+#endif
 	ID3V1_MULTI_ALL_SET_SAME (mul->padding);
 
 	return mul;
@@ -681,14 +683,22 @@ void id3v1_multi_write_to_v1 (Id3v1Multi *mul, Id3v1 *tag)
 	g_assert (mul != NULL);
 	g_assert (tag != NULL);
 
+	gchar *title;
 	gchar *artist;
 	gchar *album;
 	gchar *year;
 	gchar *comment;
 	/* take care this */
+	gchar track_val;
+	gchar *track = &track_val;
 	gchar genre_val;
 	gchar *genre = &genre_val;
-	id3v1_multi_get_content_to_param (mul, &artist, &album, &year, &comment, &genre);
+	id3v1_multi_get_content_to_param (mul, &title, &artist, &album, &year, &comment, &track, &genre);
+	if (title)
+	{
+		id3v1_set_title (tag, title);
+		g_free (title);
+	}
 	if (artist)
 	{
 		id3v1_set_artist (tag, artist);
@@ -709,6 +719,11 @@ void id3v1_multi_write_to_v1 (Id3v1Multi *mul, Id3v1 *tag)
 		id3v1_set_comment (tag, comment);
 		g_free (comment);
 	}
+	if (track)
+	{
+		id3v1_set_track (tag, *track);
+		/* don't free */
+	}
 	if (genre)
 	{
 		id3v1_set_genre (tag, *genre);
@@ -721,9 +736,11 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 	g_assert (mul != NULL);
 
 	Id3v1Multi *new;
+	gchar *title = NULL;
 	gchar *artist = NULL;
 	gchar *album = NULL;
 	gchar *comment = NULL;
+	gchar *title_new;
 	gchar *artist_new;
 	gchar *album_new;
 	gchar *comment_new;
@@ -748,8 +765,23 @@ Id3v1Multi *id3v1_multi_convert (Id3v1Multi *mul, const gchar *to_codeset, const
 		return new;
 	}
 
-	id3v1_multi_get_content_to_param (mul, &artist, &album, NULL, &comment, NULL);
+	id3v1_multi_get_content_to_param (mul, &title, &artist, &album, NULL, &comment, NULL, NULL);
 
+	if (title)
+	{
+		read = write = ID3V1_TITLE_LEN;
+		if ((title_new = G_convert (title, ID3V1_TITLE_LEN, to_codeset, from_codeset, &read, &write)) != NULL)
+		{
+			id3v1_multi_set_title (new, title_new);
+			g_free (title_new);
+		}
+		else
+		{
+			CONVERT_FAIL (title);
+			rt = FALSE;
+		}
+		g_free (title);
+	}
 	if (artist)
 	{
 		read = write = ID3V1_ARTIST_LEN;
@@ -864,10 +896,17 @@ void id3v1_multi_set_from_file (Id3v1Multi *mul, FILE *file)
 	if ((cmp_tag = (Id3v1Multi *)id3v1_new_from_file (file)) == NULL)
 	{
 		/* the multi is not null, but the next one is null, nothing same, clear multi */
-		id3v1_multi_set_content_from_param (mul, NULL, NULL, NULL, NULL, NULL);
+		id3v1_multi_set_content_from_param (mul, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 		return;
 	}
 
+	if (ID3V1_MULTI_TITLE_IS_SAME (mul->padding))
+	{
+		if (memcmp (mul->title, cmp_tag->title, ID3V1_TITLE_LEN) != 0)
+		{
+			id3v1_multi_set_title (mul, NULL);
+		}
+	}
 	if (ID3V1_MULTI_ARTIST_IS_SAME (mul->padding))
 	{
 		if (memcmp (mul->artist, cmp_tag->artist, ID3V1_ARTIST_LEN) != 0)	/* this field not same, clear it */
@@ -900,6 +939,14 @@ void id3v1_multi_set_from_file (Id3v1Multi *mul, FILE *file)
 		}
 	}
 
+	if (ID3V1_MULTI_TRACK_IS_SAME (mul->padding))
+	{
+		if ((mul->track) != (cmp_tag->track))
+		{
+			id3v1_multi_set_track (mul, NULL);
+		}
+	}
+
 	if (ID3V1_MULTI_GENRE_IS_SAME (mul->padding))
 	{
 		if ((mul->genre) != (cmp_tag->genre))
@@ -910,6 +957,20 @@ void id3v1_multi_set_from_file (Id3v1Multi *mul, FILE *file)
 
 	id3v1_free ((Id3v1*)cmp_tag);
 	return;
+}
+
+void id3v1_multi_set_title (Id3v1Multi *mul, const gchar *title)
+{
+	g_assert (mul != NULL);
+	if (title)
+	{
+		id3v1_set_title ((Id3v1 *)mul, title);
+		ID3V1_MULTI_TITLE_SET_SAME (mul->padding);
+	}
+	else
+	{
+		ID3V1_MULTI_TITLE_SET_UNSAME (mul->padding);
+	}
 }
 
 void id3v1_multi_set_artist (Id3v1Multi *mul, const gchar *artist)
@@ -966,6 +1027,19 @@ void id3v1_multi_set_comment (Id3v1Multi *mul, const gchar *comment)
 	}
 }
 
+void id3v1_multi_set_track (Id3v1Multi *mul, const gchar *track)
+{
+	if (track)
+	{
+		mul->track = *track;
+		ID3V1_MULTI_TRACK_SET_SAME (mul->padding);
+	}
+	else
+	{
+		ID3V1_MULTI_TRACK_SET_UNSAME (mul->padding);
+	}
+}
+
 void id3v1_multi_set_genre (Id3v1Multi *mul, const gchar *genre)
 {
 	if (genre)
@@ -979,10 +1053,21 @@ void id3v1_multi_set_genre (Id3v1Multi *mul, const gchar *genre)
 	}
 }
 
-void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
-		gchar **album, gchar **year, gchar **comment, gchar **genre)
+void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **title, gchar **artist,
+		gchar **album, gchar **year, gchar **comment, gchar **track, gchar **genre)
 {
 	g_assert (mul != NULL);
+	if (title)
+	{
+		if (ID3V1_MULTI_TITLE_IS_SAME (mul->padding))
+		{
+			*title = g_strndup (mul->title, ID3V1_TITLE_LEN);
+		}
+		else
+		{
+			*title = NULL;
+		}
+	}
 	if (artist)
 	{
 		if (ID3V1_MULTI_ARTIST_IS_SAME (mul->padding))
@@ -1027,6 +1112,17 @@ void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
 			*comment = NULL;
 		}
 	}
+	if (track)
+	{
+		if (ID3V1_MULTI_TRACK_IS_SAME (mul->padding))
+		{
+			**track = mul->track;
+		}
+		else
+		{
+			*track = NULL;
+		}
+	}
 	if (genre)
 	{
 		if (ID3V1_MULTI_GENRE_IS_SAME (mul->padding))
@@ -1040,14 +1136,16 @@ void id3v1_multi_get_content_to_param (Id3v1Multi *mul, gchar **artist,
 	}
 }
 
-void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *artist,
-		const gchar *album, const gchar *year, const gchar *comment, const gchar *genre)
+void id3v1_multi_set_content_from_param (Id3v1Multi *mul, const gchar *title, const gchar *artist,
+		const gchar *album, const gchar *year, const gchar *comment, const gchar *track, const gchar *genre)
 {
 	g_assert (mul != NULL);
+	id3v1_multi_set_title (mul, title);
 	id3v1_multi_set_artist (mul, artist);
 	id3v1_multi_set_album (mul, album);
 	id3v1_multi_set_year (mul, year);
 	id3v1_multi_set_comment (mul, comment);
+	id3v1_multi_set_track (mul, track);
 	id3v1_multi_set_genre (mul, genre);
 }
 
@@ -1058,18 +1156,26 @@ gboolean id3v1_multi_no_same (Id3v1Multi *mul)
 
 void id3v1_multi_dump (Id3v1Multi *mul, FILE *file)
 {
+	gchar *title;
 	gchar *artist;
 	gchar *album;
 	gchar *year;
 	gchar *comment;
 	/* take care this!! */
+	gchar track_val;
+	gchar *track = &track_val;
 	gchar genre_val;
 	gchar *genre = &genre_val;
 
-	id3v1_multi_get_content_to_param (mul, &artist, &album, &year, &comment, &genre);
+	id3v1_multi_get_content_to_param (mul, &title, &artist, &album, &year, &comment, &track, &genre);
 
 	fprintf (file, "<ID3V1_MULTI");
 
+	if (title)
+	{
+		fprintf (file, " TITLE=\"%s\"", title);
+		g_free (title);
+	}
 	if (artist)
 	{
 		fprintf (file, " ARTIST=\"%s\"", artist);
@@ -1090,9 +1196,14 @@ void id3v1_multi_dump (Id3v1Multi *mul, FILE *file)
 		fprintf (file, " COMMENT=\"%s\"", comment);
 		g_free (comment);
 	}
+	if (track)
+	{
+		fprintf (file, " TRACK=\"%d\"", *track);
+		/* don't free */
+	}
 	if (genre)
 	{
-		fprintf (file, " GENRE = \"%d\"", *genre);
+		fprintf (file, " GENRE=\"%d\"", *genre);
 		/* don't free */
 	}
 
