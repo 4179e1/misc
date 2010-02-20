@@ -1,10 +1,10 @@
 #include "wpsocket.h"
 #include "wpbase.h"
 
-int wp_socket (in domain, int type, int protocol)
+int wp_socket (int domain, int type, int protocol)
 {
 	int n;
-	if ((n = sockent (domain, type, protocol)) == -1)
+	if ((n = socket (domain, type, protocol)) == -1)
 		wp_error_warning ("socket() error");
 	return n;
 }
@@ -211,10 +211,10 @@ ssize_t wp_recv (int sockfd, void *buf, size_t nbytes, int flags)
 	return n;
 }
 
-ssize_t wp_recvfrom (int sockfd, void *buf, int flags, struct sockaddr *addr, socklen_t *addrlen)
+ssize_t wp_recvfrom (int sockfd, void *buf, size_t len, int flags, struct sockaddr *addr, socklen_t *addrlen)
 {
 	ssize_t n;
-	if ((n = recvfrom (sockfd, buf, flags, addr, addrlen)) == -1)
+	if ((n = recvfrom (sockfd, buf, len, flags, addr, addrlen)) == -1)
 		wp_error_warning ("recvfrom() error");
 	return n;
 }
@@ -223,7 +223,7 @@ ssize_t wp_recvmsg (int sockfd, struct msghdr *msg, int flags)
 {
 	ssize_t n;
 	if ((n = recvmsg (sockfd, msg, flags)) == -1)
-		wp_error_warnig ("recvmsg() error");
+		wp_error_warning ("recvmsg() error");
 	return n;
 }
 
