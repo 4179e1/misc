@@ -1,5 +1,5 @@
-﻿Build started 2010-2-27 22:34:45.
-Project "D:\code\vc\serial\serial\serial.vcxproj" on node 34 (build target(s)).
+﻿Build started 2010-2-28 0:22:36.
+Project "D:\code\vc\serial\serial\serial.vcxproj" on node 3 (build target(s)).
 _PrepareForBuild:
   Creating "Debug\serial.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
@@ -26,4 +26,4 @@ Done Building Project "D:\code\vc\serial\serial\serial.vcxproj" (build target(s)
 
 Build succeeded.
 
-Time Elapsed 00:00:07.18
+Time Elapsed 00:00:06.50

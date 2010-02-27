@@ -33,15 +33,21 @@ int _tmain(int argc, _TCHAR* argv[])
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			GetLastError(),
-			LANG_NEUTRAL, // Default language
+			LANG_CHINESE,
 			(LPTSTR)&error_string,
 			0,
 			NULL 
 			);
 
-		wprintf (_T("%s\n"), error_string);
-
-		LocalFree( error_string );
+		if (error_string == NULL)
+		{
+			fprintf (stderr, "Unknown error\n");
+		}
+		else
+		{
+			wprintf (_T("%s\n"), error_string);
+			LocalFree( error_string );
+		}
 
 		system ("pause");
 		exit (0);
