@@ -3,6 +3,8 @@
 #include "genre.h"
 #include "wrap.h"
 
+static void gv1_on_ck_all_toggled (GtkToggleButton *button, Gv1 *gv1);
+
 struct _gv1
 {
 	GtkEntry *title;
@@ -13,6 +15,7 @@ struct _gv1
 	GtkSpinButton *track;
 	GtkComboBox *genre;
 
+	GtkToggleButton *ck_all;
 	GtkToggleButton *ck_title;
 	GtkToggleButton *ck_artist;
 	GtkToggleButton *ck_album;
@@ -44,7 +47,8 @@ Gv1 *gv1_init (Gv1 *gv1, GtkBuilder *builder)
 	gv1->track = GTK_SPIN_BUTTON (Gtk_builder_get_object (builder, "gv1_track"));
 	gv1->genre = GTK_COMBO_BOX (Gtk_builder_get_object (builder, "gv1_genre"));
 
-	gv1->ck_title =GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_title"));
+	gv1->ck_all = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_all"));
+	gv1->ck_title = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_title"));
 	gv1->ck_artist = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_artist"));
 	gv1->ck_album = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_album"));
 	gv1->ck_year = GTK_TOGGLE_BUTTON (Gtk_builder_get_object (builder, "ck_year"));
@@ -55,6 +59,8 @@ Gv1 *gv1_init (Gv1 *gv1, GtkBuilder *builder)
 	liststore = GTK_LIST_STORE (
 			Gtk_builder_get_object (builder, "genre_list"));
 	genre_list_init (liststore);
+
+	g_signal_connect (gv1->ck_all, "toggled", G_CALLBACK (gv1_on_ck_all_toggled), gv1);
 
 	gv1_reset (gv1);
 	gv1_set_sensitive (gv1, FALSE);
@@ -329,3 +335,20 @@ void gv1_read_from_id3v1_multi (Gv1 *gv1, Id3v1Multi *mul)
 		gtk_toggle_button_set_active (gv1->ck_genre, FALSE);
 	}
 }
+
+/* private func */
+static void gv1_on_ck_all_toggled (GtkToggleButton *button, Gv1 *gv1)
+{
+	gboolean status;
+
+	status = gtk_toggle_button_get_active(button);
+
+	gtk_toggle_button_set_active (gv1->ck_title, status);
+	gtk_toggle_button_set_active (gv1->ck_artist, status);
+	gtk_toggle_button_set_active (gv1->ck_album, status);
+	gtk_toggle_button_set_active (gv1->ck_year, status);
+	gtk_toggle_button_set_active (gv1->ck_comment, status);
+	gtk_toggle_button_set_active (gv1->ck_track, status);
+	gtk_toggle_button_set_active (gv1->ck_genre, status);
+}
+

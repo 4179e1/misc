@@ -6,6 +6,7 @@
 #include "id3e.h"
 #include "list.h"
 
+
 /* struct for id3e, passed as the argument to all callback func  */
 struct _id3e
 {
@@ -26,7 +27,6 @@ struct _id3e
 
 	gpointer pointer;
 };
-
 
 /* memory alloc */
 Id3e *id3e_new (void)
@@ -244,6 +244,10 @@ void id3e_statusbar_message (Id3e *id3e, const char *fmt, ...)
 			id3e->statusbar_context_id, msg);
 
 	g_free (msg);
+}
+
+void id3e_statusbar_message_from_error_number (Id3e *id3e, gint number)
+{
 }
 
 void id3e_statusbar_toggle (Id3e *id3e)

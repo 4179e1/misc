@@ -17,71 +17,64 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 {
 	gint selected_num;
 	Gva *gva;
-	Enc *enc;
 
 	selected_num = gtk_tree_selection_count_selected_rows (selection);
 	id3e_statusbar_message (id3e, "Selected %d rows", selected_num);
-	enc = id3e_get_enc (id3e);
+
 	gva = id3e_get_gva (id3e);
 	gva_reset (gva);
 
 	/* not thing selected */
 	if (selected_num == 0)
 	{
-		/* TODO: reset gva */
 		return;
 	}
 	else
 	{
 		/* ok, selected something, initial some variable */
-		GList *list;
-		GList *ptr;
 		GtkTreeModel *model;
 		GtkTreeIter iter;
-		gchar *path = NULL;
+		GList *list;
+		GList *ptr;
 		gchar *src;
 		gboolean result;
-		Id3 *tag;
-		Id3 *tag_new;
-	
-		src = enc_get_src_text (enc);
+
+		src = enc_get_src_text (id3e_get_enc (id3e));
+
 		model = GTK_TREE_MODEL (id3e_get_list_store (id3e));
 		list = gtk_tree_selection_get_selected_rows (selection,
 				&model);
 		ptr = list;
 	
-
 		if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 		{
+			Id3 *tag;
+			gchar *path = NULL;
+
 			gtk_tree_model_get (model, &iter,
 					1, &path,
 					-1);
+
 			if ((tag = id3_new_from_path (path)) != NULL)
 			{
-				if (selected_num == 1) /* only 1 row selected */
-				{
-					g_message ("selected 1 item");
-					tag_new = id3_convert (tag, "UTF-8", src, &result);
-					gva_read_from_id3 (gva, tag_new);
-					id3_free (tag_new);
-				}
-				else /* two or more rows selected */
-				{
-					g_message ("selected %d items", selected_num);
-					Id3 *mul;
-					mul = id3_multi_new_from_tag (tag);
-					/* TODO: a foreach func to set mul */
-					selection_foreach_init ();
-					gtk_tree_selection_selected_foreach (selection, (GtkTreeSelectionForeachFunc)set_id3_multi, mul);
 
-					tag_new = id3_multi_convert (mul, "UTF-8", src, &result);
-					gva_read_from_id3_multi (gva, tag_new);
+				Id3 *mul;
+				Id3 *tag_new;
 
-					id3_free (mul);
-				}
+				mul = id3_multi_new_from_tag (tag);
 
+				/* TODO: a foreach func to set mul */
+				selection_foreach_init ();
+				gtk_tree_selection_selected_foreach (selection, (GtkTreeSelectionForeachFunc)set_id3_multi, mul);
+
+				tag_new = id3_multi_convert (mul, "UTF-8", src, &result);
+				gva_read_from_id3_multi (gva, tag_new);
+
+				id3_free (mul);
+				id3_free (tag_new);
 				id3_free (tag);
 			}
+			g_free (path);
 		}
 
 		if (!result)
@@ -93,7 +86,6 @@ void on_selection_changed (GtkTreeSelection *selection, Id3e *id3e)
 
 		g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (list);
-		g_free (path);
 	}
 }
 

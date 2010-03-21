@@ -72,36 +72,19 @@ void on_save_clicked (GtkButton *button, Id3e *id3e)
 		ptr = list;
 		tag = id3_new ();
 
-		if (selected_num == 1) /* only one item selected */
+		gva_write_to_id3_multi (gva, tag);
+		tag_new = id3_multi_convert (tag, src, "UTF-8", &result);
+
+		for (ptr = list; ptr != NULL; ptr = g_list_next (ptr))
 		{
 			if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
 			{
 				gtk_tree_model_get (model, &iter, 1, &path, -1);
-				
-				gva_write_to_id3 (gva, tag);
-				tag_new = id3_convert (tag, src, "UTF-8", &result);
-				id3_write_tag_to_path (tag_new, path);
-
-				id3_free (tag_new);
+				id3_multi_write_to_path (tag_new, path);
 				g_free (path);
 			}
 		}
-		else /* selected two or more rows */
-		{
-			gva_write_to_id3_multi (gva, tag);
-			tag_new = id3_multi_convert (tag, src, "UTF-8", &result);
-
-			for (ptr = list; ptr != NULL; ptr = g_list_next (ptr))
-			{
-				if (gtk_tree_model_get_iter (model, &iter, (GtkTreePath *)ptr->data))
-				{
-					gtk_tree_model_get (model, &iter, 1, &path, -1);
-					id3_multi_write_to_path (tag_new, path);
-					g_free (path);
-				}
-			}
-			id3_free (tag_new);
-		}
+		id3_free (tag_new);
 
 		if (!result)
 		{
@@ -184,7 +167,7 @@ void on_convert_clicked (GtkButton *button, Id3e *id3e)
 		}
 		else
 		{
-			g_warning ("should not reach here");
+			g_warning ("Criticual error! Should not reach here.");
 		}
 
 		if (!result)

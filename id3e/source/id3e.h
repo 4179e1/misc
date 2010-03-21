@@ -46,6 +46,7 @@ void id3e_set_statusbar (Id3e *id3e, GtkWidget *statusbar);
 GtkWidget *id3e_get_statusbar (Id3e *id3e);
 void id3e_statusbar_init (Id3e *id3e);
 void id3e_statusbar_message (Id3e *id3e, const char *fmt, ...);
+void id3e_statusbar_message_from_error_number (Id3e *id3e, gint number);
 void id3e_statusbar_toggle (Id3e *id3e);
 
 void id3e_set_enc (Id3e *id3e, Enc *enc);
