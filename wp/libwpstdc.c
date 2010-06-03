@@ -24,7 +24,7 @@ int wp_fgetc (FILE *fp)
 	int n;
 	clearerr (fp);
 	n = fgetc (fp);
-	if (n == EOF && ferror (fp) == 0)
+	if (n == EOF && ferror (fp))
 		wp_error_warning ("fgetc error");
 	return n;
 }
@@ -32,7 +32,7 @@ int wp_fgetc (FILE *fp)
 char *wp_fgets (char *buf, int n, FILE *fp)
 {
 	char *str;
-	if ((str = fgets (buf, n, fp)) == NULL)
+	if (((str = fgets (buf, n, fp)) == NULL) && ferror (fp))
 		wp_error_warning ("fgets error");
 	return str;
 }
@@ -75,7 +75,7 @@ size_t wp_fread (void *ptr, size_t size, size_t nobj, FILE *fp)
 
 	clearerr (fp);
 	n = fread (ptr, size, nobj, fp);
-	if (ferror (fp) == 0)
+	if (ferror (fp))
 		wp_error_warning ("fread error");
 	return n;
 }
@@ -93,7 +93,7 @@ int wp_getc (FILE *fp)
 	int n;
 	clearerr (fp);
 	n = getc (fp);
-	if (n == EOF && ferror(fp) == 0)
+	if (n == EOF && ferror(fp))
 		wp_error_warning ("getc error");
 	return n;
 }
@@ -103,7 +103,7 @@ int wp_getchar (void)
 	int n;
 	clearerr (stdin);
 	n = getchar ();
-	if (n == EOF && ferror (stdin) == 0)
+	if (n == EOF && ferror (stdin))
 		wp_error_warning ("getchar error");
 	return n;
 }
@@ -161,7 +161,7 @@ size_t wp_fwrite (const void *ptr, size_t size, size_t nobj, FILE *fp)
 	int n;
 	clearerr (fp);
 	n = fwrite (ptr, size, nobj, fp);
-	if (ferror (fp) == 0)
+	if (ferror (fp))
 		wp_error_warning ("fwrite error");
 	return n;
 }
