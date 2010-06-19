@@ -17,6 +17,7 @@ void matrix_unref (Matrix *m);
 void matrix_set_value (Matrix *m, int row, int column, int value);
 int matrix_get_value (Matrix *m, int row, int column);
 
+void matrix_set_name (Matrix *m, char *name);
 void matrix_set_all_value (Matrix *m, int value);
 
 Matrix *matrix_multiply (Matrix *a, Matrix *b);
