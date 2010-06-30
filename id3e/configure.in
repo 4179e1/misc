@@ -1,0 +1,19 @@
+AC_PREREQ([2.63])
+AC_INIT([id3e], [0.0.1], [4179e1@gmail.com])
+AM_INIT_AUTOMAKE()
+AM_CONFIG_HEADER(config.h)
+
+AC_PROG_INSTALL
+
+AC_PROG_CC
+AC_LANG_C
+
+AC_HEADER_STDC
+
+AM_PATH_GTK_2_0(2.18.6)
+GTK_LIBS=`pkg-config --libs gtk+-2.0 gmodule-2.0`
+AC_SUBST(GTK_LIBS)
+GTK_FLAGS=`pkg-config --cflags gtk+-2.0 gmodule-2.0`
+AC_SUBST(GTK_FLAGS)
+
+AC_OUTPUT(Makefile source/Makefile)

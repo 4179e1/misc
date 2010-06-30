@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#define sleep(n) Sleep(1000 * n)
-#endif /* _WIN32 */
 
 static unsigned cyc_hi = 0;
 static unsigned cyc_lo = 0;
@@ -47,7 +43,7 @@ double mhz (bool verbose, int sleeptime)
 	double rate;
 	start_counter ();
 	sleep (sleeptime);
-	rate = get_counter() / (1e9*sleeptime);
+	rate = get_counter() / (1e6*sleeptime);
 	if (verbose)
 	{
 		printf ("Processor clock rate ~= %.1f MHz\n", rate);
