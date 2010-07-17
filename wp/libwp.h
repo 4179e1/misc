@@ -1,5 +1,5 @@
-#ifndef _LIBWRAP_H
-#define _LIBWRAP_H
+#ifndef _LIBWP_H
+#define _LIBWP_H
 
 #include "libwpbase.h"
 #include "libwppthread.h"
@@ -7,4 +7,4 @@
 #include "libwpstdc.h"
 #include "libwpunix.h"
 
-#endif /* _LIBWRAP_H */
+#endif /* _LIBWP_H */
