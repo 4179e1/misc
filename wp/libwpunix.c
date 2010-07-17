@@ -4,8 +4,11 @@
 #include <unistd.h>
 #include <utime.h>
 #include <sys/wait.h>
+#include <sys/time.h>
+#include <assert.h>
 #include "libwpunix.h"
 #include "libwpbase.h"
+#include "libwpstdc.h"
 
 int wp_chdir (const char *pathname)
 {
@@ -964,7 +967,7 @@ ssize_t wp_writen (int fd, void *ptr, size_t n)
 
 WpTimer *wp_timer_new ()
 {
-	return (WpTimer *)Malloc (sizeof (WpTimer));
+	return (WpTimer *)wp_malloc (sizeof (WpTimer));
 }
 
 void wp_timer_free (WpTimer *t)
@@ -974,7 +977,7 @@ void wp_timer_free (WpTimer *t)
 }
 
 
-void wp_timer_start (WpTimer *t);
+void wp_timer_start (WpTimer *t)
 {
 	assert (t != NULL);
 	gettimeofday (t, NULL);
@@ -988,7 +991,7 @@ double wp_timer_elapse (WpTimer *t)
 	assert (t != NULL);
 
 	gettimeofday (&tfinish, NULL);
-	sec = tfinish.tv_sec - tstart->tv_sec;
-	usec = tfinish.tv_usec - tstart->tv_usec;
+	sec = tfinish.tv_sec - t->tv_sec;
+	usec = tfinish.tv_usec - t->tv_usec;
 	return sec + 1e-6*usec;
 }
