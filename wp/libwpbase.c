@@ -15,7 +15,7 @@ static FILE *wp_error_of = NULL;
 
 static void error_do (bool errnoflag, int level, const char *fmt, va_list ap);
 
-void wp_error_info (const char *fmt, ...)
+void wp_message (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -24,7 +24,7 @@ void wp_error_info (const char *fmt, ...)
 	va_end (ap);
 }
 
-void wp_error_warning (const char *fmt, ...)
+void wp_warning (const char *fmt, ...)
 {
 	va_list ap;
 	
@@ -33,7 +33,7 @@ void wp_error_warning (const char *fmt, ...)
 	va_end (ap);
 }
 
-void wp_error_return (const char *fmt, ...)
+void wp_error (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -44,7 +44,7 @@ void wp_error_return (const char *fmt, ...)
 	return;
 }
 
-void wp_error_exit (int exit_status, const char *fmt, ...)
+void wp_critical (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -52,10 +52,10 @@ void wp_error_exit (int exit_status, const char *fmt, ...)
 	error_do (false, LOG_ERR, fmt, ap);
 	va_end (ap);
 	
-	exit (exit_status);
+	exit (EXIT_STATUS_DEFAULT);
 }
 
-void wp_error_sys_info (const char *fmt, ...)
+void wp_sys_message (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -64,7 +64,7 @@ void wp_error_sys_info (const char *fmt, ...)
 	va_end (ap);
 }
 
-void wp_error_sys_warning (const char *fmt, ...)
+void wp_sys_warning (const char *fmt, ...)
 {
 	va_list ap;
 	
@@ -73,7 +73,7 @@ void wp_error_sys_warning (const char *fmt, ...)
 	va_end (ap);
 }
 
-void wp_error_sys_return (const char *fmt, ...)
+void wp_sys_error (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -84,7 +84,7 @@ void wp_error_sys_return (const char *fmt, ...)
 	return;
 }
 
-void wp_error_sys_exit (const char *fmt, ...)
+void wp_sys_critical (const char *fmt, ...)
 {
 	va_list ap;
 
@@ -95,39 +95,28 @@ void wp_error_sys_exit (const char *fmt, ...)
 	exit (EXIT_STATUS_DEFAULT);
 }
 
-void wp_error_sys_exit_with_status (int exit_status, const char *fmt, ...)
-{
-	va_list ap;
-
-	va_start (ap, fmt);
-	error_do (true, LOG_ERR, fmt, ap);
-	va_end (ap);
-
-	exit (exit_status);
-}
-
-void wp_error_syslog_on (void) 
+void wp_syslog_on (void) 
 {
 	wp_syslog_status = true;
 }
 
-void wp_error_syslog_off (void)
+void wp_syslog_off (void)
 {
 	wp_syslog_status = false;
 }
 
-bool wp_error_is_syslog_on (void)
+bool wp_syslog_is_on (void)
 {
 	return wp_syslog_status;
 }
 
-FILE *wp_error_set_output_file (FILE *new_of)
+FILE *wp_set_output_file (FILE *new_of)
 {
 	wp_error_of = new_of;
 	return wp_error_of;
 }
 
-FILE *wp_error_get_output_file (void)
+FILE *wp_get_output_file (void)
 {
 	return wp_error_of;
 }
@@ -183,7 +172,7 @@ long open_max (void)
 			if (errno == 0)
 				openmax = OPEN_MAX_GUESS;
 			else
-				wp_error_sys_warning ("sysconf error for _SC_OPEN_MAX");
+				wp_sys_warning ("sysconf error for _SC_OPEN_MAX");
 		}
 
 	}
@@ -219,7 +208,7 @@ int wp_get_path_max(void)
 			if (errno == 0)
 				pathmax = PATH_MAX_GUESS;
 			else
-				wp_error_sys_warning ("pathconf error for _PC_PATH_MAX");
+				wp_sys_warning ("pathconf error for _PC_PATH_MAX");
 		}
 		else
 		{
@@ -241,7 +230,7 @@ char *wp_path_alloc (int *sizep)
 	int size = wp_get_path_max();
 
 	if ((ptr = malloc (size)) == NULL)
-		wp_error_sys_exit ("malloc error for pathname");
+		wp_sys_critical ("malloc error for pathname");
 
 	if (sizep != NULL)
 		*sizep = size;
