@@ -961,3 +961,34 @@ ssize_t wp_writen (int fd, void *ptr, size_t n)
 
 	return (n - nleft);
 }
+
+WpTimer *wp_timer_new ()
+{
+	return (WpTimer *)Malloc (sizeof (WpTimer));
+}
+
+void wp_timer_free (WpTimer *t)
+{
+	assert (t != NULL);
+	free (t);
+}
+
+
+void wp_timer_start (WpTimer *t);
+{
+	assert (t != NULL);
+	gettimeofday (t, NULL);
+}
+
+double wp_timer_elapse (WpTimer *t)
+{
+	struct timeval tfinish;
+	long sec, usec;
+
+	assert (t != NULL);
+
+	gettimeofday (&tfinish, NULL);
+	sec = tfinish.tv_sec - tstart->tv_sec;
+	usec = tfinish.tv_usec - tstart->tv_usec;
+	return sec + 1e-6*usec;
+}

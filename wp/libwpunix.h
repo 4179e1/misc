@@ -194,4 +194,15 @@ int wp_rmdir (const char *pathname);
 
 ssize_t wp_readv (int filedes, const struct iovec *iov, int iovcnt);
 ssize_t wp_writev (int filedes, const struct iovec *iov, int iovcnt);
+
+/*************************************
+ * wp timer utilities
+ ************************************/
+
+typedef struct timeval WpTimer;
+
+WpTimer *wp_timer_new ();
+void wp_timer_free (WpTimer *t);
+void wp_timer_start (WpTimer *t);
+double wp_timer_elapse (WpTimer *t);
 #endif /* _WPUNIX_H */

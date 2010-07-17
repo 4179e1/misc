@@ -1,4 +1,4 @@
-#include <libwrap.h>
+#include <libwp.h>
 
 int main (int argc, char *argv[])
 {
