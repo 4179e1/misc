@@ -16,6 +16,8 @@ void wp_warning (const char *fmt, ...);
 void wp_error (const char *fmt, ...);
 void wp_critical (const char *fmt, ...);
 
+#define wp_func_warning() wp_warning ("%s() error\n", __func__)
+
 /* error process for system call, check errno */
 void wp_sys_message (const char *fmt, ...);
 void wp_sys_warning (const char *fmt, ...);

@@ -6,7 +6,7 @@ int main (int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		wp_error_exit (-1, "usage: %s filename", argv[0]);
+		wp_critical ("usage: %s filename", argv[0]);
 	}
 
 
@@ -17,7 +17,7 @@ int main (int argc, char *argv[])
 	}
 	else
 	{
-		wp_error_warning ("open %s failed", argv[0]);
+		wp_warning ("open %s failed", argv[0]);
 	}
 
 
