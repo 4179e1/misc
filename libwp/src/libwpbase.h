@@ -16,13 +16,16 @@ void wp_warning (const char *fmt, ...);
 void wp_error (const char *fmt, ...);
 void wp_critical (const char *fmt, ...);
 
-#define wp_func_warning() wp_warning ("%s() error\n", __func__)
+#define wp_func_warning() wp_warning("%s() error", __func__)
+#define wp_pthread_warning(N) wp_warning("%s() error: %s", __func__, strerror(N))
 
 /* error process for system call, check errno */
 void wp_sys_message (const char *fmt, ...);
 void wp_sys_warning (const char *fmt, ...);
 void wp_sys_error (const char *fmt, ...);
 void wp_sys_critical (const char *fmt, ...);
+
+#define wp_sys_func_warning() wp_sys_warning("%s() error", __func__)
 
 void wp_syslog_on (void);
 void wp_syslog_off (void);

@@ -26,6 +26,8 @@
 #include <dirent.h>
 #include <utime.h>
 
+#include "libwpunix_utils.h"
+
 struct passwd *wp_getpwuid (uid_t uid);
 struct passwd *wp_getpwanam (const char *name);
 struct passwd *wp_getpwent (void);
@@ -116,10 +118,7 @@ int wp_shmctl (int shmid, int cmd, struct shmid_ds *buf);
 void *wp_shmat (int shmid, const void *addr, int flag);
 int wp_shmdt (void *addr);
 
-/* utilities */
 void wp_check_exit_status (int status);
-ssize_t wp_readn (int fd, void *ptr, size_t n);
-ssize_t wp_writen (int fd, void *ptr, size_t n);
 
 /************************************
  * wpfileio
