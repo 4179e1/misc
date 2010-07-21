@@ -27,6 +27,7 @@
 #include <utime.h>
 
 #include "libwpunix_utils.h"
+#include "libwpunix_rio.h"
 
 struct passwd *wp_getpwuid (uid_t uid);
 struct passwd *wp_getpwanam (const char *name);
@@ -118,12 +119,6 @@ int wp_shmctl (int shmid, int cmd, struct shmid_ds *buf);
 void *wp_shmat (int shmid, const void *addr, int flag);
 int wp_shmdt (void *addr);
 
-void wp_check_exit_status (int status);
-
-/************************************
- * wpfileio
- ***********************************/
-
 #ifdef __USE_UNIX98
 /* aton operate, lseek and read/write */
 ssize_t wp_pread (int filedes, void *buf, size_t nbytes, off_t offset);
@@ -164,23 +159,6 @@ int wp_unlink (const char *pathname);
 int wp_utime (const char *pathname, const struct utimbuf *times);
 ssize_t wp_write (int filedes, const void *buf, size_t nbytes);
 
-/**************************************
- * wp io utilities
- *************************************/
-int wp_fd_create (const char *pathname, mode_t mode);
-int wp_fd_alloc (const char *pathname, mode_t mode, off_t offset);
-int wp_fd_append (int filedes, off_t offset);
-
-void wp_fd_set_flag (int fd, int flags);
-void wp_fd_clear_flag (int fd, int flags);
-bool wp_fd_is_flag_set (int fd, int flag);
-
-typedef void (*wp_dopath_func) (const char *path, void *data);
-void wp_dopath (char *path, wp_dopath_func func, void *data);
-
-/**************************************
- * wp file utilities
- *************************************/
 int wp_chdir (const char *pathname);
 int wp_closedir (DIR *dp);
 int wp_fchdir (int filedes);
@@ -194,14 +172,4 @@ int wp_rmdir (const char *pathname);
 ssize_t wp_readv (int filedes, const struct iovec *iov, int iovcnt);
 ssize_t wp_writev (int filedes, const struct iovec *iov, int iovcnt);
 
-/*************************************
- * wp timer utilities
- ************************************/
-
-typedef struct timeval WpTimer;
-
-WpTimer *wp_timer_new ();
-void wp_timer_free (WpTimer *t);
-void wp_timer_start (WpTimer *t);
-double wp_timer_elapse (WpTimer *t);
 #endif /* _WPUNIX_H */
