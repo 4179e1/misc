@@ -1,0 +1,7 @@
+Target iqn.2010-08.com.skybility:iscsi0
+Target iqn.2010-08.com.skybility:iscsiz
+	Lun 0 Path=/dev/lvmdatas/iscsi,Type=fileio
+	Lun 0 Path=/dev/lvmdatas/iscsi,Type=fileio
+	Lun 0 Path=/dev/lvmdatas/iscsi,Type=fileio
+	Lun 0 Path=/dev/lvmdatas/iscsi,Type=fileio
+Target iqn.2010-08.com.skybility:iscsi1

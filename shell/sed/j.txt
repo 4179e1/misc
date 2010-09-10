@@ -1,0 +1,5 @@
+tid:1 name:iqn.2010-08.com.skybility:md0
+	lun:1 state:0 iotype:blockio iomode:wt path:/dev/md1
+tid:2 name:iqn.2010-08.com.skybility:md1
+	lun:0 state:0 iotype:blockio iomode:wt path:/dev/md0
+	lun:1 state:0 iotype:blockio iomode:wt path:/dev/md1

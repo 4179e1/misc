@@ -1,0 +1,6 @@
+a=$1
+shift
+b=$1
+c=$2
+
+echo $a $b $c

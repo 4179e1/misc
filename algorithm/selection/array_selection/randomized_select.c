@@ -14,7 +14,7 @@ int randomized_select (int *array, int p, int r, int i)
 	int q;
 	int k;
 
-	assert (0 < i <= r + 1);
+	assert (0 < i && i <= r + 1);
 
 	if (p == r)
 	{
@@ -43,7 +43,7 @@ int randomized_select_loop (int *array, int p, int r, int i)
 	int k;
 	int begin, end;
 
-	assert (0 < i <= r + 1);
+	assert (0 < i && i <= r + 1);
 	begin = p;
 	end = r;
 	while(1)

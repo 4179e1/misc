@@ -1,0 +1,48 @@
+# Chinese translations for test package
+# test 软件包的简体中文翻译.
+# Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the test package.
+# lyre <liyong@skybility.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: test 1.0\n"
+"Report-Msgid-Bugs-To: abc@def.com\n"
+"POT-Creation-Date: 2010-08-17 00:30+0800\n"
+"PO-Revision-Date: 2010-08-16 23:41+0800\n"
+"Last-Translator: lyre <liyong@skybility.com>\n"
+"Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
+"sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c:10
+#, c-format
+msgid "this is a func\n"
+msgstr "这是一个函数\n"
+
+#: src/main.c:23
+#, c-format
+msgid "test program start\n"
+msgstr "测试程序启动\n"
+
+#: src/main.c:26
+#, c-format
+msgid "test program end\n"
+msgstr "测试程序结束\n"
+
+#: src/module.c:8
+#, c-format
+msgid "test module\n"
+msgstr "测试模块\n"
+
+#: src/module.c:9
+#, c-format
+msgid "another test\n"
+msgstr "另一个测试\n"
+
+#: src/module.c:14
+#, c-format
+msgid "another module\n"
+msgstr "另一个模块\n"

@@ -1,0 +1,4 @@
+sed '
+/INCLUDE/ a\
+post
+'

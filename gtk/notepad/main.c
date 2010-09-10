@@ -590,8 +590,8 @@ void on_about_menu_item_activate (GtkMenuItem *menuitem, TutorialTextEditor *edi
 			       "authors", authors,
 			       "comments", comments,
 			       "copyright", copyright,
-			       "version", "0.1",
-			       "website", "http://www.micahcarrick.com",
+			       "version", "0.0.1",
+			       "website", "abc@def.com",
 			       "program-name", "GTK+ Text Editor",
 			       "logo-icon-name", GTK_STOCK_EDIT,
 			       NULL); 

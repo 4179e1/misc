@@ -6,6 +6,10 @@ OBJ = a.o b.o
 all: $(OBJ)
 
 $(OBJ) : %.o : %.c
+# the 2 instruct following oupouts "compiling $<".
+# and it's the ouput of 'echo compiling $<'.
+# normally, without the leadding '@',
+# it'll output 3 lines inclueding the instrut itselves.
 	@echo compiling $<
 	@$(CC) -c $(CFLAGS) $< -o $@
 

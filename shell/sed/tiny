@@ -1,0 +1,17 @@
+name="tiny"
+uuid="b1a41d38-0426-11fe-dbc1-9366bb152b03"
+memory=256
+maxmem=512
+vcpus=2
+on_poweroff="destroy"
+on_reboot="restart"
+on_crash="destroy"
+localtime=0
+keymap="en-us"
+builder="linux"
+bootloader="/usr/bin/pygrub"
+bootargs=""
+extra=" "
+disk=[ 'IMAGE,xvda,w', ]
+vif=[ 'mac=00:16:3e:5d:fe:9d,bridge=br0', ]
+vfb=['type=vnc,vncunused=1']

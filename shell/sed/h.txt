@@ -1,0 +1,1 @@
+[ 'file:/vmdata/host1/tpl/image/sles10.img,xvda,w',]

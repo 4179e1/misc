@@ -1,0 +1,5 @@
+echo This script removes all fils that
+echo contain an asterisk in the name.
+echo
+echo Are you sure you want to remove these files\n?
+rm -i *\**

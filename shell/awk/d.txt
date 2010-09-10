@@ -1,0 +1,2 @@
+/dev/hda1 /mnt/disc/hda/part1
+/dev/hda1 /mnt/disc/hda/part2

@@ -5,6 +5,10 @@
 #include "list.h"
 #include "gva.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 G_MODULE_EXPORT 
 void on_sidebar_toggle (gpointer *widget, Id3e *id3e)
 {
