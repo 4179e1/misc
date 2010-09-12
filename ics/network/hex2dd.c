@@ -1,5 +1,5 @@
 #if 0
-clang -Wall -o `basename $0 .c` $0
+gcc -Wall -o `basename $0 .c` $0
 exit 0
 #endif
 #include <stdio.h>
