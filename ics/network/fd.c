@@ -12,6 +12,8 @@ exit 0
 #define LISTENQ 1024
 #endif /* LISTENQ */
 
+int Open_clientfd (char *hostname, int port)
+
 int open_clientfd (char *hostname, int port)
 {
 	int clientfd;

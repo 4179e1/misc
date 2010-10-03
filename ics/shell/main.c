@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <libwrap.h>
+#include <libwp.h>
 #include <unistd.h>
 
 
@@ -51,7 +51,7 @@ void eval (char *cmdline)
 		{
 			if (execvp (argv[0], argv) < 0)
 			{
-				wp_error_exit (0, "%s: Command not found.\n", argv[0]);
+				wp_error ("%s: Command not found.\n", argv[0]);
 			}
 		}
 	}
