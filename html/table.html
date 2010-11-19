@@ -1,0 +1,41 @@
+<table border>
+		<tr>
+				<td>northwest</td>
+				<td>northeast</td>
+		</tr>
+		<tr>
+				<td>southwest</td>
+				<td>southeast</td>
+		<tr>
+</table>
+<table border>
+		<tr>
+				<td rowspan=2>west</td>
+				<td>northeast</td>
+		</tr>
+		<tr>
+				<!-- Don't define "southwest", since it's overlaid by "west" -->
+				<td>southeast</td>
+		<tr>
+</table>
+<table border>
+		<tr valign=middle>
+				<td rowspan=2>west</td>
+				<td valign=baseline rowspan=2>baseline</td>
+				<td>northeast</td>
+		</tr>
+		<tr>
+				<!-- Don't define "southwest", since it's overlaid by "west" -->
+				<td>southeast</td>
+		<tr>
+</table>
+<table>
+		<tr>
+				<td>laundry detergent</td>
+				<td align=right>$4.99</td>
+		</tr>
+		<tr>
+				<td>cat food</td>
+				<td align=right>$128.00</td>
+		</tr>
+</table>
