@@ -1,4 +1,4 @@
-CFLAGS += -Wall -g
+CFLAGS += -Wall -O2
 LIBS = -lgc
 OBJ = test.o
 

@@ -1,5 +1,5 @@
 #if 0
-gcc -Wall -o `basename $0 .c` $0 -lwpbase -lwpstdc -lwpunix -lwpsocket
+gcc -Wall -o `basename $0 .c` $0 -lwp
 exit
 #endif
 #include <sys/stat.h>
@@ -10,7 +10,7 @@ exit
 #define MAXLINE 4096
 
 void doit (int fd);
-void read_requesthdrs (Rio *rp);
+void read_requesthdrs (wp_rio_t *rp);
 bool parse_uri (char *uri, char *filename, char *cgiargs);
 void serve_static (int fd, char *filename, int filesize);
 void get_filetype (char *filename, char *filetype);
@@ -49,7 +49,7 @@ void doit (int fd)
 	char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
 	char filename[MAXLINE], cgiargs[MAXLINE];
 
-	Rio *rio;
+	wp_rio_t *rio;
 
 	rio = wp_rio_new (fd);
 	wp_rio_readlineb (rio, buf, sizeof (buf));
@@ -110,7 +110,7 @@ void clienterror (int fd, char *cause, char *errnum, char *shortmsg, char *longm
 	wp_writen (fd, body, strlen (body));
 }
 
-void read_requesthdrs (Rio *rp)
+void read_requesthdrs (wp_rio_t *rp)
 {
 	char buf[MAXLINE];
 
