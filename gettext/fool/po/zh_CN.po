@@ -1,0 +1,26 @@
+# Chinese translations for fool package
+# fool 软件包的简体中文翻译.
+# Copyright (C) 2011 poetpalace.org
+# This file is distributed under the same license as the fool package.
+# lyre <lyre@linux.site>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fool 0.0.1\n"
+"Report-Msgid-Bugs-To: 4179e1@gmail.com\n"
+"POT-Creation-Date: 2011-01-27 22:28+0800\n"
+"PO-Revision-Date: 2011-01-27 22:36+0800\n"
+"Last-Translator: lyre <lyre@linux.site>\n"
+"Language-Team: Chinese (simplified)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=GB2312\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/fool.c:12
+msgid "Global string\n"
+msgstr "全局字符串\n"
+
+#: src/fool.c:22
+#, c-format
+msgid "Hello, world!\n"
+msgstr "你好，世界！\n"
