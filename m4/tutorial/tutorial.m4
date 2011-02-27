@@ -91,3 +91,32 @@ dnl => Secret message.
 msg
 dnl => msg
 msg
+
+I said ``Quote me.''
+
+changequote(<!, !>) dnl
+a `quo<!ted str!>ing'
+changequote dnl
+
+define(x, ``xyz'')dnl
+dnl => xyz
+x
+changequote({, })dnl
+dnl => `xyz'
+x
+changequote dnl
+
+define(`VERSION', `A1')dnl
+VERSION # VERSION `quote' unmatched'
+
+changecom(/*, */)dnl
+VERSION `quote' /* VERSION
+`quote' ` */ VERSION
+changecom dnl
+
+dnl echo nothing
+ifelse(`
+This is a comment
+spanning more than
+one line.
+')dnl
