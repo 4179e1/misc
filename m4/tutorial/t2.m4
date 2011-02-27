@@ -83,6 +83,8 @@ reverse drawer: reverse(`drawer')
 
 substr(`drawer', 1)
 
+we `shift' the responsibility
+
 dnl define(`substr',`ifelse($#,0,``$0'',
 dnl $#,2,`substr($@,eval(len(`$1')-$2))',
 dnl `ifelse(eval($3<=0),1,,
