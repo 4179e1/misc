@@ -1,4 +1,4 @@
-TAR = echoclient echoserver fork
+TAR = echoclient echoserver fork multiplex
 CFLAGS += `pkg-config --cflags --libs libwp-0.0`
 
 all: prog
