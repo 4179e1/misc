@@ -1,5 +1,5 @@
-TAR = echoclient echoserver fork multiplex
-CFLAGS += `pkg-config --cflags --libs libwp-0.0`
+TAR = echoclient echoserver fork multiplex event
+CFLAGS += -g -Wall `pkg-config --cflags --libs libwp-0.0`
 
 all: prog
 
