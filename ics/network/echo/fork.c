@@ -1,5 +1,10 @@
+#include <stdbool.h>
+#include <errno.h>
 #include <sys/wait.h>
 #include "echo.h"
+
+static bool keep_on_running = true;
+static int listenfd;
 
 void sigchld_handler (int sig)
 {
@@ -8,9 +13,16 @@ void sigchld_handler (int sig)
 	return;
 }
 
+void sigterm_handler (int sig)
+{
+	keep_on_running = false;
+	wp_close (listenfd);
+}
+
+
 int main(int argc, char **argv) 
 {
-	int listenfd, connfd, port;
+	int connfd, port;
 	socklen_t clientlen;
 	struct sockaddr_in clientaddr;
 	struct hostent *hp;
@@ -28,10 +40,18 @@ int main(int argc, char **argv)
 	}
 
 	wp_signal (SIGCHLD, sigchld_handler);
+	wp_signal (SIGTERM, sigterm_handler);
 
+	wp_debug_full (stdout, "My pid is %d", getpid());
 	while (1) {
 		clientlen = sizeof(clientaddr);
+		errno = 0;
 		connfd = wp_accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
+		wp_debug("connfd: %d errno: %d", connfd, errno);
+		if (keep_on_running == false)
+		{
+			break;
+		}
 
 		if (wp_fork () == 0)
 		{
