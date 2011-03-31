@@ -12,9 +12,9 @@ _libdir=$3
 
 shift 3
 
-source $_libidr/bashdb.fns
+source $_libdir/bashdb.fns
 _linebp=
-let _trae=0
+let _trace=0
 let _i=1
 
 while read;do
@@ -23,5 +23,5 @@ while read;do
 done < $_guineapig
 
 trap _cleanup EXIT
-let _setps=1
+let _steps=1
 trap '_steptrap $(( $LINENO-27 ))' DEBUG

@@ -7,8 +7,8 @@ function _steptrap
 	
 	(( $_trace ))&& _msg "PS4 line $_curline: ${_lines[$_curline]}"
 
-	if (( $stemp >= 0 ));then
-		let _steps="$_step - 1"
+	if (( $_steps >= 0 ));then
+		let _steps="$_steps - 1"
 	fi
 
 # First check to see if a line number breakpoint was reached.
@@ -43,7 +43,7 @@ function _cmdloop {
 			ds) _displayscript;; # list the script and show the breakpoints
 			g) return;;			# "go": start/resume execution of the script
 			q) exit;;			# quit
-			s) let_steps=${args:-1} # single step N times (default = 1)
+			s) let _steps=${args:-1} # single step N times (default = 1)
 			   return;;
 			x) _xtrace;;		# toggle execution trace
 			!*) eval ${cmd#!} $args;; # pass to the shell
@@ -90,8 +90,8 @@ function _clearbp
 function _at_linenumbp
 {
 	local i=0
-	if ["$_linebp"];then
-		while (( $i < ${#_linebp[@]} }));do
+	if [ "$_linebp" ];then
+		while (( $i < ${#_linebp[@]} ));do
 			if (( ${_linebp[$i]} == $_curline ));then
 				return 0
 			fi
@@ -124,4 +124,66 @@ function _displayscript
 		echo "$i:$bp $cl ${_lines[$i]}"
 		let i=$i+1
 	done) | more
+}
+
+function _setbc
+{
+	if [ -n "$*" ]; then
+		_brcond=$args
+		_msg "Break when true: $_brcond"
+	else	
+		_brcond=
+		_msg "Break condition cleared"
+	fi
+}
+
+function _listbp
+{
+	if [ -n "$_linebp" ];then
+		_msg "Breakpoints at lines: ${_linebp[*]}"
+	else
+		_msg "No breakpoints have been set"
+	fi
+
+	_msg "Break on conditions:"
+	_msg "$_brcond"
+}
+
+function _xtrace
+{
+	let _trace="! $_trace"
+	_msg "Execution trace"
+	if (( $_trace )); then
+		_msg "on"
+	else
+		_msg "off"
+	fi
+}
+
+function _cleanup
+{
+	rm "$_debugfile" 2>/dev/null
+}
+
+function _msg
+{
+	echo -e "$@" >&2
+}
+
+function _menu
+{
+    _msg 'bashdb commands:
+         bp N          set breakpoint at line N
+         bp            list breakpoints and break condition
+         bc string     set break condition to string
+         bc            clear break condition
+         cb N          clear breakpoint at line N
+         cb            clear all breakpoints
+         ds            displays the test script and breakpoints
+         g             start/resume execution
+         s [N]         execute N statements (default 1)
+         x             toggle execution trace on/off
+         h, ?          print this menu
+         ! string      passes string to a shell
+         q             quit'
 }
