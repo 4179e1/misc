@@ -1,4 +1,4 @@
-TAR = echoclient echoserver fork multiplex event thread prethread
+TAR = echoclient echoserver fork multiplex event thread prethread epoll
 CFLAGS += -g -Wall `pkg-config --cflags --libs libwp-0.0 wppthread-0.0`
 
 all: prog
