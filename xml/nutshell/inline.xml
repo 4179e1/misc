@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII" standalone="no"?>
+<!DOCTYPE person [
+	<!ELEMENT person		(name, profession*)>
+	<!ELEMENT name			(first_name, last_name)>
+	<!ELEMENT first_name	(#PCDATA)>
+	<!ELEMENT last_name		(#PCDATA)>
+	<!ELEMENT profession	(#PCDATA)>
+]>
+<person>
+  <name>
+    <first_name>Alan</first_name>
+    <last_name>Turing</last_name>
+  </name>
+  <profession>computer scientist</profession>
+  <profession>mathematician</profession>
+  <profession>cryptographer</profession>
+</person>
