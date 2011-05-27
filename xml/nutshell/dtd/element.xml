@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ASCII" standalone="no"?>
+<!DOCTYPE person [
+	<!ELEMENT person		(name, profession*, a, definition, page)>
+	<!ELEMENT name			(first_name, ((middle_name+, last_name) | last_name?))>
+	<!ELEMENT first_name	(#PCDATA)>
+	<!ELEMENT middle_name	(#PCDATA)>
+	<!ELEMENT last_name		(#PCDATA)>
+	<!ELEMENT profession	(#PCDATA)>
+	<!ELEMENT a				(b1, (b2 | b3), b4*)>
+	<!ELEMENT b1			(#PCDATA)>
+	<!ELEMENT b2			(#PCDATA)>
+	<!ELEMENT b3			(#PCDATA)>
+	<!ELEMENT b4			(#PCDATA)>
+	<!ELEMENT definition	(#PCDATA | term | image)*>
+	<!ELEMENT term			(#PCDATA)>
+	<!ELEMENT image			EMPTY>
+	<!ELEMENT page			ANY>
+]>
+<person>
+  <name>
+    <first_name>Alan</first_name>
+	<middle_name>ha?</middle_name>
+    <last_name>Turing</last_name>
+  </name>
+  <profession>computer scientist</profession>
+  <profession>mathematician</profession>
+  <profession>cryptographer</profession>
+  <a>
+  	<b1/>
+	<b3/>
+  </a>
+  <definition>
+  	A <term>Turing Machine</term> refers to an abstract finite 
+state automaton with infinite memory that can be proven equivalent 
+to any any other finite state automaton with arbitrarily large memory. 
+Thus what is true for one Turing machine is true for all Turing 
+machines no matter how implemented.<image></image>
+  </definition>
+  <page>
+	<term></term>
+  </page>
+</person>
