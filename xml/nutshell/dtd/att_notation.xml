@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
+<!DOCTYPE top[
+	<!ELEMENT top (image)>
+
+	<!-- Could not declare NOTATION attribute for EMPTY element -->
+	<!ELEMENT image (#PCDATA)>
+	<!NOTATION gif	SYSTEM "image/gif">
+	<!NOTATION tiff	SYSTEM "image/tiff">
+	<!NOTATION jpeg SYSTEM "image/jpeg">
+	<!NOTATION png	SYSTEM "image/png">
+	<!ATTLIST image type NOTATION (gif | tiff | jpeg | png) #REQUIRED>
+]>
+<top>
+	<image type="png">what?</image>
+</top>

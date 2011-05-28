@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
+<!DOCTYPE top [
+	<!ELEMENT top		(project*, employee*)>
+	
+	<!ELEMENT project	(goal)>
+	<!ATTLIST project	id		ID		#REQUIRED>
+	<!ATTLIST project	teams 	IDREFS 	#REQUIRED>
+	
+	<!ELEMENT goal		(#PCDATA)>
+
+	<!ELEMENT employee	(name)>
+	<!ATTLIST employee social_security_number	ID	#REQUIRED>
+
+	<!ELEMENT name	(#PCDATA)>
+]>
+<top>
+	<!-- the refered person id must exist in document -->
+	<project id="p1" teams="ss087-05-1120 ss987-65-4320">
+		<goal>Develop Strategic Plan</goal>
+	</project>
+	<project id="p2" teams="ss087-05-1120 ss9876-12-3456">
+		<goal>Deploy Linux</goal>
+	</project>
+	<!-- the ID is unique in document -->
+	<employee social_security_number="ss087-05-1120">
+		<name>Fred Smith</name>
+	</employee>
+	<employee social_security_number="ss987-65-4320">
+		<name>Jill Jones</name>
+	</employee>
+	<employee social_security_number="ss9876-12-3456">
+		<name>Sydney Lee</name>
+	</employee>
+</top>

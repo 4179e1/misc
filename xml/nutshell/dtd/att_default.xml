@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE top[
+	<!ELEMENT top (person*, circle*, biography*, web_page*)>
+
+	<!ELEMENT person EMPTY>
+	<!ATTLIST person 	born	CDATA	#IMPLIED
+			  			died	CDATA	#IMPLIED>
+
+	<!ELEMENT circle EMPTY>
+	<!ATTLIST circle	center_x	NMTOKEN	#REQUIRED
+						center_y	NMTOKEN #REQUIRED
+						radius		NMTOKEN	#REQUIRED>
+
+	<!ELEMENT biography EMPTY>
+	<!ATTLIST biography version CDATA	#FIXED "1.0">
+
+	<!ELEMENT web_page EMPTY>
+	<!ATTLIST web_page protocol NMTOKEN "http">
+]>
+<top>
+	<person />
+	<person born="1900" />
+	<circle center_x="1" center_y="1" radius="1.0" />
+	<biography />
+	<!-- value of FIXED attribute must be the same as dtd if exist -->
+	<biography version="1.0" />
+	<!-- value of "literal" attribute can be omit for default, or givn a literal one -->
+	<web_page />
+	<web_page protocol="ftp" />
+</top>

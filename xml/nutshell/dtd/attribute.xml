@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ASCII" standalone="no"?>
+<!DOCTYPE top [
+	<!ELEMENT top	(image, sku, journal, performances*, date, employee)>			
+
+	<!ELEMENT image	EMPTY>
+	<!ATTLIST image	source 	CDATA	#REQUIRED
+					width 	CDATA	#REQUIRED
+					height	CDATA	#REQUIRED
+					alt		CDATA	#IMPLIED>
+
+	<!ELEMENT sku	EMPTY>
+	<!ATTLIST sku	list_price				CDATA	#IMPLIED
+					suggested_retail_price	CDATA	#IMPLIED
+					actual_price			CDATA	#IMPLIED>
+
+	<!ELEMENT journal	EMPTY>
+	<!ATTLIST journal	year	NMTOKEN	#REQUIRED>	
+
+	<!ELEMENT performances	(#PCDATA)>
+	<!ATTLIST performances	dates	NMTOKENS	#REQUIRED>
+
+	<!ELEMENT date	EMPTY>
+	<!ATTLIST date	month	(January | February | March | April | May
+			| July | August | September | October | November | December)
+			#REQUIRED>
+
+	<!ELEMENT employee EMPTY>
+	<!ATTLIST employee social_security_number ID #REQUIRED>
+]>
+<top>
+	<image source="img.jpg" width="10" height="10" />
+	<sku />
+	<journal year="1999" />
+	<performances dates="08-21-2001 08-23-2001 08-27-2001">
+		Kat and the Kings
+	</performances>
+	<performances dates="08-22-2001">
+		king leer
+	</performances>
+	<date month="July" />
+	<!-- The value of ID type is unique in document -->
+	<employee social_security_number="_078-05-1120"/>
+</top>
