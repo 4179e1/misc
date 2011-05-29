@@ -1,0 +1,36 @@
+<!ATTLIST biography xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+<!ELEMENT person (first_name, last_name)>
+<!-- Birth and death dates are given in the form yyyy/mm/dd -->
+<!ATTLIST person	born CDATA #IMPLIED
+					died CDATA #IMPLIED>
+<!ELEMENT date		(month, day, year)>
+<!ELEMENT month		(#PCDATA)>
+<!ELEMENT day		(#PCDATA)>
+<!ELEMENT year		(#PCDATA)>
+
+<!-- xlink:href must contain a URL. -->
+<!ATTLIST emphasize xlink:type (simple) #IMPLIED
+					xlink:href CDATA	#IMPLIED>
+<!ELEMENT profession (#PCDATA)>
+
+<!-- The source is given according to the Chicago Manual of Style 
+	citation coventions -->
+<!ATTLIST footnote source CDATA #REQUIRED>
+<!ELEMENT first_name (#PCDATA)>
+<!ELEMENT last_name (#PCDATA)>
+
+<!ELEMENT image EMPTY>
+<!ATTLIST image source	CDATA	#REQUIRED
+				width	NMTOKEN	#REQUIRED
+				height	NMTOKEN	#REQUIRED
+				ALT		CDATA	#IMPLIED
+>
+
+<!ENTITY % top_level "( #PCDATA | image | paragraph | defintion
+						| person | profession | emphasize | last_name
+						| first_name | footnote | date )*">
+
+<!ELEMENT paragraph		%top_level;>
+<!ELEMENT definition 	%top_level;>
+<!ELEMENT emphasize		%top_level;>
+<!ELEMENT biography		%top_level;>

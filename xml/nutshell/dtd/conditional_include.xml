@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE top SYSTEM "conditional_include.dtd" [
+	<!-- explicitly disable notes -->
+	<!ENTITY % notes_allowed "IGNORE">
+]>
+<top>
+	<name />
+</top>

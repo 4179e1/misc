@@ -1,0 +1,12 @@
+<!ELEMENT top ANY>
+
+<!ENTITY % name_allowed "INCLUDE">
+<!ENTITY % notes_allowed "INCLUDE">
+
+<![%name_allowed;[
+	<!ELEMENT name EMPTY>
+]]>
+
+<![%notes_allowed;[
+	<!ELEMENT notes EMPTY>
+]]>
