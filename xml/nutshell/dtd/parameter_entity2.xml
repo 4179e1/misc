@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE top SYSTEM "parameter_entity.dtd" [
+	<!ENTITY % residential_content "address, footage, rooms, bedrooms">
+	<!ELEMENT bedrooms EMPTY>
+]>
+<top>
+	<apartment>
+		<address />
+		<footage />
+		<rooms />
+		<bedrooms />
+		<rent />
+	</apartment>
+</top>

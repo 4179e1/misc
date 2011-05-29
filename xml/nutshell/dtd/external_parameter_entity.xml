@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE top SYSTEM "external_parameter_entity.dtd">
+<top>
+	<apartment>
+		<address />
+		<footage />
+		<rooms />
+		<baths />
+		<rent />
+	</apartment>
+</top>

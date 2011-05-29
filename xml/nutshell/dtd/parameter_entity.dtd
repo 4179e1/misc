@@ -1,0 +1,17 @@
+<!ELEMENT top (apartment*, sublet*, coop*, condo*, house*)>
+
+<!ENTITY % residential_content "address, footage, rooms, baths">
+<!ENTITY % rental_content "rent">
+<!ENTITY % purchase_content "price">
+<!ELEMENT apartment (%residential_content;, %rental_content;)>
+<!ELEMENT sublet (%residential_content;, %rental_content;)>
+<!ELEMENT coop (%residential_content;, %purchase_content;)>
+<!ELEMENT condo (%residential_content;, %purchase_content;)>
+<!ELEMENT house (%residential_content;, %purchase_content;)>
+
+<!ELEMENT address EMPTY>
+<!ELEMENT footage EMPTY>
+<!ELEMENT rooms EMPTY>
+<!ELEMENT baths EMPTY>
+<!ELEMENT rent EMPTY>
+<!ELEMENT price EMPTY>

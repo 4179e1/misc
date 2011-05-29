@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ASCII" standalone="no"?>
+<!DOCTYPE top SYSTEM "external_parsed_entity.dtd">
+<top>
+	<movie>&X-Men-trailer;</movie>
+	<slide_show>&slide1; &slide2; &slide3;</slide_show>
+</top>

@@ -1,0 +1,17 @@
+<!ENTITY footer '<hr size="1" noshade="true"/>
+<font CLASS="footer">
+<a href="index.html">O&apos;Reilly Home</a> |
+<a href="sales/bookstores/">O&apos;Reily Bookstores</a> |
+<a href="order_new/">How to order</a> |
+<a href="orilly/contact.html">O&apos;Reilly Contacts</a><br>
+<a href="http://international.oreilly.com/">International</a> |
+<a href="oreilly/about.html">About O&apos;Reilly</a> |
+<a href="affiliates.html">Affiliated Companies</a>
+</font>
+<p>
+<font CLASS="copy">
+Copyright 2004, O&apos;Reilly Media, Inc.<br/>
+<a href="mailto:webmaster@oreilly.com">webmaster@oreilly.com</a>
+</font>
+</p>
+'>

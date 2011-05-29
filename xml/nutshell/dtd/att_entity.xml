@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
+<!DOCTYPE top[
+	<!ELEMENT top (movie, slide_show*)>
+
+	<!ELEMENT movie EMPTY>
+	<!ENTITY X-Men-trailer SYSTEM "http://www.turing.co.uk/bus.jpg" NDATA jpeg>
+	<!NOTATION jpeg SYSTEM "image/jpeg">
+	<!ATTLIST movie source ENTITY #REQUIRED>
+
+	<!ELEMENT slide_show EMPTY>
+	<!ENTITY slide1  SYSTEM "/root/slid1.ppt" NDATA jpeg>
+	<!ENTITY slide2  SYSTEM "/root/slid2.ppt" NDATA jpeg>
+	<!ENTITY slide3  SYSTEM "/root/slid3.ppt" NDATA jpeg>
+	<!ATTLIST slide_show slides ENTITIES #REQUIRED>
+]>
+<top>
+	<movie source="X-Men-trailer" />
+	<slide_show slides="slide1 slide2 slide3" />
+</top>

@@ -1,0 +1,9 @@
+<!ELEMENT top (movie, slide_show)>
+
+<!ELEMENT movie (#PCDATA)>
+<!ENTITY X-Men-trailer "http://xman.com">
+
+<!ELEMENT slide_show (#PCDATA)>
+<!ENTITY slide1 "/root/slide1.ppt">
+<!ENTITY slide2 "/root/slide2.ppt">
+<!ENTITY slide3 "/root/slide3.ppt">

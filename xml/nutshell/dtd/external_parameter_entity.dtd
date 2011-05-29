@@ -1,0 +1,2 @@
+<!ENTITY % first_dtd SYSTEM "parameter_entity.dtd">
+%first_dtd;
