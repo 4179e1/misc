@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<catalog>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/TR/REC-rdf-syntax#">
+		<rdf:Description xmlns:dc="http://purl.org/dc/" about="http://www.cafeconleche.org/examples/impressionists.xml">
+			<dc:title>Impressionist Paintings</title>
+			<dc:creator>Elliotte Rusty Harold</creator>
+			<dc:description>
+				A list of famous impressionist paintings organized
+				by painter and date
+			</description>
+			<date>2000-08-22</date>
+		</rdf:Description>
+	</rdf:RDF>
+
+	<painting>
+		<title>Memory of the Garden at Etten</title>
+		<artist>Vincent Van Gogh</artist>
+		<date>November, 1888</date>
+		<description>
+			Two women look to the left. A third works in her garden.
+		</description>
+	</painting>
+
+	<!-- Many more paintings... -->
+</catalog>
