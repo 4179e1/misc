@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<people>
+	<person born="1912" died="1954">
+		<name first_name="Alan" last_name="Turing"/>
+		<profession>computer scientist</profession>
+		<profession>mathematician</profession>
+		<profession>cryptographer</profession>
+	</person>
+	<person born="1918" died="1988">
+		<name first_name="Richard" middle_initial="P" last_name="Feyman"/>
+		<profession>physicist</profession>
+		<hobby>Playing the bongoes</hobby>
+	</person>
+</people>
