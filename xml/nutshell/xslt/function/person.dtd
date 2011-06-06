@@ -1,0 +1,9 @@
+<!ELEMENT people		(person*)>
+<!ELEMENT person		(name, profession*)>
+<!ATTLIST person		born	CDATA	#REQUIRED>
+<!ATTLIST person		died	CDATA	#REQUIRED>
+<!ELEMENT name			(first_name, middle_initial*, last_name)>
+<!ELEMENT first_name	(#PCDATA)>
+<!ELEMENT middle_initial	(#PCDATA)>
+<!ELEMENT last_name		(#PCDATA)>
+<!ELEMENT profession	(#PCDATA)>
