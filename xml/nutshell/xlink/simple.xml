@@ -1,0 +1,8 @@
+<novel 	xmlns:xlink="http://www.w3.org/1999/xlink"
+		xlink:type="simple"
+		xlink:href="ftp://archive.org/pub/etext/etext93/wizoz10.txt"
+		xlink:actuate="onRequest" xlink:show="replace">
+		<title>The Wonderful Wizard of Oz</title>
+		<author>L. Frank Baum</author>
+		<year>1900</year>
+</novel>
