@@ -1,0 +1,15 @@
+<edition 	xlink:type="locator" xlink:href="urn:isbn:0700609857"
+			xlink:type="University Press of Kansas"
+			xlink:role="http://purl.org/dc/elements/1.1/identifier"
+			xlink:label="ISBN0700609857">
+	<publisher_info xlink:type="title">
+		<ul>
+			<li>The Kansas Centennial Edition</li>
+			<li>Illustrated by Micheal McCurdy</li>
+			<li>Foreword by Ray Bradbury</li>
+			<li>1999</li>
+			<li>216 pages</li>
+			<li>SRP: $24.95</li>
+		</ul>
+	</publisher_info>
+</edition>

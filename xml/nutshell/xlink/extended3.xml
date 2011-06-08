@@ -1,0 +1,23 @@
+<book xlink:type="extened" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>The Wonderful Wizard of Oz</title>
+
+	<!-- locator elements -->
+	<edition 	xlink:type="locator" xlink:href="urn:isbn:0192839306"
+				xlink:title="Oxford University Press"
+				xlink:role="http://www.oup-usa.org/"
+				xlink:label="ISBN0192839306"/>
+	<store 	xlink:type="locator"
+			xlink:href="http://www.amazon.com/exec/obidos/ASIN/0192839306"
+			xlink:label="buy">Amazon</store>
+
+	<store 	xlink:type="locator" xlink:href=
+			"http://www.powells.com/cgi-bin/biblio?isbn=0192839306"
+			xlink:label="buy">Powell's</store>
+
+	<store xlink:type="locator" xlink:href=
+			"http://shop.bn.com/booksearch/isbninquiry.asp?isbn=019289306"
+			xlink:label="buy">Barnes &amp; Noble</store>
+	
+	<!-- arcs -->
+	<purchase xlink:type="arc" xlink:from="ISBN0192839306" xlink:to="buy"/>
+</book>

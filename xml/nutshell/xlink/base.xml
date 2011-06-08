@@ -1,0 +1,17 @@
+<authors xml:base="http://www.literature.org/authors/"
+         xmlns:xlink = "http://www.w3.org/1999/xlink">
+  <author xml:base="baum-l-frank/">
+    <name>L. Frank Baum</name>
+    <novel  xml:base = "the-wonderful-wizard-of-oz/">
+      <title>The Wonderful Wizard of Oz</title>
+      <year>1900</year>
+      <chapter xlink:type="simple" 
+               xlink:href="introduction.html">Introduction</chapter>
+      <chapter xlink:type="simple" 
+               xlink:href="chapter-01.html">The Cyclone</chapter>
+      <chapter xlink:type="simple" 
+               xlink:href="chapter-02.html">The Council with the 
+                                                Munchkins</chapter>
+    </novel>
+  </author>
+</authors>

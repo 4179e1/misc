@@ -1,0 +1,16 @@
+<novel xlink:type="extened">
+	<title>The Wonderful wizard of Oz</title>
+	<author>L. Frank Baum</author>
+	<year>1900</year>
+	<edition xlink:type="locator" 	xlink:href="urn:isbn:068809444"
+									xlink:title="William Morrow"
+									xlink:role="http://purl.org/dc/elements/1.0/publisher"
+									xlink:label="ISBN068809444"/>
+	<edition xlink:type="locator" 	xlink:href="urn:isbn:0192839306"
+									xlink:title="oxford University Press"
+									xlink:role="http://purl.org/dc/elements/1.0/publisher"
+									xlink:label="ISBN0192839306"/>
+	<edition xlink:type="locator" 	xlink:href="urn:isbn:068809444"
+									xlink:title="University Press of Kansas"
+									xlink:role="http://purl.org/dc/elements/1.0/publisher"
+									xlink:label="ISBN068809444"/>

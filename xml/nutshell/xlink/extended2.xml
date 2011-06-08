@@ -1,0 +1,28 @@
+<series xlink:type="extended" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<author xlink:type="resource" xlink:label="baum">L. Frank Baum</author>
+	<!-- locator elements -->
+	<novel 	xlink:type="locator" xlink:label="oz1"
+			xlink:href="ftp://archive.org/pub/etext/etext93/wizoz10.txt">
+		<title>The Wonderful Wizard of Oz</title>
+		<year>1900</year>
+	</novel>
+	<novel 	xlink:type="locator" xlink:label="oz2"
+		  	xlink:href="ftp://archive.org/pub/etext/etext93/ozland10.txt">
+		<title>The Marvelous Land of Oz</title>
+		<year>1904</year>
+	</novel>
+	<novel 	xlink:type="locator" xlink:label="oz3"
+		  	xlink:href="ftp://archive.org/pub/etext/etext93/ozland10.txt">
+		<title>Ozma of Oz</title>
+		<year>1904</year>
+	</novel>
+
+	<!-- arcs -->
+	<next xlink:type="arc" xlink:from="oz1" xlink:to="oz2"/>
+	<next xlink:type="arc" xlink:from="oz2" xlink:to="oz3"/>
+	<previous xlink:type="arc" xlink:from="oz2" xlink:to="oz1"/>
+	<previous xlink:type="arc" xlink:from="oz3" xlink:to="oz2"/>
+	<book xlink:type="arc" xlink:from="baum" xlink:to="oz1"/>
+	<book xlink:type="arc" xlink:from="baum" xlink:to="oz2"/>
+	<book xlink:type="arc" xlink:from="baum" xlink:to="oz3"/>
+</series>
