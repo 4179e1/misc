@@ -1,0 +1,14 @@
+<slide xmlns:xlink="http://www.w3.org/1999/xlink">
+	<point>Acme Wonder Goo is a delicious dessert topping!</point>
+	<point>Acme Wonder Goo is a powerful floor cleaner!</point>
+	<point>It's two products in one!</point>
+
+	<first 	xlink:type="simple" 
+			xlink:href="#xpointer(//slide[position()=1])">
+		Start
+	</first>
+	<last	xlink:type="simple"
+			xlink:href="#xpointer(//slide[position()=last()])">
+		End
+	</last>
+</slide>

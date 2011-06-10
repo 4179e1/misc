@@ -1,0 +1,8 @@
+<Bible xlink:type="extened" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<testament 	xlink:type="locator" xlink:label="ot"
+				xlink:href="ot.xml#xpointer(//v[position()=last()])"/>
+	<testament	xlink:type="locator" xlink:label="nt"
+				xlink:href="nt.xml#xpointer(//v[position()=1])"/>
+	<next xlink:from="ot" xlink:to="nt"/>
+	<previous xlink:from="nt" xlink:to="ot"/>
+</Bible>
