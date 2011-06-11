@@ -1,0 +1,22 @@
+/* Defaults for the entire document */
+recipe {font-family:"New York", "Times New Roman", serif;
+		font-size: 12pt}
+
+/* Make the dish look like a headline */
+dish {
+	display:block;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	text-align: center
+}
+
+/* A bulleted list */
+ingredient {display:list-item; list-style-position:inside}
+
+/* Formant these two items as paragraphs */
+directions, story {
+	display:block;
+	margin-top:12pt;
+	margin-left:4pt
+}
