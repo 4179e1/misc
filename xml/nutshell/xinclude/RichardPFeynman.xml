@@ -1,0 +1,9 @@
+<person born="1918" died="1988">
+	<name>
+		<first_name>Richard</first_name>
+		<middle_initial>P</middle_initial>
+		<last_name>Feynman</last_name>
+	</name>
+	<profession>physicist</profession>
+	<hobby>Playing the bongoes</hobby>
+</person>

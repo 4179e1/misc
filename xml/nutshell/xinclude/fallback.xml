@@ -1,0 +1,15 @@
+<top xmlns:xi="http://www.w3.org/2001/XInclude">
+	<xi:include href="http://www.example.us/data.xml">
+		<xi:fallback>
+			<xi:include href="http://www.example.fr/data.xml">
+				<xi:fallback>
+					<xi:include href="http://www.example.cn/data.xml">
+						<xi:fallback>
+							Could not find the document in the U.S., France, or China.
+						</xi:fallback>
+					</xi:include>
+				</xi:fallback>
+			</xi:include>
+		</xi:fallback>
+	</xi:include>
+</top>

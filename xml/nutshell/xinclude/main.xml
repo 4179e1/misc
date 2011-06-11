@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- xmllint - -xinclude main.xml -->
+<people xmlns:xi="http://www.w3.org/2001/XInclude">
+	<xi:include href="AlanTuring.xml"/>
+	<xi:include href="RichardPFeynman.xml"/>
+	<source>
+		<xi:include href="hw.c" parse="text" encoding="ISO-8859-1"/>
+	</source>
+	<google>
+		<xi:include href="http://www.google.com" accept-language="en" accept="application/xml"/>
+	</google>
+</people>
