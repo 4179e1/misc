@@ -1,0 +1,39 @@
+step {
+	display: list-item;
+	list-style-type: decimal;
+	list-style-position: inside
+}
+
+/* story {display: none} */
+
+ingredients {display:table}
+ingredient {display:table-row}
+quantity, component {display: table-cell}
+
+dish {height: 0.5cm}
+
+story {line-height: 1.5ex}
+
+dish {font-height: 0.5cm}
+dish {line-height: 150%}
+
+dish {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: x-large;
+	font-style: italic;
+	font-variant: small-caps;
+	font-weight: 900;
+	font-stretch: semi-expanded
+}
+
+story {
+	display:block;
+	text-indent: 0.5in;
+	white-space: pre-wrap;
+}
+
+dish {color: red}
+story {color: #00FF00}
+directions {color: #0000FF}
+ingredient {color: rgb(43, 43, 43)}
+quantity {color: rgb(8.2%, 8.2%, 8.2%)}

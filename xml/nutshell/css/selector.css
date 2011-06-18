@@ -1,0 +1,41 @@
+* {font-size: large}
+
+ingredients quantity {font-size: medium}
+/* ingredient > quantity {font-size: inherit} */
+
+directions + story {border-top-style: solid}
+
+/* step[optional] {display:none} */
+/* *[optional] {display:none} */
+step[optional="yes"] {display:none}
+
+recipe[source~="Anderson"] {font-weight: bold}
+
+step#P833 {font-weight: 800}
+
+step:first-child {font-style: italic}
+
+*:link {color:blue; text-decoration:underline}
+*:visited {color:purple; text-decoration: underline}
+*:active {color: red}
+
+*:hover {color: green; text-decoration: underline}
+*:focus {border: 1px solid red}
+
+*:lang(he) {font-family: "David New Hebrew"}
+
+story:first-letter {
+	font-size:200%;
+	font-weight: bold;
+	float: left;
+	padding-right: 3pt
+	}
+
+story:first-line {font-variant: small-caps}
+
+ingredients:before {content: "Ingredients!"}
+
+step:before {
+	content: counter(step) ". ";
+	counter-increment: step;
+	 }

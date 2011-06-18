@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/css" href="selector.css" media="all" alternate="no" title="Web Page" charset="UTF-8"?>
+<recipe source="Marjorie Anderson">
+	<dish>Southern Corn Bread</dish>
+	<ingredients>
+		<ingredient>
+			<quantity>1 cup</quantity>
+			<component>flour</component>
+		</ingredient>
+		<ingredient>
+			<quantity>4 tablespoon</quantity>
+			<component>Royal Baking Power</component>
+		</ingredient>
+		<ingredient>
+			<quantity>1/2 teaspoon</quantity>
+			<component>salt</component>
+		</ingredient>
+		<ingredient>
+			<quantity>1 cup</quantity>
+			<component>corn meal</component>
+		</ingredient>
+		<ingredient>
+			<quantity>1 1/2 cups</quantity>
+			<component>melted butter</component>
+		</ingredient>
+	</ingredients>
+	<directions>
+		<step>Shift flour, baking powder, sugar &amp; salt together.</step>
+		<step>Add 1 cup corn meal.</step>
+		<step>
+			Beat egg in cup and add beaten egg and 1 1/2 cups whole
+			milk to make a batter. stir well.
+		</step>
+		<step>
+			Add melted shortening and beat until light and thoroughly mixed.
+		</step>
+		<step>
+			Pour into greased shallow pan or greased muffin rings.
+		</step>
+		<step>
+			Bake in hot oven at <temperature>425F</temperature> for <duration>25 minutes</duration>.
+		</step>
+		<step optional="yes">
+			Cut into squares if cooked in shallow pan.
+		</step>
+	</directions>
+	<story>
+		After my mother-in-law <person>Marjorie Anderson</person> died, Beth and I found this recipe written on the "extra recipes" page in a local cookbook in her cupboard.
+		This was published by The Episcopal Churchwomen, Church of Ascension, <city>Mt. stering</city>, <state>Kentucky</state>.
+	</story>
+</recipe>
