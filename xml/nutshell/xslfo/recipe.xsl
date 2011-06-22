@@ -19,9 +19,34 @@
 		</fo:root>
 	</xsl:template>
 
-	<xsl:template match="dish|ingredient|directions|story">
-		<fo:block><xsl:apply-templates/></fo:block>
+	<xsl:template match="directions|story">
+		<fo:block margin-top="12pt" margin-left="4pt">
+			<xsl:apply-templates/>
+		</fo:block>
 	</xsl:template>
+
+	<xsl:template match="dish">
+		<fo:block font-family="Helvetica, Arial, sans-serif" font-size="20pt" font-weight="bold" text-align="center">
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template match="ingredients">
+		<fo:list-block><xsl:apply-templates/></fo:list-block>
+	</xsl:template>
+
+	<xsl:template match="ingredient">
+		<fo:list-item>
+				<!-- Unicode Bullet Character -->
+			<fo:list-item-label>
+				<fo:block>&#x2022;</fo:block>
+			</fo:list-item-label>
+			<fo:list-item-body>
+				<fo:block><xsl:apply-templates/></fo:block>
+			</fo:list-item-body>
+		</fo:list-item>
+	</xsl:template>
+
 </xsl:stylesheet>
 
 
