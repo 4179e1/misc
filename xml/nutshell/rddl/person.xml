@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//XML-DEV//DTD XHTML RDDL 1.0//EN"
+					"http://www.rddl.org/rddl-xhtml.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:xlink="http://www.w3.org/1999/xlink"
+	  xmlns:rddl="http://www.rddl.org/">
+<head>
+	<title>An XML Application Describing People</title>
+</head>
+<body>
+<h1>An XML Application Describing People</h1>
+<rddl:resource xlink:type="simple"
+	xlink:href="urn:isbn:0596007647"
+	xlink:role="http://dublincore.org/documents/dcmi-type-vocabulary/#text"
+	xlink:arcrole="http://www.rddl.org/purpose#normative-reference">
+	<p>
+	http://www.cafeconleche.org/namespaces/people is the namespace URL
+	for an XML application describing people in a record-like
+	fashion used as an example in <cite>XML in a Nutshell</cite>, third
+	edition by Elliotte Rusty Harold and W. Scott Means (O'Reilly Media,
+	2004).
+	</p>
+</rddl:resource>
+
+<h2>Related Resource</h2>
+<p>
+	Serval examples in this book address this application in one way or
+	another. This include:
+</p>
+
+<ul>
+<li>
+	<rddl:resource xlink:type="simple"
+		xlink:href="http://www.cafeconleche.org/books/xian3/examples/03/3-5.dtd"
+		xlink:role="http://www.isi.edu/in-notes/iana/assignments/media-types/application/xml-dtd"
+		xlink:arcrole="http://www.cafeconle.org/books/xian3/examples/03/3-5.dtd">
+		<a href="http://www.cafeconleche.org/books/xian3/examples/03/3-5.dtd">
+		Example 3-1</a>:A data oriented DTD describing people
+	</rddl:resource>
+</li>
+<li>
+	<rddl:resource xlink:type="simple"
+		xlink:href="http://www.cafeconleche.org/books/xian3/examples/08/8-15.xsl"
+		xlink:role="http://www.w3.org/1999/XSL/Transform"
+		xlink:arcrole="http://www.isi.edu/in-notes/iana/assignments/media-types/text/html">
+		<a href="http://www.cafeconleche.org/books/xian3/examples/08/8-15.xsl">
+		Example 8-15</a>: An XSLT stylesheet for people documents
+	</rddl:resource>
+</li>
+</ul>
+
+<p>
+	This document itself is 
+	<a href="http://www.cafeconleche.org/books/xian3/examples/15/15-2.html">
+	Example 15-2</a>from the RDDL chapter.
+</p>
+</body>
+</html>
