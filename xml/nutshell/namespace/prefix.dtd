@@ -5,10 +5,18 @@
 <!ENTITY % dc-creator	"%dc-prefix;%dc-colon;creator">
 <!ENTITY % dc-description "%dc-prefix;%dc-colon;description">
 <!ENTITY % dc-date		"%dc-prefix;%dc-colon;date">
+<!ENTITY % xmlns-dc		"xmlns%dc-colon;%dc-prefix;">
 
 <!ELEMENT %dc-title; (#PCDATA)>
 <!ELEMENT %dc-creator; (#PCDATA)>
 <!ELEMENT %dc-description; (#PCDATA)>
 <!ELEMENT %dc-date; (#PCDATA)>
-<!ELEMENT rdf:Descripption
+<!ELEMENT rdf:Description
 	((%dc-title; | %dc-creator; | %dc-description; | %dc-date;)*)>
+<!ELEMENT catalog (rdf:RDF)>
+<!ELEMENT rdf:RDF (rdf:Description)>
+
+<!ATTLIST rdf:RDF	xmlns:rdf	CDATA	#REQUIRED>
+<!ATTLIST rdf:Description	xmlns:dc	CDATA	#REQUIRED
+							about		CDATA	#REQUIRED>
+		

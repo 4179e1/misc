@@ -1,0 +1,11 @@
+<!ENTITY % ns-prefix "ns">
+<!ENTITY % ns-colon ":">
+
+<!ENTITY % ns-top "%ns-prefix;%ns-colon;top">
+<!ENTITY % ns-down "%ns-prefix;%ns-colon;down">
+<!ENTITY % ns-xmlns "xmlns%ns-colon;%ns-prefix;">
+
+<!ELEMENT %ns-top; ((%ns-down;)*)>
+<!ELEMENT %ns-down; (#PCDATA)>
+
+<!ATTLIST %ns-top; %ns-xmlns; CDATA	#FIXED "http://dev.poetpalace.org/ns">

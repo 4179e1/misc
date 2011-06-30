@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE catalog SYSTEM "prefix.dtd">
+<catalog>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/TR/REC-rdf-syntax#">
+		<rdf:Description xmlns:dc="http://purl.org/dc/" about="http://www.cafeconleche.org/examples/impressionists.xml">
+			<dc:title>Impressionist Paintings</dc:title>
+			<dc:creator>Elliotte Rusty Harold</dc:creator>
+			<dc:description>
+				A list of famous impressionist paintings organized
+				by painter and date
+			</dc:description>
+		</rdf:Description>
+	</rdf:RDF>
+	<!-- Many more paintings... -->
+</catalog>
