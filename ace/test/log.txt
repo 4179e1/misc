@@ -1,0 +1,1 @@
+    This will got to STDERR, syslog & an ostream
