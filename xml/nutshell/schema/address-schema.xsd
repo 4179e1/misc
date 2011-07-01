@@ -10,11 +10,19 @@
 		</xs:documentation>
 	</xs:annotation>
 	
-	<xs:element name="fullName" type="xs:string">
+	<xs:element name="fullName">
 		<xs:annotation>
 			<xs:appinfo>
 				<help-text>Enter the person's full name.</help-text>
 			</xs:appinfo>
 		</xs:annotation>
+
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="language" type="xs:language"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
 	</xs:element>
 </xs:schema>
