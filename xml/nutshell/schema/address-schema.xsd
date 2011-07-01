@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-US">
+			Simple schema example from O'Reilly's
+			<a href="http://www.oreilly.com/catalog/xmlnut">
+				XML in a Nutshell.
+			</a>
+			Copyright 2004 O'Reilly Media, Inc.
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:element name="fullName" type="xs:string">
+		<xs:annotation>
+			<xs:appinfo>
+				<help-text>Enter the person's full name.</help-text>
+			</xs:appinfo>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>
