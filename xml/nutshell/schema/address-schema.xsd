@@ -9,6 +9,10 @@
 			Copyright 2004 O'Reilly Media, Inc.
 		</xs:documentation>
 	</xs:annotation>
+
+	<xs:attributeGroup name="nationality">
+		<xs:attribute name="language" type="xs:language"/>
+	</xs:attributeGroup>
 	
 	<xs:element name="fullName">
 		<xs:annotation>
@@ -20,7 +24,7 @@
 		<xs:complexType>
 			<xs:simpleContent>
 				<xs:extension base="xs:string">
-					<xs:attribute name="language" type="xs:language"/>
+					<xs:attributeGroup ref="nationality"/>
 				</xs:extension>
 			</xs:simpleContent>
 		</xs:complexType>
