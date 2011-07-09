@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<fullName 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<addr:fullName 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address address-schena.xsd"
-			xmlns="http://namespaces.oreilly.com/xmlnut/address"
-			language="zh-CN">
+			xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
+			addr:language="zh-CN">
 Scott Means
-</fullName>
+</addr:fullName>
