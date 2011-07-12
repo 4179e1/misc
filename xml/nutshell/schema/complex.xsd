@@ -1,0 +1,25 @@
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			targetNamespace="http://namespaces.oreilly.com/xmlnut/address"
+			xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
+			elementFormDefault="qualified">
+	<xs:element name="address">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="fullName">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="first" type="addr:nameComponent"/>
+							<xs:element name="last" type="addr:nameComponent"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="nameComponent">
+		<xs:simpleContent>
+			<xs:extension base="xs:string"/>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

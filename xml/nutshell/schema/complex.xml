@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<addr:address xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address complex.xsd"
+	xmlns:addr="http://namespaces.oreilly.com/xmlnut/address" >
+	<addr:fullName>
+		<addr:first>Scott</addr:first>
+		<addr:last>Means</addr:last>
+	</addr:fullName>
+</addr:address>
