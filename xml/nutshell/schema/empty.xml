@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<addr:address xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address empty.xsd"
+	xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
+	>
+	<addr:fullName>
+		<addr:first>Scott</addr:first>
+		<addr:last>Means</addr:last>
+	</addr:fullName>
+	<addr:contacts>
+		<addr:phone addr:number="888.737.1752"/>
+	</addr:contacts>
+</addr:address>
