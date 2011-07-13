@@ -1,0 +1,67 @@
+<xs:schema 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			targetNamespace="http://namespaces.oreilly.com/xmlnut/address"
+			xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
+			elementFormDefault="qualified">
+	<xs:element name="address">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="fullName">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="first" type="addr:nameComponent"/>
+							<xs:element name="middle" type="addr:nameList" minOccurs="0"/>
+							<xs:element name="last" type="addr:nameComponent"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="contacts" type="addr:contactsType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="nameList">
+		<xs:simpleContent>
+			<xs:extension base="addr:nameListType"/>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:simpleType name="nameListType">
+		<xs:list itemType="addr:nameString"/>
+	</xs:simpleType>
+
+	<xs:complexType name="nameComponent">
+		<xs:simpleContent>
+			<xs:extension base="addr:nameString"/>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:simpleType name="nameString">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="contactsType">
+		<xs:sequence>
+			<xs:element name="phone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xs:anyType">
+							<xs:attribute name="number" type="xs:string"/>
+							<xs:attribute name="location" type="addr:locationType"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="locationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="work"/>
+			<xs:enumeration value="home"/>
+			<xs:enumeration value="mobile"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>
