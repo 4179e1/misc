@@ -1,0 +1,34 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="letter">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element name="greeting"/>
+				<xs:element name="body"/>
+				<xs:element name="closing"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="greeting">
+		<xs:complexType mixed="true">
+			<xs:choice>
+				<xs:element name="hello"/>
+				<xs:element name="hi"/>
+				<xs:element name="dear"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="body">
+		<xs:complexType mixed="true">
+			<xs:all>
+				<xs:element name="item"/>
+				<xs:element name="price"/>
+				<xs:element name="arrivalDate"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="closing" type="xs:string"/>
+</xs:schema>
+

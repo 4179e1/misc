@@ -1,0 +1,8 @@
+<letter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="formletter.xsd">
+	<greeting><hello/>Bob !</greeting>
+	<body>
+		Thank you for ordering the <item/> ($<price/>). It should arrive by <arrivalDate/>.
+	</body>
+	<closing/>
+</letter>
