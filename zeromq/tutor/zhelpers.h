@@ -29,6 +29,8 @@
 
 //  Include a bunch of headers that we will need in the examples
 
+#define STATIC 
+
 #include <zmq.h>
 
 #include <pthread.h>
@@ -54,7 +56,7 @@
 
 //  Receive 0MQ string from socket and convert into C string
 //  Caller must free returned string.
-static char *
+STATIC char *
 s_recv (void *socket) {
     zmq_msg_t message;
     zmq_msg_init (&message);
@@ -70,7 +72,7 @@ s_recv (void *socket) {
 }
 
 //  Convert C string to 0MQ string and send to socket
-static int
+STATIC int
 s_send (void *socket, char *string) {
     int rc;
     zmq_msg_t message;
@@ -83,7 +85,7 @@ s_send (void *socket, char *string) {
 }
 
 //  Sends string as 0MQ string, as multipart non-terminal
-static int
+STATIC int
 s_sendmore (void *socket, char *string) {
     int rc;
     zmq_msg_t message;
@@ -97,7 +99,7 @@ s_sendmore (void *socket, char *string) {
 
 //  Receives all message parts from socket, prints neatly
 //
-static void
+STATIC void
 s_dump (void *socket)
 {
     puts ("----------------------------------------");
@@ -137,7 +139,7 @@ s_dump (void *socket)
 
 //  Set simple random printable identity on socket
 //
-static void
+STATIC void
 s_set_id (void *socket)
 {
     char identity [10];
@@ -148,12 +150,41 @@ s_set_id (void *socket)
 
 //  Report 0MQ version number
 //
-static void
+STATIC void
 s_version (void)
 {
     int major, minor, patch;
     zmq_version (&major, &minor, &patch);
     printf ("Current 0MQ version is %d.%d.%d\n", major, minor, patch);
+}
+
+// Sleep for a number of milliseconds
+STATIC void
+s_sleep (int msecs)
+{
+#if (defined (__WINDOWS__))
+    Sleep (msecs);
+#else
+    struct timespec t;
+    t.tv_sec = msecs / 1000;
+    t.tv_nsec = (msecs % 1000) * 1000000;
+    nanosleep (&t, NULL);
+#endif
+}
+
+// Return current system clock as milliseconds
+STATIC int64_t
+s_clock (void)
+{
+#if (defined (__WINDOWS__))
+    SYSTEMTIME st;
+    GetSystemTime (&st);
+    return (int64_t) st.wSecond * 1000 + st.wMilliseconds;
+#else
+    struct timeval tv;
+    gettimeofday (&tv, NULL);
+    return (int64_t) (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+#endif
 }
 
 #endif
