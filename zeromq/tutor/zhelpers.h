@@ -1,27 +1,28 @@
-/*  =========================================================================
+/*  =====================================================================
     zhelpers.h
 
     Helper header file for example applications.
 
-    -------------------------------------------------------------------------
-    Copyright (c) 1991-2010 iMatix Corporation <www.imatix.com>
+    ---------------------------------------------------------------------
+    Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
     This file is part of the ZeroMQ Guide: http://zguide.zeromq.org
 
-    This is free software; you can redistribute it and/or modify it under the
-    terms of the GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 3 of the License, or (at your option)
-    any later version.
+    This is free software; you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
 
     This software is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABIL-
-    ITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General
-    Public License for more details.
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-    =========================================================================
+    You should have received a copy of the GNU Lesser General Public
+    License along with this program. If not, see
+    <http://www.gnu.org/licenses/>.
+    =====================================================================
 */
 
 #ifndef __ZHELPERS_H_INCLUDED__
@@ -29,11 +30,8 @@
 
 //  Include a bunch of headers that we will need in the examples
 
-#define STATIC 
-
 #include <zmq.h>
 
-#include <pthread.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,26 +41,43 @@
 #include <time.h>
 #include <unistd.h>
 #include <assert.h>
+#include <signal.h>
 
-//  Bring Windows MSVC up to C99 scratch
-#if (defined (__WINDOWS__))
-    typedef unsigned long ulong;
-    typedef unsigned int  uint;
-    typedef __int64 int64_t;
+#define STATIC
+
+//  Version checking, and patch up missing constants to match 2.1
+#if ZMQ_VERSION_MAJOR == 2
+#   if ZMQ_VERSION_MINOR == 0
+#       error "Please upgrade to ZeroMQ/2.1 stable for these examples"
+#   endif
+#elif ZMQ_VERSION_MAJOR == 3
+#   error "Please stick with ZeroMQ/2.1 stable for these examples"
+#endif
+#ifndef ZMQ_ROUTER
+#   define ZMQ_ROUTER ZMQ_XREP
+#endif
+#ifndef ZMQ_DEALER
+#   define ZMQ_DEALER ZMQ_XREQ
 #endif
 
+
 //  Provide random number from 0..(num-1)
-#define randof(num)   (int) ((float) (num) * random () / (RAND_MAX + 1.0))
+#if (defined (__WINDOWS__))
+#   define randof(num)  (int) ((float) (num) * rand () / (RAND_MAX + 1.0))
+#else
+#   define randof(num)  (int) ((float) (num) * random () / (RAND_MAX + 1.0))
+#endif
+
 
 //  Receive 0MQ string from socket and convert into C string
-//  Caller must free returned string.
+//  Caller must free returned string. Returns NULL if the context
+//  is being terminated.
 STATIC char *
 s_recv (void *socket) {
     zmq_msg_t message;
     zmq_msg_init (&message);
     if (zmq_recv (socket, &message, 0))
-        exit (1);           //  Context terminated, exit
-
+        return (NULL);
     int size = zmq_msg_size (&message);
     char *string = malloc (size + 1);
     memcpy (string, zmq_msg_data (&message), size);
@@ -79,7 +94,6 @@ s_send (void *socket, char *string) {
     zmq_msg_init_size (&message, strlen (string));
     memcpy (zmq_msg_data (&message), string, strlen (string));
     rc = zmq_send (socket, &message, 0);
-    assert (!rc);
     zmq_msg_close (&message);
     return (rc);
 }
@@ -93,7 +107,6 @@ s_sendmore (void *socket, char *string) {
     memcpy (zmq_msg_data (&message), string, strlen (string));
     rc = zmq_send (socket, &message, ZMQ_SNDMORE);
     zmq_msg_close (&message);
-    assert (!rc);
     return (rc);
 }
 
@@ -148,17 +161,7 @@ s_set_id (void *socket)
 }
 
 
-//  Report 0MQ version number
-//
-STATIC void
-s_version (void)
-{
-    int major, minor, patch;
-    zmq_version (&major, &minor, &patch);
-    printf ("Current 0MQ version is %d.%d.%d\n", major, minor, patch);
-}
-
-// Sleep for a number of milliseconds
+//  Sleep for a number of milliseconds
 STATIC void
 s_sleep (int msecs)
 {
@@ -166,13 +169,13 @@ s_sleep (int msecs)
     Sleep (msecs);
 #else
     struct timespec t;
-    t.tv_sec = msecs / 1000;
+    t.tv_sec  =  msecs / 1000;
     t.tv_nsec = (msecs % 1000) * 1000000;
     nanosleep (&t, NULL);
 #endif
 }
 
-// Return current system clock as milliseconds
+//  Return current system clock as milliseconds
 STATIC int64_t
 s_clock (void)
 {
@@ -187,4 +190,25 @@ s_clock (void)
 #endif
 }
 
-#endif
+//  Print formatted string to stdout, prefixed by date/time and
+//  terminated with a newline.
+
+STATIC void
+s_console (const char *format, ...)
+{
+    time_t curtime = time (NULL);
+    struct tm *loctime = localtime (&curtime);
+    char *formatted = malloc (20);
+    strftime (formatted, 20, "%y-%m-%d %H:%M:%S ", loctime);
+    printf ("%s", formatted);
+    free (formatted);
+
+    va_list argptr;
+    va_start (argptr, format);
+    vprintf (format, argptr);
+    va_end (argptr);
+    printf ("\n");
+}
+
+#endif  //  __ZHELPERS_H_INCLUDED__
+
