@@ -3,7 +3,20 @@
 			xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
 			elementFormDefault="qualified"
 			attributeFormDefault="qualified">
-	<xs:include schemaLocation="physical-address.xsd"/>
+
+	<xs:redefine schemaLocation="physical-address.xsd">
+		<xs:complexType name="physicalAddressType">
+			<xs:complexContent>
+				<xs:extension base="addr:physicalAddressType">
+					<xs:attribute name="latitude" type="xs:decimal"/>
+					<xs:attribute name="longitude" type="xs:decimal"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:redefine>
+
+	<!-- xs:import namespace="http://www.w3.org/2001/03/XMLSchema/TypeLibrary" schemaLocation="http://www.w3.org/2001/03/XMLSchema/TypeLibrary.xsd"/ -->
+
 	<xs:element name="address">
 		<xs:complexType>
 			<xs:sequence>
@@ -26,7 +39,9 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="physicalAddress" type="addr:physicalAddressType"/>
+				<xs:element name="physicalAddress" type="addr:physicalAddressType" minOccurs="1" maxOccurs="unbounded"/>
+				<!-- xs:element name="mailingAddress" type="addr:mailingAddressType"/ -->
+				<!-- xs:element name="simplePhysicalAddress" type="addr:physicalAddressType"/ -->
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

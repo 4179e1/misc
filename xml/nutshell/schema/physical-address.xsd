@@ -1,6 +1,6 @@
 <xs:schema	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 			targetNamespace="http://namespaces.oreilly.com/xmlnut/address" 
-			xmlns:addr="http://namespaces.oreilly.com/xmlnutaddress"
+			xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
 			attributeFormDefault="qualified" elementFormDefault="qualified">
 	<xs:annotation>
 		<xs:documentation xml:lang="en-us">
@@ -17,4 +17,27 @@
 			<xs:element  name="state" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
+
+	<xs:complexType name="mailingAddressType">
+		<xs:complexContent>
+			<xs:extension base="addr:physicalAddressType">
+				<xs:sequence>
+					<xs:element name="zipCode" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="simplePhysicalAddressType">
+		<xs:complexContent>
+			<xs:restriction base="addr:physicalAddressType">
+				<xs:sequence>
+					<xs:element name="street" type="xs:string" />
+					<xs:element name="city" type="xs:string"/>
+					<xs:element  name="state" type="xs:string"/>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
 </xs:schema>

@@ -11,7 +11,19 @@
 	<addr:contacts>
 		<addr:phone addr:number="888.737.1752" addr:location="H"/>
 	</addr:contacts>
-	<addr:physicalAddress>
+	<addr:physicalAddress addr:latitude="123" addr:longitude="132">
+		<addr:street/>
+		<addr:street/>
+		<addr:city/>
+		<addr:state/>
+	</addr:physicalAddress>
+	<addr:physicalAddress xsi:type="addr:mailingAddressType">
+		<addr:street/>
+		<addr:city/>
+		<addr:state/>
+		<addr:zipCode/>
+	</addr:physicalAddress>
+	<addr:physicalAddress xsi:type="addr:simplePhysicalAddressType">
 		<addr:street/>
 		<addr:city/>
 		<addr:state/>
