@@ -1,0 +1,20 @@
+<xs:schema	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			targetNamespace="http://namespaces.oreilly.com/xmlnut/address" 
+			xmlns:addr="http://namespaces.oreilly.com/xmlnutaddress"
+			attributeFormDefault="qualified" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-us">
+			Simple schema example ffrom O'Reilly's
+		<a href="http://www.oreilly.com/catalog/xmlnut">XML in a Nutshell.</a>
+		Copyright 2004 O'Reilly Media, Inc.
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:complexType name="physicalAddressType">
+		<xs:sequence>
+			<xs:element name="street" type="xs:string" maxOccurs="3"/>
+			<xs:element name="city" type="xs:string"/>
+			<xs:element  name="state" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
