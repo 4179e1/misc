@@ -1,17 +1,31 @@
 <?xml version="1.0"?>
-<addr:address xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<addr:addressBook xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address empty.xsd"
 	xmlns:addr="http://namespaces.oreilly.com/xmlnut/address"
 	>
-	<addr:fullName>
-		<addr:first>Scott</addr:first>
-		<addr:middle>W W</addr:middle>
-		<addr:last>Means</addr:last>
-	</addr:fullName>
-	<addr:contacts>
-		<addr:phone addr:number="888.737.1752" addr:location="H"/>
-	</addr:contacts>
-	<addr:kids>
-		<addr:kid addr:ssn="acb"/>
-	</addr:kids>
-</addr:address>
+	<addr:address addr:ssn="123">
+		<addr:fullName >
+			<addr:first>Scott</addr:first>
+			<addr:middle>W W</addr:middle>
+			<addr:last>Means</addr:last>
+		</addr:fullName>
+		<addr:contacts>
+			<addr:phone addr:number="888.737.1752" addr:location="H"/>
+		</addr:contacts>
+	</addr:address>
+
+	<addr:address addr:ssn="456">
+		<addr:fullName >
+			<addr:first>Scott</addr:first>
+			<addr:middle>W W</addr:middle>
+			<addr:last>Means</addr:last>
+		</addr:fullName>
+		<addr:contacts>
+			<addr:phone addr:number="888.737.1752" addr:location="H"/>
+		</addr:contacts>	
+		<addr:kids>
+			<!-- notice, It is illegal if value of addr:ssn not exist in this document-->
+			<addr:kid addr:ssn="123"/>
+		</addr:kids>
+	</addr:address>
+</addr:addressBook>
