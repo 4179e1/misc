@@ -11,4 +11,4 @@ $(TAR): %: %.$(SUFFIX)
 	
 .PHONY: clean
 clean:
-	$(RM) -rf $(TAR)
+	$(RM) -rf $(TAR) *.ipc

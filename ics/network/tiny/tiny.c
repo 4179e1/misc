@@ -1,5 +1,5 @@
 #if 0
-gcc -Wall -o `basename $0 .c` $0 -lwp
+gcc -Wall -o `basename $0 .c` $0 `pkg-config --cflags --libs libwp0`
 exit
 #endif
 #include <sys/stat.h>
@@ -71,7 +71,7 @@ void doit (int fd)
 
 	if (is_static)
 	{
-		if (!(S_ISREG(sbuf.st_mode)) || !(S_IXUSR & sbuf.st_mode))
+		if (!(S_ISREG(sbuf.st_mode)) || !(S_IRUSR & sbuf.st_mode))
 		{
 			clienterror (fd, filename, "403", "Forbidden", "Tiny couldn't read the file");
 			return;
