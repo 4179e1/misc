@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include "queue.h"
 
 struct _proxy_queue 
@@ -120,7 +122,7 @@ ssize_t proxy_queue_push (ProxyQueue *q, char *buf, ssize_t size)
 		else
 		{
 			memcpy (tmp, &(q->mem_ptr[q->mem_front]), part);
-			memcpy (&tmp[part + 1], q->mem_ptr, q->mem_rear);
+			memcpy (&tmp[part], q->mem_ptr, q->mem_rear);
 		}
 
 		free (q->mem_ptr);
@@ -137,7 +139,7 @@ ssize_t proxy_queue_push (ProxyQueue *q, char *buf, ssize_t size)
 	else
 	{
 		memcpy (&(q->mem_ptr[q->mem_rear]), buf, tail);
-		memcpy (q->mem_ptr, &buf[tail + 1], size - tail);
+		memcpy (q->mem_ptr, &buf[tail], size - tail);
 	}
 	q->mem_rear = next (q->mem_rear, size, q->mem_max);
 	q->mem_card += size;
@@ -193,7 +195,7 @@ ssize_t proxy_queue_get_content (ProxyQueue *q, char *buf, ssize_t *size)
 		else
 		{
 			memcpy (buf, &(q->mem_ptr[q->mem_front]), tail);
-			memcpy (&buf[tail + 1], q->mem_ptr, *size - tail);
+			memcpy (&buf[tail], q->mem_ptr, *size - tail);
 		}
 	}
 	
@@ -228,5 +230,15 @@ void proxy_queue_dump (ProxyQueue *q)
 {
 	assert (q != NULL);
 	fprintf (stderr, "<QUEUE mem_max='%jd' mem_card='%jd' mem_front='%jd' mem_rear='%jd' mem_ptr='%#x'>", (intmax_t)(q->mem_max), (intmax_t)(q->mem_card), (intmax_t)(q->mem_front), (intmax_t)(q->mem_rear), (unsigned int)(q->mem_ptr));
+	if (q->mem_front < q->mem_rear)
+	{
+		write (STDERR_FILENO, &(q->mem_ptr[q->mem_front]), q->mem_card);
+	}
+	else
+	{
+		off_t tail = q->mem_max - q->mem_front;
+		write (STDERR_FILENO, &(q->mem_ptr[q->mem_front]), tail);
+		write (STDERR_FILENO, q->mem_ptr, q->mem_rear);
+	}
 	fprintf (stderr, "</QUEUE>\n");
 }

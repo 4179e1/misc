@@ -1,5 +1,5 @@
+#include <unistd.h>
 #include <stdbool.h>
-
 #ifndef _QUEUE_H
 #define _QUEUE_H
 
