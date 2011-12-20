@@ -6,6 +6,7 @@ exit 0
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <assert.h>
 
 int main (int argc, char *argv[])
 {
@@ -27,6 +28,7 @@ int main (int argc, char *argv[])
 	{
 		hostp = gethostbyname (argv[1]);
 	}
+	assert (hostp != NULL);
 
 	printf ("offical hostname: %s\n", hostp->h_name);
 
