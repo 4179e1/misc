@@ -19,7 +19,7 @@ class BaseHTMLProcessor (SGMLParser):
 		# may be parsed incorrectly by the ancestor, causing runtime script errors.
 		# All non-HTML code must be enclosed in HTML comment tags (<!--code-->)
 		# to ensure tha i will pass through this parser unaltered (in handle_comment).
-		strattrs = "".join ([' %s="%s" ' % (key, value) for key, value in attrs])
+		strattrs = " ".join ([' %s="%s" ' % (key, value) for key, value in attrs])
 		self.pieces.append ("<%(tag)s%(strattrs)s>" % locals())
 
 	def unknown_endtag (self, tag):
@@ -69,3 +69,7 @@ class BaseHTMLProcessor (SGMLParser):
 	def output (self):
 		"""Return processed HTML as a single string """
 		return " ".join (self.pieces)
+
+if __name__ == "__main__":
+	for k, v in globals().items():
+		print k, "=", v
