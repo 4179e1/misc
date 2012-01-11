@@ -7,7 +7,7 @@ class BaseHTMLProcessor (SGMLParser):
 		self.pieces = []
 		SGMLParser.reset (self)
 
-	def unknown_startag (self, tag, attrs):
+	def unknown_starttag (self, tag, attrs):
 		# called for each start tag
 		# attrs is a list of (attr, value) tuples
 		# e.g. for <pre class="screen">, tag="pre" attrs=[("class", "screen")]
@@ -25,7 +25,7 @@ class BaseHTMLProcessor (SGMLParser):
 	def unknown_endtag (self, tag):
 		# called for each end tag, e.g. for </pre>, tag will be "pre"
 		# Reconstruct the original end tag.
-		self.pieces.append ("<%(tag)s>" % locals ())
+		self.pieces.append ("</%(tag)s>" % locals ())
 
 	def handle_charref (self, ref):
 		# called for each character reference, e.g. for "&#160;", ref will be "160"
@@ -68,7 +68,7 @@ class BaseHTMLProcessor (SGMLParser):
 
 	def output (self):
 		"""Return processed HTML as a single string """
-		return " ".join (self.pieces)
+		return "".join (self.pieces)
 
 if __name__ == "__main__":
 	for k, v in globals().items():
