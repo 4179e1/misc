@@ -2,7 +2,7 @@
 import roman
 import unittest
 
-class KnownValues (unitest.TestCase):
+class KnownValues (unittest.TestCase):
 	knownValues = (	(1, 'I'),
 			(2, 'II'),
 			(3, 'III'),
@@ -105,7 +105,7 @@ class FromRomanBadInput (unittest.TestCase):
 			self.assertRaises (roman.InvalidRomanNumeralError, roman.fromRoman, s)
 
 
-class SanityCheck (unitest.TestCase):
+class SanityCheck (unittest.TestCase):
 	def testSanity (self):
 		"""fromRoman (toRoman(n)) == n for all n"""
 		for integer in range (1, 4000):
@@ -116,7 +116,7 @@ class SanityCheck (unitest.TestCase):
 class CaseCheck (unittest.TestCase):
 	def testToRomanCase (self):
 		"""toRoman should always return uppercase"""
-		for integer in (range (1, 4000):
+		for integer in range (1, 4000):
 			numeral = roman.toRoman (integer)
 			self.assertEqual (numeral, numeral.upper())
 
@@ -127,6 +127,6 @@ class CaseCheck (unittest.TestCase):
 			roman.fromRoman (numeral.upper())
 			self.assertRaises (roman.InvalidRomanNumeralError, roman.fromRoman, numeral.lower())
 
-if __name__ == "__main__"
+if __name__ == "__main__":
 	unittest.main()
 
