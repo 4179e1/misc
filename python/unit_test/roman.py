@@ -22,6 +22,11 @@ romanNumeralMap = (('M', 1000),
 
 def toRoman (n, debug=0):
 	""" convert integer to Roman numeral"""
+	if not (0 < n < 4000):
+		raise OutOfRangeError, "number out of range (must be 1..3999)"
+	if int (n) <> n:
+		raise NotIntegerError, "non-integers can not be converted"
+
 	result = ""
 	for numeral, integer in romanNumeralMap:
 		while n >= integer:
