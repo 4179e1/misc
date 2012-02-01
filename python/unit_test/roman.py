@@ -1,4 +1,6 @@
 """Convert to and from Roman numerals"""
+import re
+
 #Define exceptions
 class RomanError (Exception): pass
 class OutOfRangeError (RomanError): pass
@@ -36,11 +38,26 @@ def toRoman (n, debug=0):
 				print 'subtracting', integer, 'from input, adding', numeral, 'to output'
 	return result
 
+#Define pattern to detect valid Roman numerals
+romanNumeralPattern = '^M?M?M?(CM|CD|D?C?C?C?)(XC|XL|L?X?X?X?)(IX|IV|V?I?I?I?)$'
 
-def fromRoman (s):
+def fromRoman (s, debug=0):
 	""" convert Roman numeral to integer"""
-	pass
+	if not re.search (romanNumeralPattern, s):
+		raise InvalidRomanNumeralError, 'Invalid Roman numeral: %s' % s
+
+	result = 0
+	index = 0
+	for numeral, integer in romanNumeralMap:
+		while s[index:index+len(numeral)] == numeral:
+			result += integer
+			index += len(numeral)
+			if debug > 0:
+				print 'found', numeral, 'of length', len(numeral), ', adding', integer
+	return result
+
 
 if __name__ == "__main__":
 	print "call toRoman (1424)"
 	toRoman (1424, 1)
+	fromRoman ('MCMLXXII', 1)

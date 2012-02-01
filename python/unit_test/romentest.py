@@ -86,7 +86,7 @@ class ToRomanBadInput (unittest.TestCase):
 
 	def testNonInteger (self):
 		"""toRoman should fail with non-integer input"""
-		self.assertRaises (roman.NotIntegerRrror, roman.toRoman, 0.5)
+		self.assertRaises (roman.NotIntegerError, roman.toRoman, 0.5)
 
 class FromRomanBadInput (unittest.TestCase):
 	def testTooManyRepeatedNumerals (self):
