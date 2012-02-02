@@ -103,6 +103,10 @@ class FromRomanBadInput (unittest.TestCase):
 		"""fromRoman should fail with malformed antecedents"""
 		for s in ('IIMXCC', 'VX', 'DCM', 'CMM', 'IXIV', 'MCMC', 'XCX', 'IVI', 'LM', 'LD', 'LC'):
 			self.assertRaises (roman.InvalidRomanNumeralError, roman.fromRoman, s)
+	
+	def testBlank (self):
+		"""fromRoman should with blank string"""
+		self.assertRaises(roman.InvalidRomanNumeralError, roman.fromRoman, "")
 
 
 class SanityCheck (unittest.TestCase):
