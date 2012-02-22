@@ -28,6 +28,7 @@ static char *input = NULL;
 static bool verbose = false;
 static int size = 0;
 static char *output = NULL;
+static bool version = false;
 
 int main (int argc, char *argv[])
 {
@@ -44,8 +45,7 @@ int main (int argc, char *argv[])
 				size = atoi (optarg);
 				break;
 			case 'v':
-				printf ("version 0.0.1\n");
-				exit (0);
+				version = true;
 				break;
 			case 'o':
 				output = optarg;
@@ -67,6 +67,16 @@ int main (int argc, char *argv[])
 	if (size) printf ("size: %d\n", size);
 	if (output) printf ("output: %s\n", output);
 	if (verbose) printf ("verbose\n");
+	if (version)	printf ("version 0.0.1\n");
+	printf ("argc=%d\n", argc);
+	if (optind <= argc - 1)
+	{
+		printf ("target: %s\n", argv[optind]);
+	}
+	else
+	{
+		printf ("not specify target\n");
+	}
 
 	return 0;
 }
