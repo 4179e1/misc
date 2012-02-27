@@ -1,5 +1,5 @@
 #if 0
-clang $0 -o `basename $0 .c` -g -Wall
+${CC:=clang} $0 -o `basename $0 .c` -g -Wall
 exit $?
 #endif
 
@@ -121,7 +121,7 @@ void parse_args (int argc, char *argv[])
 
 	if (argc < 4)
 	{
-		printf ("usage: %s", argv[0]);
+		printf ("usage: %s <listen port> <isolated host> <service>\n", argv[0]);
 		exit (1);
 	}
 
@@ -270,6 +270,72 @@ void reap_status (int signo)
 
 void do_proxy (int usersockfd)
 {
-	fputs ("hello", stdout);
+	int isosockfd;
+	fd_set rdfdset;
+	int connstat;
+	int iolen;
+	char buf[2048];
+	
+	/* open a socket to connect to the isolated host */
+	if ((isosockfd = socket (AF_INET, SOCK_STREAM, 0)) < 0)
+	{
+		errorout ("failed to create socket to host");
+	}
+
+	connstat = connect (isosockfd, (struct sockaddr *)&hostaddr, sizeof (hostaddr));
+
+	switch (connstat)
+	{
+		case 0: 
+			break;
+		case ETIMEDOUT:
+		case ECONNREFUSED:
+		case ENETUNREACH:
+			strcpy (buf, strerror (errno));
+			strcat (buf, "/r/n");
+			write (usersockfd, buf, strlen (buf));
+			close (usersockfd);
+			exit (1);
+			break;
+		default:
+			errorout ("failed to connect to host");
+	}
+
+	while (1)
+	{
+		/* select for readbility on either of our two sockets */
+		FD_ZERO (&rdfdset);
+		FD_SET (usersockfd, &rdfdset);
+		FD_SET (isosockfd, &rdfdset);
+
+		if (select (FD_SETSIZE, &rdfdset, NULL, NULL, NULL) < 0)
+		{
+			errorout ("Select failed");
+		}
+
+		/* is the client sending data? */
+		if (FD_ISSET(usersockfd, &rdfdset))
+		{
+			/* (zero length means the client disconnected */
+			if ((iolen = read (usersockfd, buf, sizeof (buf))) <= 0)
+			{
+				break;
+			}
+			write (isosockfd, buf, iolen);
+		}
+
+		/* is the host sending data? */
+		if (FD_ISSET (isosockfd, &rdfdset))
+		{
+			if ((iolen = read (isosockfd, buf, sizeof (buf))) <= 0)
+			{
+				break;
+			}
+			write (usersockfd, buf, iolen);
+		}
+	}
+	close (isosockfd);
 	close (usersockfd);
+
+
 }
