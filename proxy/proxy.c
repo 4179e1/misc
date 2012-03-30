@@ -222,7 +222,7 @@ void daemonize (int servfd)
 	setpgrp();
 #else
 	if (setpgrp(0,getpid()) < 0)
-	}
+	{
 		fputs("failed to become process group leader",stderr);
 		exit(1);
 	}
