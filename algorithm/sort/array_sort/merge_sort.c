@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <limits.h>
 #include "array_sort.h"
 
 /**
@@ -11,8 +12,8 @@
  *
  * @param array The input array
  * @param p Beginning index number of array.
- * @param q Endding index number of array.
- * @param r	Middle index number of array, end of the first sub-sequence.
+ * @param q	Middle index number of array, end of the first sub-sequence.
+ * @param r Endding index number of array.
  * @note Attention: p <= q < r
  */
 static void merge (int *array, int p, int q, int r)
@@ -35,8 +36,8 @@ static void merge (int *array, int p, int q, int r)
 		ra[j] = array [q + j + 1];
 	}
 	
-	la [n1] = MERGE_SORT_SENTINEL;
-	ra [n2] = MERGE_SORT_SENTINEL;
+	la [n1] = INT_MAX;
+	ra [n2] = INT_MAX;
 
 	i = 0;
 	j = 0;

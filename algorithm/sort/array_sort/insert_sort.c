@@ -16,6 +16,13 @@
  */
 int *insert_sort (int *array, int len)
 {
+	/**
+	 * j for the select card in array
+	 * i for the boundary of the sorted group in the beginging 
+	 * i + 1 for the index for the selected card after iteration.
+	 * key for the value of the selected card.
+	*/
+	
 	int i, j, key;
 
 	for (j = 1; j < len; j++)
