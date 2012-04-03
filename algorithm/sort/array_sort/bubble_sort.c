@@ -14,14 +14,15 @@
  */
 int *bubble_sort (int *array, int len)
 {
+	/* array[0, i) for the sorted sequence */
 	int i, j;
 	for (i = 0; i < len; i++)
 	{
-		for (j = i + 1; j < len; j++)
+		for (j = len - 1; j > i; j--)
 		{
-			if (array[i] > array[j])
+			if (array[j] < array[j - 1])
 			{
-				swap (&array[i], &array[j]);
+				swap (&array[j], &array[j - 1]);
 			}
 		}
 	}
