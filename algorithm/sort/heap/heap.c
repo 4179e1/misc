@@ -142,8 +142,6 @@ void heap_insert (Heap *h, int v)
 //		h->data[h->card - 1] = INT_MAX;
 //	}
 	heap_update_key (h, h->card - 1, v);
-
-	print_array (h->data, h->card - 1);
 }
 
 /* priority queue*/
