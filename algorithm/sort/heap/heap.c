@@ -133,14 +133,14 @@ void heap_insert (Heap *h, int v)
 		h->size += h->growing_factor;
 	}
 
-//	if (h->type == MAX_HEAP)
-//	{
-//		h->data[h->card - 1] = INT_MIN;
-//	}
-//	else
-//	{
-//		h->data[h->card - 1] = INT_MAX;
-//	}
+	if (h->type == MAX_HEAP)
+	{
+		h->data[h->card - 1] = INT_MIN;
+	}
+	else
+	{
+		h->data[h->card - 1] = INT_MAX;
+	}
 	heap_update_key (h, h->card - 1, v);
 }
 
@@ -174,11 +174,11 @@ void heap_update_key (Heap *h, int i, int key)
 {
 	if (h->type == MAX_HEAP)
 	{
-//		if (key < h->data[i])
-//		{
-//			fprintf (stderr, "Max-Heap: new key %d is samller than current key %d\n", key, h->data[i]);
-//			return;
-//		}
+		if (key < h->data[i])
+		{
+			fprintf (stderr, "Max-Heap: new key %d is samller than current key %d\n", key, h->data[i]);
+			return;
+		}
 
 		h->data[i] = key;
 		while ((i > 0) && (h->data[HEAP_PARENT_INDEX(i)] < h->data[i]))
@@ -189,11 +189,11 @@ void heap_update_key (Heap *h, int i, int key)
 	}
 	else
 	{
-//		if (key > h->data[i])
-//		{
-//			fprintf (stderr, "Min-Heap: new key %d is larger than current key %d\n", key, h->data[i]);
-//			return;
-//		}
+		if (key > h->data[i])
+		{
+			fprintf (stderr, "Min-Heap: new key %d is larger than current key %d\n", key, h->data[i]);
+			return;
+		}
 		h->data[i] = key;
 		while ((i > 0) && (h->data[HEAP_PARENT_INDEX(i)] > h->data[i]))
 		{
