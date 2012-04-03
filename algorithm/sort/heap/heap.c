@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "heap.h"
 #include "base.h"
 
@@ -21,10 +22,13 @@ struct _heap
 #define HEAP_LEFT_INDEX(i) (2 * i + 1)
 #define HEAP_RIGHT_INDEX(i) (2 * i + 2)
 
+#ifndef USE_LOOP
 static void max_heapify (Heap *heap, int index);
 static void min_heapify (Heap *heap, int index);
+#else
 static void max_heapify_loop (Heap *h, int i);
 static void min_heapify_loop (Heap *h, int i);
+#endif /* USE_LOOP */
 static Heap *heap_new_from_array (HeapType heap_type, int *array, int size);
 
 Heap *heap_new (HeapType heap_type, int size)
@@ -49,7 +53,11 @@ Heap *heap_new (HeapType heap_type, int size)
 	h->size = size;
 	h->type = heap_type;
 
+#ifndef USE_LOOP
 	h->heapify_func = (heap_type == MAX_HEAP) ? max_heapify : min_heapify;
+#else
+	h->heapify_func = (heap_type == MAX_HEAP) ? max_heapify_loop : min_heapify_loop;
+#endif /* USE_LOOP */
 
 	return h;
 }
@@ -125,15 +133,17 @@ void heap_insert (Heap *h, int v)
 		h->size += h->growing_factor;
 	}
 
-	if (h->type == MAX_HEAP)
-	{
-		h->data[h->card - 1] = INT_SENT_MIN;
-	}
-	else
-	{
-		h->data[h->card - 1] = INT_SENT_MAX;
-	}
+//	if (h->type == MAX_HEAP)
+//	{
+//		h->data[h->card - 1] = INT_MIN;
+//	}
+//	else
+//	{
+//		h->data[h->card - 1] = INT_MAX;
+//	}
 	heap_update_key (h, h->card - 1, v);
+
+	print_array (h->data, h->card - 1);
 }
 
 /* priority queue*/
@@ -166,11 +176,11 @@ void heap_update_key (Heap *h, int i, int key)
 {
 	if (h->type == MAX_HEAP)
 	{
-		if (key < h->data[i])
-		{
-			fprintf (stderr, "Max-Heap: new key %d is samller than current key %d\n", key, h->data[i]);
-			return;
-		}
+//		if (key < h->data[i])
+//		{
+//			fprintf (stderr, "Max-Heap: new key %d is samller than current key %d\n", key, h->data[i]);
+//			return;
+//		}
 
 		h->data[i] = key;
 		while ((i > 0) && (h->data[HEAP_PARENT_INDEX(i)] < h->data[i]))
@@ -181,11 +191,11 @@ void heap_update_key (Heap *h, int i, int key)
 	}
 	else
 	{
-		if (key > h->data[i])
-		{
-			fprintf (stderr, "Min-Heap: new key %d is larger than current key %d\n", key, h->data[i]);
-			return;
-		}
+//		if (key > h->data[i])
+//		{
+//			fprintf (stderr, "Min-Heap: new key %d is larger than current key %d\n", key, h->data[i]);
+//			return;
+//		}
 		h->data[i] = key;
 		while ((i > 0) && (h->data[HEAP_PARENT_INDEX(i)] > h->data[i]))
 		{
@@ -218,6 +228,7 @@ int *heap_sort (int *array, int len)
  * private func
  ******************************************************/
 
+#ifndef USE_LOOP
 /**
  * @breaif heapify a heap
  * 
@@ -290,6 +301,7 @@ static void min_heapify (Heap *h, int i)
 	}
 }
 
+#else
 /**
  * @brief loop version of max_heapify, should be faster.
  * @see max_heapify().
@@ -365,6 +377,7 @@ static void min_heapify_loop (Heap *h, int i)
 		}
 	} while (p != minimum);
 }
+#endif /* USE_LOOP */
 
 static Heap *heap_new_from_array (HeapType heap_type, int *array, int size)
 {
@@ -383,7 +396,11 @@ static Heap *heap_new_from_array (HeapType heap_type, int *array, int size)
 	h->growing_factor = 0;
 	h->size = size;
 	h->type = heap_type;
+#ifndef USE_LOOP
 	h->heapify_func = (heap_type == MAX_HEAP) ? max_heapify : min_heapify;
+#else
+	h->heapify_func = (heap_type == MAX_HEAP) ? max_heapify_loop : min_heapify_loop;
+#endif /* USE_LOOP */
 
 	h->card = size;
 	for (i = HEAP_PARENT_INDEX (h->card); i >= 0; i--)
