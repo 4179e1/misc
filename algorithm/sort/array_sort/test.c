@@ -26,10 +26,10 @@ int main (void)
 	bubble_sort (array4, ARRAY_LEN(array4));
 	print_array (array4, ARRAY_LEN(array4));
 
-	int array5[] = {2, 8, 7, 1, 3, 5, 6};
+	int arrayz[] = {7, 0, 9, 3, 9, 4};
 	printf ("quick sort\n");
-	quick_sort (array5, 0, ARRAY_LEN(array5) - 1);
-	print_array (array5, ARRAY_LEN(array5));
+	quick_sort (arrayz, 0, ARRAY_LEN(arrayz) - 1);
+	print_array (arrayz, ARRAY_LEN(arrayz));
 
 	int array6[] = {2, 8, 7, 1, 3, 5, 6};
 	printf ("randomized quick sort\n");

@@ -22,7 +22,7 @@ int *selection_sort (int *array, int len)
 	for (i = 0; i < len - 1; i++)
 	{
 		min = &array[i];
-		for(j = i; (j < len); j++)
+		for(j = i + 1; j < len; j++)
 		{
 			if (array[j] < *min)
 			{

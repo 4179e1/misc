@@ -3,6 +3,9 @@
 
 /**
  * @brief quick sort
+ *
+ * Partition array into 2 sub-sequences withe middle number Q index with q,
+ * so that in each recursion, Q is placed in the right place.
  * 
  * @note Complexity O ( n*lg(n) )
  */

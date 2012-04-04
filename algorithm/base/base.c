@@ -53,8 +53,8 @@ int dice (int num, int surface)
 /** 
  * @brief partition for quick sort
  * 
- * Select the last element as the Q value, elements between index i and j
- * are smaller than Q, elements between index j and (r - 1) are greater than
+ * Select the last element as the Q value, elements between index p and i
+ * are smaller than Q, elements between index i + 1 and r - 1 are greater than
  * or equal to Q. Swap Q with the elements in index (i + 1). return index of Q.
  *
  * @note Complexity O ( n )
