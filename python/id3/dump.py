@@ -7,13 +7,14 @@ Usage: python dump.py [options] [file]
 
 Options:
 	-e ..., --encoding=...   specify encoding
-	-t ..., --to=...         specify destination encoding
+	-c
 '''
 
 import sys
 import getopt
 import os.path
 import mutagen.id3
+
 
 frames = \
 (
@@ -95,24 +96,44 @@ frames = \
 
 def usage():
 	sys.stderr.write(__doc__)
+
+
+def convert_frames (audio, encoding):
+	def conv_enc(text):
+		return text.encode('iso-8859-1').decode(encoding)
+	for frame, desc in frames:
+		if audio.has_key(frame):
+			audio[frame].text = map (conv_enc, audio[frame])
+			audio[frame].encoding=1
+			print frame, audio[frame]
+	audio.save()
 	
-def dump_frames(file, encoding='utf8', to='utf8'):
+def dump_frames (audio, encoding=None):
+	for frame, desc in frames:
+		if audio.has_key(frame):
+			if encoding is None:
+				print frame, audio[frame]
+			else:
+				print frame, unicode(audio[frame]).encode('iso-8859-1').decode(encoding)
+	
+def do_frames(file, encoding=None, convert=None):
 	try:
 		audio = mutagen.id3.ID3 (file)
 	except mutagen.id3.ID3NoHeaderError:
 		sys.stderr.write ("Warning: %s doesn't contain vaild ID3 Tag!\n" % file)
 		return
-	for frame, desc in frames:
-		if audio.has_key(frame):
-			if encoding == to:
-				print frame, audio[frame]
-		#print frame, desc
+
+	print 'hello'
+	if convert:
+		convert_frames (audio, encoding)
+	else:
+		dump_frames (audio, encoding)
 
 def main(argv):
-	encoding='utf8'
-	to='utf8'
+	encoding = None
+	convert=None
 	try:
-		opts, args = getopt.getopt (argv, 'e:t:h', ['encoding=', 'to=', 'help'])
+		opts, args = getopt.getopt (argv, 'e:ch', ['encoding=', 'convert', 'help'])
 	except getopt.GetoptError:
 		usage()
 		sys.exit(1)
@@ -122,11 +143,15 @@ def main(argv):
 			sys.exit (1)
 		elif opt in ('-e', '--encoding'):
 			encoding = arg
-		elif opt in ('-t', '--to'):
-			to = arg
+		elif opt in ('-c', '--convert'):
+			convert=1
+	if (convert is not None) and (encoding is None):
+		sys.stderr.write ("Requested to covert, but no encoding is specified!\n")
+		usage()
+		sys.exit (2)
 	for arg in args:
 		if os.path.isfile (arg):
-			dump_frames(arg, encoding)
+			do_frames(arg, encoding, convert)
 		else:
 			sys.stderr.write ("Warning: %s is not a valid file!\n" % arg);
 
