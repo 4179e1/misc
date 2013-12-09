@@ -1,27 +1,21 @@
-class Filter:
-    def init(self):
-        self.blocked=[]
-    def filter(self,sequence):
-        return [x for x in sequence if x not in self.blocked]
+__metaclass__ = type
 
-class SPAMFilter(Filter):
-    def init (self):
-        self.blocked=['SPAM']
+class Bird:
+    def __init__ (self):
+        self.hungry = True
+    def eat(self):
+        if self.hungry:
+            print ("Aaaah...")
+            self.hungry = False
 
-s = [1,2,3,'SPAM', 'HAHA']
-f = Filter()
-f.init()
-print (f.filter(s))
+class SongBird(Bird):
+    def __init__ (self):
+        super(SongBird, self).__init__()
+        self.sound = 'Squawk!'
+    def sing(self):
+        print (self.sound)
 
-spam = SPAMFilter()
-spam.init()
-print (spam.filter(s))
-
-print (issubclass(SPAMFilter, Filter))
-print (issubclass(Filter, SPAMFilter))
-print (SPAMFilter.__bases__)
-print (Filter.__bases__)
-print (isinstance(spam,SPAMFilter) )
-print (isinstance(spam,Filter) )
-print (spam.__class__)
-
+sb = SongBird()
+sb.sing()
+sb.eat()
+sb.eat()
