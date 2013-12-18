@@ -1,0 +1,1 @@
+shapes=['squre', 'traingle', 'circle']
