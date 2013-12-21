@@ -1,9 +1,8 @@
-#include<gtk/gtk.h>
+#include <gtk/gtk.h>
 
 void on_bt_show_title_clicked(GtkWidget *widget, gpointer window)
 {
-	:if expand("%") == ""|browse confirm w|else|confirm w|endif
-		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
 		gtk_window_set_title(window, "Title");
 	} else {
 		gtk_window_set_title(window, "");
