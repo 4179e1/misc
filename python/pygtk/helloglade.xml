@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkAboutDialog" id="aboutdialog">
-    <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="type_hint">normal</property>
     <property name="program_name">HelloGlade</property>
@@ -12,46 +11,42 @@
     <property name="website">www.poetpalace.org</property>
     <property name="license" translatable="yes">GPL</property>
     <property name="authors">Lyre</property>
-    <signal name="delete-event" handler="hide_on_delete_event" swapped="no"/>
+    <signal name="delete_event" handler="hide_on_delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="spacing">2</property>
+        <child>
+          <placeholder/>
+        </child>
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
   </object>
   <object class="GtkFileChooserDialog" id="filechooserdialog">
-    <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="type_hint">normal</property>
-    <signal name="delete-event" handler="hide_on_delete_event" swapped="no"/>
-    <signal name="response" handler="on_fc_response" swapped="no"/>
+    <signal name="delete_event" handler="hide_on_delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="spacing">2</property>
+        <child>
+          <placeholder/>
+        </child>
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button4">
@@ -84,13 +79,9 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
@@ -100,22 +91,21 @@
     </action-widgets>
   </object>
   <object class="GtkFileChooserDialog" id="filesave">
-    <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="type_hint">normal</property>
     <property name="action">save</property>
     <property name="do_overwrite_confirmation">True</property>
-    <signal name="delete-event" handler="hide_on_delete_event" swapped="no"/>
-    <signal name="response" handler="on_filesave_response" swapped="no"/>
+    <signal name="delete_event" handler="hide_on_delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox5">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="spacing">2</property>
+        <child>
+          <placeholder/>
+        </child>
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area5">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button2">
@@ -148,13 +138,9 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
@@ -165,31 +151,25 @@
   </object>
   <object class="GtkTextBuffer" id="textbuffer1"/>
   <object class="GtkWindow" id="window">
-    <property name="can_focus">False</property>
-    <signal name="destroy" handler="window_destroy" swapped="no"/>
+    <signal name="destroy" handler="window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <child>
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">文件(_F)</property>
+                <property name="label" translatable="yes">&#x6587;&#x4EF6;(_F)</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem1">
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -198,7 +178,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem2">
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -207,7 +186,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem3">
                         <property name="label">gtk-save</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -216,7 +194,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem4">
                         <property name="label">gtk-save-as</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -224,14 +201,12 @@
                     <child>
                       <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem5">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -243,18 +218,15 @@
             <child>
               <object class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">编辑(_E)</property>
+                <property name="label" translatable="yes">&#x7F16;&#x8F91;(_E)</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem6">
                         <property name="label">gtk-cut</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -263,7 +235,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem7">
                         <property name="label">gtk-copy</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -272,7 +243,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem8">
                         <property name="label">gtk-paste</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -281,7 +251,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem9">
                         <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -293,29 +262,25 @@
             <child>
               <object class="GtkMenuItem" id="menuitem3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">视图(_V)</property>
+                <property name="label" translatable="yes">&#x89C6;&#x56FE;(_V)</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">帮助(_H)</property>
+                <property name="label" translatable="yes">&#x5E2E;&#x52A9;(_H)</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem10">
                         <property name="label">gtk-about</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="about_activate" object="aboutdialog" swapped="yes"/>
+                        <signal name="activate" handler="about_activate" object="aboutdialog"/>
                       </object>
                     </child>
                   </object>
@@ -325,23 +290,20 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="toolbar_style">both-horiz</property>
             <child>
               <object class="GtkToolButton" id="toolbutton1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="is_important">True</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
-                <signal name="clicked" handler="open_clicked" swapped="no"/>
+                <signal name="clicked" handler="open_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -351,11 +313,10 @@
             <child>
               <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="is_important">True</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-close</property>
-                <signal name="clicked" handler="on_close_clicked" swapped="no"/>
+                <property name="stock_id">gtk-new</property>
+                <signal name="clicked" handler="on_close_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -365,11 +326,10 @@
             <child>
               <object class="GtkToolButton" id="toolbutton3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="is_important">True</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
-                <signal name="clicked" handler="on_save_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_save_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -379,7 +339,6 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -397,24 +356,85 @@
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkStatusbar" id="statusbar">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="spacing">2</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkDialog" id="closesave">
+    <property name="border_width">5</property>
+    <property name="type_hint">normal</property>
+    <property name="has_separator">False</property>
+    <signal name="delete_event" handler="hide_on_delete_event"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox6">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Save the file?</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button6">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button5">
+                <property name="label">gtk-save</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">button6</action-widget>
+      <action-widget response="-5">button5</action-widget>
+    </action-widgets>
   </object>
 </interface>

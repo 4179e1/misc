@@ -5,42 +5,58 @@ import gtk
 import gtk.glade
 
 class HelloGlade:
-    def on_close_clicked (self, widget, data=None):
-        pass
-        
-    def on_filesave_response (self, widget, signal, data=None):
-        print (signal)
-        # TODO
-        pass
+    def _do_run_dialog (self, dialog):
+        dialog.show()
+        response = dialog.run()
+        dialog.hide()
+        return response
 
-    def on_save_clicked (self, widget, data=None):
-        if self.filename is None:
-            self.fs.show()
-            self.fs.run()
-            self.fs.hide()
-        else :
-            print ('saving file')
+    def _do_open (self):
+            self._set_status (self.filename.split('/')[-1])
+            self.file = open (self.filename, 'a+')
+
+    def _do_save (self):
             start,end = self.textbuffer.get_bounds()
             text = self.textbuffer.get_text(start, end)
             self.file.truncate(0)
             self.file.write (text)
-            self.file.close()
 
-    def on_fc_response (self, widget, response, data=None):
+    def on_close_clicked (self, widget, data=None):
+        response = self._do_run_dialog (self.cs)
         if response == gtk.RESPONSE_OK:
-            self.filename = self.fc.get_filename()
-            self._set_status (self.filename.split('/')[-1])
+            if self.file is None:
+                sr = self._do_run_dialog (self.fs)
+                if sr == gtk.RESPONSE_OK:
+                    self.filename = self.fs.get_filename()
+                    self._do_open()
+                else:
+                    return
+            self._do_save()
+            self.file.close()
+            self._reset()
 
-            self.file = open (self.filename, 'rw+')
-            self.textbuffer.set_text (self.file.read())
+    def on_save_clicked (self, widget, data=None):
+        if self.file is None:
+            response = self._do_run_dialog (self.fs)
+            if response == gtk.RESPONSE_OK:
+                self.filename = self.fs.get_filename()
+                self._do_open()
+                self._do_save()
+        else :
+            self._do_save()
 
     def open_clicked (self, widget, data=None):
         # there's a warning after setting reponse id in glade
-        self.fc.show()
-        response = self.fc.run()
-        self.fc.hide()
+        response = self._do_run_dialog (self.fc)
+        if response == gtk.RESPONSE_OK:
+            self.filename = self.fc.get_filename()
+            self._do_open()
+            self.textbuffer.set_text (self.file.read())
 
     def window_destroy (self, gobject, data=None):
+        self.on_save_clicked (None, None)
+        if self.file is not None:
+            self.file.close()
         gtk.main_quit()
 
     def about_activate (self, widget, data=None):
@@ -55,6 +71,7 @@ class HelloGlade:
 
     def _reset (self):
         self._set_status ('untitiled')
+        self.file = None
         self.filename = None
         self.textbuffer.set_text('')
         
@@ -70,12 +87,12 @@ class HelloGlade:
         self.sbid = self.sb.get_context_id ('untitiled')
         self.fc = self.builder.get_object ('filechooserdialog')
         self.fs = self.builder.get_object ('filesave')
+        self.cs = self.builder.get_object ('closesave')
         self.tv = self.builder.get_object ('textview')
         self.textbuffer = self.tv.get_buffer()
 
         self._reset()
         self.window.show()
-
 
 if __name__ == '__main__':
     helloglade = HelloGlade()
