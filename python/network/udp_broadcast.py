@@ -1,6 +1,8 @@
 import sys, socket
 
 s = socket.socket (socket.AF_INET, socket.SOCK_DGRAM)
+# it seems that on linux, only client need this
+# servers will get the broadcast packet even if they didn't enable it
 s.setsockopt (socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 MAX = 65535
