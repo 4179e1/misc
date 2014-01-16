@@ -18,7 +18,7 @@ except ssl.CertificateError as ce:
     print ('Certificatie error:', str(ce))
     sys.exit (1)
 
-sslsocket.sendall ('GET /HTTP/1.0\r\n\r\n')
+sslsock.sendall (bytes('GET /HTTP/1.0\r\n\r\n', 'UTF-8'))
 result = sslsock.makefile().read()
 sslsock.close()
 print ('The document https://%s is %d bytes long' % (hostname, len(result)))
