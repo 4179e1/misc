@@ -5,7 +5,7 @@ def handle_client (client_sock):
         while True:
             question = launcelot.recv_until (client_sock, '?')
             answer = launcelot.qadict.get (question, "I don't understand your question.")
-            client_sock.sendall (answer + '\n')
+            client_sock.sendall (answer)
     except EOFError:
         client_sock.close()
 
