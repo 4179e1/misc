@@ -1,4 +1,4 @@
-import launcelot
+import launcelot, socket
 
 def handle_client (client_sock):
     try:
@@ -6,7 +6,7 @@ def handle_client (client_sock):
             question = launcelot.recv_until (client_sock, '?')
             answer = launcelot.qadict.get (question, "I don't understand your question.")
             client_sock.sendall (answer)
-    except EOFError:
+    except (EOFError, socket.error):
         client_sock.close()
 
 def server_loop (listen_sock):
