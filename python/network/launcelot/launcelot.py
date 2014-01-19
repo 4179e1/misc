@@ -22,7 +22,7 @@ def setup():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt (socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind ((interface, PORT))
-    sock.listen (128)
+    sock.listen (1024)
     print 'Ready and listening at %r port %d' % (interface, PORT)
     return sock
 
