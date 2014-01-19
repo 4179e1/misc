@@ -9,14 +9,19 @@ responses = {}
 poll = select.poll()
 poll.register (listen_sock, select.POLLIN)
 
+def clean_fd (fd, sock):
+	sock.close()
+	poll.unregister(fd)
+	del sockets[fd]
+	requests.pop (sock,None)
+	responses.pop (sock, None) 
+
 while True:
 	for fd, event in poll.poll():
 		sock = sockets[fd]
-		if event & (select.POLLHUP | select.POLLERR | select.POLLNVAL):
-			poll.unregister(fd)
-			del sockets[fd]
-			requests.pop (sock,None)
-			responses.pop (sock, None) 
+		if event & (select.POLLHUP | select.POLLERR):
+			print 'Error occoured, poll event %d' % event
+			clean_fd (fd, sock)
 
 		elif sock is listen_sock:
 			newsock, sockname = sock.accept()
@@ -29,7 +34,7 @@ while True:
 		elif event & select.POLLIN:
 			data = sock.recv(4096).strip('\n')
 			if not data:
-				sock.close()
+				clean_fd (fd, sock)
 				continue
 			requests[sock] += data				# add to request
 			if '?' == requests[sock][-1]:
