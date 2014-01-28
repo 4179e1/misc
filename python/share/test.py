@@ -1,16 +1,16 @@
 from xmlrpclib import *
 
-mypeer = ServerProxy ('http://localhost:4242')
-code, data = mypeer.query('file2')
-print 'CODE: %d, DATA: %s' % (code, data)
+try:
+	mypeer = ServerProxy ('http://localhost:4242')
+	print mypeer.query('file2')
+except:
+	print 'oops, not found'
 
 otherpeer = ServerProxy ('http://localhost:4243')
-code, data = otherpeer.query('file2')
-print 'CODE: %d, DATA: %s' % (code, data)
+print otherpeer.query('file2')
 
 mypeer.hello ('http://localhost:4243')
-code, data = mypeer.query('file2')
-print 'CODE: %d, DATA: %s' % (code, data)
+print mypeer.query('file2')
 
 mypeer.fetch('file2', 'secret1')
 
