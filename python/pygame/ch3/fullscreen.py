@@ -20,11 +20,10 @@ while True:
 			if event.key == K_ESCAPE:
 				exit()
 			if event.key == K_f:
-				FullScreen = not Fullscreen
-				if FullScreen:
+				Fullscreen = not Fullscreen
+				if Fullscreen:
 					screen = pygame.display.set_mode (Resolution, FULLSCREEN, 32)
 				else:
-					print 'no fullscreen'
 					screen = pygame.display.set_mode (Resolution, 0, 32)
 
 	screen.blit (background, (0, 0))
