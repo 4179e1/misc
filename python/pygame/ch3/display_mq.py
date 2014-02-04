@@ -15,7 +15,9 @@ while True:
 	event_text = event_text[-SCREEN_SIZE[1]/font_height:]
 
 	if event.type == QUIT:
+		print 'about to exit()'
 		exit()
+		print 'should be done'
 
 	screen.fill ((255,255,255))
 
