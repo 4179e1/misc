@@ -39,6 +39,7 @@ while True:
 
 	screen.blit(background, (0, 0))
 	screen.blit (sprite, sprite_pos)
+	print sprite.get_rect()
 
 	time_passed = clock.tick(60)
 	time_passed_seconds = time_passed / 1000.0
