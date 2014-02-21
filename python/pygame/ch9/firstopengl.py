@@ -15,7 +15,7 @@ def resize (width, height):
 	glViewport (0, 0, width, height)
 	glMatrixMode (GL_PROJECTION)
 	glLoadIdentity()
-	gluPerspective (60.0, float (width)/height, .1, 1000.)
+	gluPerspective (60.0, float (width)/height, 0.1, 1000.)
 	glMatrixMode (GL_MODELVIEW)
 	glLoadIdentity()
 
@@ -62,6 +62,9 @@ class Cube (object):
 		glColor (self.color)
 		vertices = []
 		for v in self.vertices:
+			# Vector3 (v) + self.position is a Vector3 ( plus for translation)
+			# tuple () convert it into... a tuple...
+			# print Vector3(v), self.position
 			vertices.append (tuple (Vector3(v) + self.position))
 
 		glBegin (GL_QUADS)
@@ -89,8 +92,10 @@ class Map (object):
 			for x in range (w):
 				r, g, b, a = map_surface.get_at ((x, y))
 				if (r, g, b) != (255, 255, 255):
+					# color range are 0 - 1 in opengl
 					gl_col = (r/255.0, g/255.0, b/255.0)
-					position = (float(x), 0.0, float (y))
+					#position = (float(x), 0.0, float (y))
+					position = (float(x), -float(y), 0.0)
 					cube = Cube (position, gl_col)
 					self.cubes.append (cube)
 		map_surface.unlock()
@@ -104,6 +109,22 @@ class Map (object):
 			
 			for cube in self.cubes:
 				cube.render()
+			# test
+			glLineWidth(1.0)
+			glColor ((0.0, 0.0, 0.0))
+			glBegin (GL_LINES)
+			glVertex (0.0, 0.0, 0.0)
+			glVertex (10.0, 0.0, 0.0)
+			glEnd ()
+			glBegin (GL_LINES)
+			glVertex (0.0, 0.0, 0.0)
+			glVertex (0.0, -10.0, 0.0)
+			glEnd ()
+			glBegin (GL_LINES)
+			glVertex (0.0, 0.0, 0.0)
+			glVertex (0.0, 0.0, 10.0)
+			glEnd ()
+			# test
 
 			glEndList()
 		else:
@@ -120,7 +141,9 @@ def run():
 	map = Map()
 
 	camera_matrix = Matrix44()
-	camera_matrix.translate = (10.0, .6, 10.0)
+	#camera_matrix.translate = (10.0, 0.6, 10.0)
+	camera_matrix.translate = (20.0, -20.0, 50.0)
+	#camera_matrix.translate = (3.0, 0.0, 1.0)
 
 	rotation_direction = Vector3 ()
 	rotation_speed = radians(90.0)
@@ -133,6 +156,7 @@ def run():
 				return
 			if event.type == KEYUP and event.key == K_ESCAPE:
 				return
+
 
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
