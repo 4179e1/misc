@@ -21,7 +21,7 @@ def resize (width, height):
 
 def init ():
 	glEnable (GL_DEPTH_TEST)
-	glClearColor (1.0, 1.0, 1.0, 1.0)
+	glClearColor (1.0, 1.0, 1.0, 0.0)
 	glShadeModel (GL_FLAT)
 	glEnable (GL_COLOR_MATERIAL)
 
@@ -105,7 +105,7 @@ class Map (object):
 			for cube in self.cubes:
 				cube.render()
 
-			glEndlist()
+			glEndList()
 		else:
 			glCallList (self.display_list)
 
@@ -141,6 +141,9 @@ def run():
 
 		pressed = pygame.key.get_pressed()
 
+		rotation_direction.set (0.0, 0.0, 0.0)
+		movement_direction.set (0.0, 0.0, 0.0)
+
 		if pressed [K_LEFT]:
 			rotation_direction.y += 1.0
 		if pressed [K_RIGHT]:
@@ -155,7 +158,7 @@ def run():
 			rotation_direction.z += 1.0
 		if pressed [K_w]:
 			movement_direction.z -= 1.0
-		if pressed [K_q]:
+		if pressed [K_s]:
 			movement_direction.z += 1.0
 
 		rotation = rotation_direction * rotation_speed * time_passed_seconds
