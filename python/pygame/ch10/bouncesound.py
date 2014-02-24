@@ -9,13 +9,13 @@ from random import randint
 from gameobjects.vector2 import Vector2
 
 def stereo_pan (x_coord, screen_width):
-	right_volume = float (x_coorade)/ screen_width
+	right_volume = float (x_coord)/ screen_width
 	left_volume = 1.0 - right_volume
 	return (left_volume, right_volume)
 
 class Ball (object):
 	def __init__ (self, position, speed, image, bounce_sound):
-		self.position = Vector2 (poistion)
+		self.position = Vector2 (position)
 		self.speed = Vector2 (speed)
 		self.image = image
 		self.bounce_sound = bounce_sound
@@ -25,13 +25,13 @@ class Ball (object):
 		w,h = self.image.get_size()
 		screen_width, screen_height = SCREEN_SIZE
 
-		x,y = self.positon
+		x,y = self.position
 		x -= w/2
 		y -= h/2
 
-		ounce = False
+		bounce = False
 
-		if y + h > screen_heigth:
+		if y + h > screen_height:
 			self.speed.y = -self.speed.y * BOUNCINESS
 			self.position.y = screen_height -h / 2.0 -1.0
 			bounce = True
@@ -68,7 +68,7 @@ class Ball (object):
 		surface.blit (self.image, (x, y))
 
 def run():
-	pygame.mixer.pre_init (44100, 16, 2, 4096)
+	pygame.mixer.pre_init (44100, -16, 2, 4096)
 	pygame.init()
 
 	screen = pygame.display.set_mode (SCREEN_SIZE, 0)
@@ -90,7 +90,7 @@ def run():
 			if event.type == MOUSEBUTTONDOWN:
 				random_speed = (randint (-400, 400), randint (-300, 0))
 				new_ball = Ball (event.pos, random_speed, ball_image, bounce_sound)
-				balls.appedn (new_ball)
+				balls.append (new_ball)
 
 		time_passed_seconds = clock.tick (30) / 1000.
 
@@ -105,7 +105,7 @@ def run():
 				dead_balls.append (ball)
 
 		for ball in dead_balls:
-			ball.remove (ball)
+			balls.remove (ball)
 
 		mouse_pos = pygame.mouse.get_pos()
 		screen.blit (mouse_image, mouse_pos)
