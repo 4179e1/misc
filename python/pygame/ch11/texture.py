@@ -35,8 +35,12 @@ def run ():
 	glBindTexture (GL_TEXTURE_2D, texture_id)
 
 	# Tell OpenGL how to scale images
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+	param = GL_LINEAR
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param)
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param)
+
+#	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT)
+#	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT)
 
 	# Tell OpenGL that data is aligned to byte boundries
 	glPixelStorei (GL_UNPACK_ALIGNMENT, 1)
@@ -77,13 +81,14 @@ def run ():
 		glTranslatef (0.0, 0.0, -600.0)
 		glRotate (tex_rotation, 1, 0, 0)
 
+		SCALE = 3
 		# Draw a quad 
 		glBegin (GL_QUADS)
-		glTexCoord2f (0, 1)
+		glTexCoord2f (0, SCALE)
 		glVertex3f (-300, 300, 0)
-		glTexCoord2f (1, 1)
+		glTexCoord2f (SCALE, SCALE)
 		glVertex3f (300, 300, 0)
-		glTexCoord2f (1, 0)
+		glTexCoord2f (SCALE, 0)
 		glVertex3f (300, -300, 0)
 		glTexCoord2f (0, 0)
 		glVertex3f (-300, -300, 0)
