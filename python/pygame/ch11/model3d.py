@@ -44,7 +44,7 @@ class Model3D (object):
 			elif command == 'vt':
 				s, t = data
 				tex_coord = (float(s), float(y))
-				self.tex_cooreds.append (tex_coord)
+				self.tex_coords.append (tex_coord)
 			elif command == 'vn':
 				x, y, z = data
 				normal = (float (x), float (y), float (z))
@@ -78,7 +78,7 @@ class Model3D (object):
 			glPixelStorei (GL_UNPACK_ALIGNMENT, 1)
 
 			width, height = texture_surface.get_rect().size
-			glBuild2DMipmaps (GL_TEXTURE_2D,
+			gluBuild2DMipmaps (GL_TEXTURE_2D,
 							3,
 							width,
 							height,
@@ -97,7 +97,7 @@ class Model3D (object):
 			if command == 'newmtl':
 				material = Material()
 				material.name = data[0]
-				self.materials[data[0]] == material
+				self.materials[data[0]] = material
 			elif command == 'map_Kd':
 				material.texture_fname = data[0]
 
@@ -117,9 +117,9 @@ class Model3D (object):
 				glVertex3fv (vertices[vi])
 			glEnd()
 
-	def draw_quick ():
+	def draw_quick (self):
 		if self.display_list_id is None:
-			self.display_list = glGenLists (1)
+			self.display_list_id = glGenLists (1)
 			glNewList (self.display_list_id, GL_COMPILE)
 			self.draw()
 			glEndList ()
@@ -139,6 +139,6 @@ class Model3D (object):
 		self.materials.clear()
 
 		del self.vertices[:]
-		del sefl.tex_coords[:]
+		del self.tex_coords[:]
 		del self.normals[:]
 		del self.face_groups[:]
