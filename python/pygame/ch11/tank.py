@@ -37,7 +37,7 @@ def init ():
 	glMaterial (GL_FRONT, GL_SHININESS, 10.0)
 
 	glLight(GL_LIGHT0, GL_AMBIENT, (0.0, 0.0, 0.0, 1.0))
-	glLight (GL_LIGHT0, GL_DIFFUSE, (0.4, 0,4, 0,4, 1.0))
+	glLight (GL_LIGHT0, GL_DIFFUSE, (0.4, 0.4, 0.4, 1.0))
 	glLight (GL_LIGHT0, GL_SPECULAR, (1.0, 1.0, 1.0, 1.0))
 
 	glEnable (GL_LIGHT0)
@@ -71,7 +71,7 @@ def run():
 		glTranslatef (0.0, -1.5, -3.5)
 
 		rotation += time_passed_seconds * 45.0
-		glRotatef (rotation, 0, 1, 1, 0)
+		glRotatef (rotation, 0, 1, 0)
 
 		tank_model.draw_quick ()
 

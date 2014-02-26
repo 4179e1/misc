@@ -43,7 +43,7 @@ class Model3D (object):
 				self.vertices.append (vertex)
 			elif command == 'vt':
 				s, t = data
-				tex_coord = (float(s), float(y))
+				tex_coord = (float(s), float(t))
 				self.tex_coords.append (tex_coord)
 			elif command == 'vn':
 				x, y, z = data
@@ -106,9 +106,9 @@ class Model3D (object):
 		tex_coords = self.tex_coords
 		normals = self.normals
 
-		for face_grop in self.face_groups:
-			maerial = self.materials [face_group.material_name]
-			glBindTexture (GL_TEXTURE_2D, material.texture)
+		for face_group in self.face_groups:
+			material = self.materials [face_group.material_name]
+			glBindTexture (GL_TEXTURE_2D, material.texture_id)
 			
 			glBegin (GL_TRIANGLES)
 			for vi, ti, ni in face_group.tri_indices:
