@@ -43,6 +43,13 @@ def init ():
 	glEnable (GL_LIGHT0)
 	glLight (GL_LIGHT0, GL_POSITION, (0, 0.5, 1, 0))
 
+	# Fog
+	glEnable (GL_FOG)
+	glFogfv (GL_FOG_COLOR, (1.0, 1.0, 1.0))
+	glFogi (GL_FOG_MODE, GL_LINEAR)
+	glFogf (GL_FOG_START, 1.5)
+	glFogf (GL_FOG_END, 3.5)
+
 def run():
 	pygame.init ()
 	screen = pygame.display.set_mode (SCREEN_SIZE, HWSURFACE|OPENGL|DOUBLEBUF)
