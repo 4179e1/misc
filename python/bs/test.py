@@ -1,8 +1,14 @@
-#!/usr/bin/python
-#coding:utf-8
+#!/usr/bin/env python
+
+'''
+To simulate HTTP GET
+# export QUERY_STRING="q=test&hl=zh"
+# python test.py
+'''
 
 from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
+import os
 
 
 __metaclass__ = type
@@ -19,19 +25,7 @@ class Result:
 
 
 	def format (self):
-		# weird
-		print ('<section><a href="')
-		print (self.href)
-		print ('">')
-		print (self.title.encode("utf-8"))
-		print ("</a>")
-		print (self.cite.encode("utf-8"))
-		print (self.desc.encode("utf-8"))
-		print ("</section>")
-		#print ('<section><a href="%s">%s</a>%s%s</section>' % (repr(self.href), repr(self.title), repr(self.cite), repr(self.desc)))
-		#print ("<section><a href=" + self.href + ">" + self.title + "</a>" + self.cite + self.desc + "</section>")
-		
-		pass
+		print ('<section><a href="%s">%s</a>%s%s</section>' % (self.href, self.title.encode("utf-8"), self.cite.encode("utf-8"), self.desc.encode("utf-8")))
 
 
 header="""<html lang="zh-CN">
@@ -42,7 +36,12 @@ header="""<html lang="zh-CN">
 
 tail="""</body></html>"""
 
-qs='https://www.google.com/search?q=Shenzhen&hl=zh'
+search_home="https://www.google.com/search?"
+
+
+#qs='https://www.google.com/search?q=Shenzhen&hl=zh'
+# WARNNG: no validation on query string, directly pass to google
+qs= search_home + os.environ['QUERY_STRING']
 request = Request (qs)
 #request.add_header ('User-Agent', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)')
 request.add_header ('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36')
