@@ -11,7 +11,7 @@ void echo(int connfd)
 	rio = wp_rio_new(connfd);
 	while((n = wp_rio_readline(rio, buf, MAXLINE)) != 0)
 	{
-		printf("server received %d bytes\n", n);
+		printf("server received %zu bytes\n", n);
 		wp_rio_writen(rio, buf, n);
 	}
 	wp_rio_free (rio);

@@ -1,11 +1,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#define HAVE_SYS_EPOLL_H
 #include <libwp.h>
 #include <errno.h>
+#include <sys/epoll.h>
 
 #define MAX_EVENTS 10
 
 #define MAXLINE 1024
+
 
 static char buf[MAXLINE];
 void echo(int connfd) 

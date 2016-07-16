@@ -22,6 +22,7 @@ static const struct option myopt[] =
 	{"size", 	required_argument, 	NULL, 's'},
 	{NULL, 		no_argument, 		NULL, 'v'},
 	{"output", 	optional_argument, 	NULL, 'o'}
+	{0,			0,					0,	0},
 };
 
 static char *input = NULL;
