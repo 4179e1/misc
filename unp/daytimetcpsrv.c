@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
 				i--;
 			}
 		}
+		Shutdown (connfd, SHUT_RDWR);
 		Close (connfd);
 	}
 }
