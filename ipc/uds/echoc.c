@@ -5,6 +5,7 @@ exit $?
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -28,7 +29,19 @@ int main (int argc, char *argv[])
 
 	printf ("Trying to connect...\n");
 
+	/* bind */
 	remote.sun_family = AF_UNIX;
+	sprintf (remote.sun_path, "%s%d", SOCK_PATH, getpid());
+	unlink (remote.sun_path);
+	len = strlen (remote.sun_path) + sizeof (remote.sun_family);
+	if (bind (s, (struct sockaddr *)&remote, len) == -1)
+	{
+		perror ("bind");
+		exit (1);
+	}
+	unlink (remote.sun_path);
+	
+	/* connect */
 	strcpy (remote.sun_path, SOCK_PATH);
 	len = strlen (remote.sun_path) + sizeof (remote.sun_family);
 	if (connect (s, (struct sockaddr *)&remote, len) == -1)
@@ -61,4 +74,6 @@ int main (int argc, char *argv[])
 	}	
 
 	close (s);
+
+	return 0;
 }

@@ -15,8 +15,18 @@ exit $?
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 
 #define SOCK_PATH "/tmp/echo.socket"
+
+void sigchld_handler (int sig)
+{
+	while (waitpid (-1, 0, WNOHANG) > 0)
+		;
+	return;
+}
 
 int main (int argc, char *argv[])
 {
@@ -46,10 +56,18 @@ int main (int argc, char *argv[])
 		exit (1);
 	}
 
+	if (signal (SIGCHLD, sigchld_handler) == SIG_ERR)
+	{
+		perror ("signal");
+		exit (1);
+	}
+
 	while (1) {
 
 		int done, n;
 		socklen_t t;
+		pid_t p;
+
 		printf ("Waiting for a connection...\n");
 		t = sizeof (remote);
 		if ((c = accept (s, (struct sockaddr *)&remote, &t)) == -1)
@@ -58,27 +76,43 @@ int main (int argc, char *argv[])
 			exit (1);
 		}
 
-		printf ("Connected.\n");
+		/* parent */
+		if ((p = fork ()) > 0 )
+		{
+			close (c);	
+		}
+		/* child */
+		else if (p == 0)
+		{
+			close (s);
+			printf ("Connected to %s.\n", remote.sun_path);
+			done = 0;
 
-		done = 0;
-
-		do {
-			n = recv (c, str, sizeof (str), 0);
-			if (n <= 0) 
-			{
-				if (n < 0) perror ("recv");
-				done = 1;
-			}
-
-			if (!done)
-				if (send (c, str, n, 0) < 0) 
+			do {
+				n = recv (c, str, sizeof (str), 0);
+				if (n <= 0) 
 				{
-					perror ("send");
+					if (n < 0) perror ("recv");
 					done = 1;
 				}
-		} while (!done);
 
-		close (c);
+				if (!done)
+					if (send (c, str, n, 0) < 0) 
+					{
+						perror ("send");
+						done = 1;
+					}
+			} while (!done);
+
+			close (c);
+			exit (0);
+		}
+		else
+		{
+			perror ("fork");
+			exit (1);
+		}
+
 	}
 
 	return 0;
