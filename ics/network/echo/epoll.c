@@ -11,7 +11,12 @@
 
 
 static char buf[MAXLINE];
-void echo(int connfd) 
+
+/*
+ * @return true to remove descriptor
+ *         false to keep it
+ */
+bool echo(int connfd) 
 {
 	ssize_t n;
 
@@ -31,14 +36,14 @@ void echo(int connfd)
 		else if (n == 0)
 		{
 			wp_debug ("nothing to read, close");
-			wp_close (connfd);
-			break;
+			return true;
 		}
 
 		wp_debug ("read %d bytes\n", n);
 		wp_write (connfd, buf, n);
 	}
 	wp_debug ("echo end %d\n", __LINE__);
+	return false;
 }
 
 bool setnonblocking (int fd)
@@ -65,7 +70,7 @@ int main (int argc, char *argv[])
 	struct sockaddr_in clientaddr;
 	socklen_t clientlen = sizeof (struct sockaddr_in);
 	struct epoll_event ev, events[MAX_EVENTS];
-	int epfd, nfds, n;
+	int epfd, nfds, n, fd;
 	int i = 1;
 
 	if (argc != 2)
@@ -95,12 +100,13 @@ int main (int argc, char *argv[])
 
 	while (1)
 	{
-		wp_debug ("loop %d", i++);
+		wp_debug ("loop %d before epoll_wait", i++);
 		nfds = epoll_wait (epfd, events, MAX_EVENTS, -1);
 		if (nfds == -1)
 		{
 			wp_critical ("epoll_wait failed");
 		}
+		wp_debug ("epoll_wait return", i++);
 
 		for (n = 0; n < nfds; ++n)
 		{
@@ -127,7 +133,12 @@ int main (int argc, char *argv[])
 			}
 			else if (events[n].events & EPOLLIN)
 			{
-				echo (events[n].data.fd);
+				if (echo (events[n].data.fd))
+				{
+					fd = events[n].data.fd;
+					wp_epoll_ctl (epfd, EPOLL_CTL_DEL, fd, NULL);
+					wp_close (fd);
+				}
 			}
 		}
 	}
