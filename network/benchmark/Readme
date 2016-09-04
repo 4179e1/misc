@@ -1,0 +1,132 @@
+
+client
+
+- enable tcp_tw_recycle and tcp_tw_reuse, when using a large number of connections
+# sysctl -w net.ipv4.tcp_tw_recycle=1
+# sysctl -w net.ipv4.tcp_tw_reuse=1
+
+- The command used for benchmark:
+The test were only performed once, the result was not conclusive.
+
+
+#./client 127.0.0.1 1234 10 1000 2000
+
+Spawn 10 process, each process initiated 1000 connection and receive a reply of 2000 lines
+
+Servers:
+
+# ./iterate 1234
+^C<WP-MESSAGE> user time = 0.02, systime = 0.12
+
+# ./fork 1234
+^C<WP-MESSAGE> user time = 0.008, systime = 0.596
+
+# ./prefork 1234 15
+...
+^C<WP-MESSAGE> user time = 0.044, systime = 0.136
+
+Note: ignore this, it do not have meter
+
+
+# ./prefork2 1234 15
+...
+^C<WP-MESSAGE> child 19005 accepted 702 connections
+<WP-MESSAGE> child 19006 accepted 634 connections
+<WP-MESSAGE> child 19007 accepted 678 connections
+<WP-MESSAGE> child 19008 accepted 682 connections
+<WP-MESSAGE> child 19009 accepted 622 connections
+<WP-MESSAGE> child 19010 accepted 697 connections
+<WP-MESSAGE> child 19011 accepted 679 connections
+<WP-MESSAGE> child 19012 accepted 643 connections
+<WP-MESSAGE> child 19013 accepted 688 connections
+<WP-MESSAGE> child 19014 accepted 623 connections
+<WP-MESSAGE> child 19015 accepted 663 connections
+<WP-MESSAGE> child 19016 accepted 641 connections
+<WP-MESSAGE> child 19017 accepted 680 connections
+<WP-MESSAGE> child 19018 accepted 669 connections
+<WP-MESSAGE> child 19019 accepted 699 connections
+<WP-MESSAGE> user time = 0.036, systime = 0.204
+
+Note: Linux have solved the thundering herd problem, so locks were not actually need.
+
+# ./prefork_flock 1234 15
+...
+^C<WP-MESSAGE> child 19074 accepted 674 connections
+<WP-MESSAGE> child 19075 accepted 660 connections
+<WP-MESSAGE> child 19076 accepted 641 connections
+<WP-MESSAGE> child 19077 accepted 657 connections
+<WP-MESSAGE> child 19078 accepted 689 connections
+<WP-MESSAGE> child 19079 accepted 644 connections
+<WP-MESSAGE> child 19080 accepted 649 connections
+<WP-MESSAGE> child 19081 accepted 682 connections
+<WP-MESSAGE> child 19082 accepted 676 connections
+<WP-MESSAGE> child 19083 accepted 673 connections
+<WP-MESSAGE> child 19084 accepted 650 connections
+<WP-MESSAGE> child 19085 accepted 657 connections
+<WP-MESSAGE> child 19086 accepted 682 connections
+<WP-MESSAGE> child 19087 accepted 670 connections
+<WP-MESSAGE> child 19088 accepted 696 connections
+<WP-MESSAGE> user time = 0.016, systime = 0.288
+
+# ./prefork_pthread 1234 15
+...
+^C<WP-MESSAGE> child 19217 accepted 650 connections
+<WP-MESSAGE> child 19218 accepted 670 connections
+<WP-MESSAGE> child 19219 accepted 674 connections
+<WP-MESSAGE> child 19220 accepted 615 connections
+<WP-MESSAGE> child 19221 accepted 673 connections
+<WP-MESSAGE> child 19222 accepted 632 connections
+<WP-MESSAGE> child 19223 accepted 710 connections
+<WP-MESSAGE> child 19224 accepted 692 connections
+<WP-MESSAGE> child 19225 accepted 677 connections
+<WP-MESSAGE> child 19226 accepted 640 connections
+<WP-MESSAGE> child 19227 accepted 653 connections
+<WP-MESSAGE> child 19228 accepted 693 connections
+<WP-MESSAGE> child 19229 accepted 688 connections
+<WP-MESSAGE> child 19230 accepted 670 connections
+<WP-MESSAGE> child 19231 accepted 663 connections
+<WP-MESSAGE> user time = 0.044, systime = 0.148
+
+Note: compare to flock2, it's still fastest to have locking in userspace
+
+# ./pthread 1234
+^C<WP-MESSAGE> user time = 0.044, systime = 0.312
+
+# ./prethread 1234 15
+...
+^C<WP-MESSAGE> Thread 2035513088 accepted 684 connections
+<WP-MESSAGE> Thread 2027120384 accepted 670 connections
+<WP-MESSAGE> Thread 2018727680 accepted 626 connections
+<WP-MESSAGE> Thread 1876117248 accepted 694 connections
+<WP-MESSAGE> Thread 2010334976 accepted 686 connections
+<WP-MESSAGE> Thread 2001942272 accepted 634 connections
+<WP-MESSAGE> Thread 1993549568 accepted 665 connections
+<WP-MESSAGE> Thread 1985156864 accepted 665 connections
+<WP-MESSAGE> Thread 1976764160 accepted 669 connections
+<WP-MESSAGE> Thread 1968371456 accepted 691 connections
+<WP-MESSAGE> Thread 1959978752 accepted 625 connections
+<WP-MESSAGE> Thread 1867724544 accepted 683 connections
+<WP-MESSAGE> Thread 1859331840 accepted 681 connections
+<WP-MESSAGE> Thread 1850939136 accepted 667 connections
+<WP-MESSAGE> Thread 1842546432 accepted 660 connections
+<WP-MESSAGE> user time = 0.052, systime = 0.168
+
+# ./prethread_main 1234 15
+...
+^C<WP-MESSAGE> Thread -1903167744 accepted 671 connections
+<WP-MESSAGE> Thread -1911560448 accepted 651 connections
+<WP-MESSAGE> Thread -1919953152 accepted 682 connections
+<WP-MESSAGE> Thread -1928345856 accepted 611 connections
+<WP-MESSAGE> Thread -1936738560 accepted 668 connections
+<WP-MESSAGE> Thread -1945131264 accepted 687 connections
+<WP-MESSAGE> Thread -1953523968 accepted 620 connections
+<WP-MESSAGE> Thread -1961916672 accepted 646 connections
+<WP-MESSAGE> Thread -1970309376 accepted 674 connections
+<WP-MESSAGE> Thread -1978702080 accepted 690 connections
+<WP-MESSAGE> Thread -1987094784 accepted 640 connections
+<WP-MESSAGE> Thread -1995487488 accepted 744 connections
+<WP-MESSAGE> Thread -2003880192 accepted 711 connections
+<WP-MESSAGE> Thread -2012272896 accepted 652 connections
+<WP-MESSAGE> Thread -2020665600 accepted 653 connections
+<WP-MESSAGE> user time = 0.036, systime = 0.216
+
