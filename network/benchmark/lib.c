@@ -81,7 +81,7 @@ void web_child (int sockfd)
 	memset (result, 'z', MAXN);
 	while (1)
 	{
-		if ((nread= readline (sockfd, line, MAXLINE)) == 0)
+		if ((nread= wp_readline (sockfd, line, MAXLINE)) == 0)
 			return;
 		ntowrite = atol (line);
 		if ((ntowrite <= 0) || (ntowrite > MAXN))
