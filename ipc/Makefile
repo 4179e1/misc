@@ -1,4 +1,4 @@
-BIN = pipe fifo_serv fifo_cli
+BIN = pipe fifo_serv fifo_cli pipe2
 LIBS = util.o
 CFLAGS = -g -Wall `pkg-config --cflags libwp0`
 BINFLAGS = $(CFLAGS) `pkg-config --libs libwp0`

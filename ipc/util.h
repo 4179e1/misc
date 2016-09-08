@@ -15,7 +15,23 @@
 
 #define MAXLINE 4096
 
+#define MAXMSGDATA (PIPE_BUF - 2 * sizeof (long))
+struct mymsg
+{
+	long	msg_len;
+	long	msg_type;
+	char	msg_data[MAXMSGDATA];
+};
+
+typedef struct mymsg Mymsg;
+#define MSGHDRSIZE (sizeof(Mymsg) - MAXMSGDATA)
+
+ssize_t msg_send (int fd, Mymsg *mptr);
+ssize_t msg_recv (int fd, Mymsg *mptr);
+
 void file_client (int readfd, int writefd);
 void file_server (int readfd, int writefd);
 
+void file_client_mymsg (int readfd, int writefd);
+void file_server_mymsg (int readfd, int writefd);
 #endif /* _UTIL_H */
