@@ -1,20 +1,22 @@
 BIN = pipe fifo_serv fifo_cli pipe2
+RTBIN = mqctl
 LIBS = util.o
 CFLAGS = -g -Wall `pkg-config --cflags libwp0`
-BINFLAGS = $(CFLAGS) `pkg-config --libs libwp0`
+BINLIBS = $(CFLAGS) `pkg-config --libs libwp0`
+RTFLAGS = $(BINLIBS) -lrt
 
 
-all: libs bin thread
+all: libs bin rtbin
 
 bin : $(BIN) 
+rtbin: $(RTBIN)
 libs : $(LIBS)
-thread: $(THREAD_BIN)
 
 $(BIN): % : %.c $(LIBS) 
-	$(CC) $< util.o -o $@  $(BINFLAGS)
+	$(CC) $< util.o -o $@  $(BINLIBS)
 
-$(THREAD_BIN): % : %.c $(LIBS) 
-	$(CC) $< util.o -o $@  $(THREAD_BINFLAGS)
+$(RTBIN): % : %.c $(LIBS) 
+	$(CC) $< util.o -o $@  $(RTFLAGS)
 
 $(LIBS): %.o : %.c %.h
 	$(CC) $< -c -o $@ $(CFLAGS)
@@ -22,4 +24,4 @@ $(LIBS): %.o : %.c %.h
 .PHONY: clean
 
 clean:
-	$(RM) -rf $(BIN) $(LIBS) $(THREAD_BIN)
+	$(RM) -rf $(BIN) $(LIBS) $(RTBIN)

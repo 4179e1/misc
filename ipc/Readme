@@ -1,0 +1,18 @@
+* Posix Message Queue
+# man mq_overview
+
+- view MQ:
+# mount -t mqueue none /dev/mqueue
+# ls -l /dev/mqueue
+
+- Limits:
+# sysctl -a | grep fs.mqueue
+fs.mqueue.msg_default = 10
+fs.mqueue.msg_max = 10				<=== do not impact root
+fs.mqueue.msgsize_default = 8192
+fs.mqueue.msgsize_max = 8192
+fs.mqueue.queues_max = 256
+
+ulimit -a  | grep -i 'posix'
+POSIX message queues     (bytes, -q) 819200
+
