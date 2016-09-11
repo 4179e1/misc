@@ -7,6 +7,7 @@ int mqunlink (int argc, char *argv[]);
 int mqattr (int argc, char *argv[]);
 int mqsend (int argc, char *argv[]);
 int mqrecv (int argc, char *argv[]);
+int mqnotify (int argc, char *argv[]);
 static void usage (void);
 
 typedef int (*handler_func_t )(int argc, char** argv);
@@ -24,6 +25,7 @@ Handler handlers[] =
 	{"attr", mqattr},
 	{"send", mqsend},
 	{"recv", mqrecv},
+	{"notify", mqnotify},
 };
 
 int mqcreate (int argc, char *argv[])
@@ -180,6 +182,56 @@ int mqrecv (int argc, char *argv[])
 
 	
 	return 0;
+}
+
+int mqnotify (int argc, char *argv[])
+{
+	int signo;
+	mqd_t mqd;
+	ssize_t n;
+	sigset_t newmask;
+	struct mq_attr attr;
+	struct sigevent sigev;
+
+	if (argc != 2)
+	{
+		usage();
+		return 1;
+	}
+
+	mqd = mq_open (argv[1], O_RDONLY | O_NONBLOCK);
+	if (mqd == -1)
+		wp_critical ("mq_open() failed: %s", strerror (errno));
+
+	if (mq_getattr (mqd, &attr) == -1)
+		wp_critical ("mq_getattr() failed: %s", strerror (errno));
+
+	char buff[attr.mq_msgsize];
+
+	wp_sigemptyset (&newmask);
+	wp_sigaddset (&newmask, SIGUSR1);
+	wp_sigprocmask (SIG_BLOCK, &newmask, NULL);
+
+	sigev.sigev_notify = SIGEV_SIGNAL;
+	sigev.sigev_signo = SIGUSR1;
+	if (mq_notify (mqd, &sigev) == -1)
+		wp_critical ("mq_notify() failed: %s", strerror (errno));
+
+	while (1)
+	{
+		wp_sigwait (&newmask, &signo);
+		if (signo == SIGUSR1)
+		{
+			if (mq_notify (mqd, &sigev) == -1)
+				wp_critical ("mq_notify() failed: %s", strerror (errno));
+			while ((n = mq_receive (mqd, buff, attr.mq_msgsize, NULL)) >= 0)
+				printf ("read %ld bytes\n", (long) n);
+
+			if (errno != EAGAIN)
+				wp_critical ("mq_receive() failed: %s", strerror (errno));
+		}
+	}
+
 }
 
 static void usage (void)

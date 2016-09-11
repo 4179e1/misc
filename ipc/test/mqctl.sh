@@ -19,4 +19,7 @@ mqctl attr $OBJ
 mqctl recv $OBJ
 mqctl attr $OBJ
 mqctl recv -n $OBJ	#non-block
+mqctl notify $OBJ &
+mqctl send $OBJ 33 18
+kill %1
 mqctl unlink $OBJ
