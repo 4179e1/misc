@@ -12,7 +12,6 @@ static void sig_usr1 (int signo)
 
 int main (int argc, char *argv[])
 {
-	int nfds;
 	char c;
 	fd_set rset;
 	mqd_t mqd;
@@ -45,7 +44,7 @@ int main (int argc, char *argv[])
 	while (1)
 	{
 		FD_SET(pipefd[0], &rset);
-		nfds = select (pipefd[0] + 1, &rset, NULL, NULL, NULL);
+		select (pipefd[0] + 1, &rset, NULL, NULL, NULL);
 
 		if (FD_ISSET (pipefd[0], &rset))
 		{

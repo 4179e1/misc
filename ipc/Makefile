@@ -1,5 +1,5 @@
 BIN = pipe fifo_serv fifo_cli pipe2 
-RTBIN = mqctl mqselect
+RTBIN = mqctl mqselect signalrt
 LIBS = util.o
 CFLAGS = -g -Wall `pkg-config --cflags libwp0`
 BINLIBS = $(CFLAGS) `pkg-config --libs libwp0`

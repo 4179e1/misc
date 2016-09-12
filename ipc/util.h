@@ -34,4 +34,9 @@ void file_server (int readfd, int writefd);
 
 void file_client_mymsg (int readfd, int writefd);
 void file_server_mymsg (int readfd, int writefd);
+
+
+typedef void (*Sigfunc_rt) (int, siginfo_t *, void *);
+Sigfunc_rt signal_rt (int signo, Sigfunc_rt func, sigset_t *mask);
+
 #endif /* _UTIL_H */

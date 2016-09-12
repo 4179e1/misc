@@ -116,3 +116,30 @@ void file_server_mymsg (int readfd, int writefd)
 	msg_send (writefd, &msg);
 	
 }
+
+Sigfunc_rt signal_rt (int signo, Sigfunc_rt func, sigset_t *mask)
+{
+	struct sigaction act, oact;
+
+	act.sa_sigaction = func;
+	act.sa_mask = *mask;
+	act.sa_flags = SA_SIGINFO;
+	if (signo == SIGALRM)
+	{
+#ifdef SA_INTERRUPT
+		act.sa_flags |= SA_INTERRUPT;
+#endif /* SA_INTERRUPT */
+	} else {
+#ifdef SA_RESTART
+		act.sa_flags |= SA_RESTART;
+#endif /* SA_RESTART */
+	}
+
+	if (sigaction (signo, &act, &oact) < 0)
+	{
+		wp_warning ("sigaction() failed: %s", strerror (errno));
+		return ((Sigfunc_rt) SIG_ERR);
+	}
+
+	return (oact.sa_sigaction);
+}
