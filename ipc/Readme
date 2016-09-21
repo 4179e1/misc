@@ -1,7 +1,7 @@
 * Posix Message Queue
 # man mq_overview
 
-- view MQ:
+- View MQ:
 # mount -t mqueue none /dev/mqueue
 # ls -l /dev/mqueue
 
@@ -16,3 +16,9 @@ fs.mqueue.queues_max = 256
 ulimit -a  | grep -i 'posix'
 POSIX message queues     (bytes, -q) 819200
 
+
+* Posix semaphore,
+- View sem
+# ls -l /dev/shm
+
+- Limites:
