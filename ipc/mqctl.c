@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <mqueue.h>
+#include <wprt.h>
 #include "util.h"
 
 int mqcreate (int argc, char *argv[]);
@@ -62,11 +63,11 @@ int mqcreate (int argc, char *argv[])
 	if ((attr.mq_maxmsg != 0 && attr.mq_msgsize == 0) || (attr.mq_maxmsg == 0 && attr.mq_msgsize != 0))
 		wp_critical ("must specify bot -m maxmsg and -z msgsize");
 
-	mqd = mq_open (argv[optind], flags, FILE_MODE, (attr.mq_maxmsg != 0) ? &attr : NULL);
+	mqd = wp_mq_open (argv[optind], flags, FILE_MODE, (attr.mq_maxmsg != 0) ? &attr : NULL);
 	if (mqd == -1)
 		wp_critical ("mq_open() failed: %s", strerror (errno));
 
-	mq_close (mqd);
+	wp_mq_close (mqd);
 	return 0;
 }
 
@@ -78,7 +79,7 @@ int mqunlink (int argc, char *argv[])
 		return 1;
 	}
 
-	if ( mq_unlink (argv[1]) == -1)
+	if ( wp_mq_unlink (argv[1]) == -1)
 	{
 		wp_critical ("mq_unlink() failed: %s", strerror (errno));
 	}
@@ -96,16 +97,16 @@ int mqattr (int argc, char *argv[])
 		return 1;
 	}
 
-	mqd = mq_open (argv[1], O_RDONLY);
+	mqd = wp_mq_open (argv[1], O_RDONLY, 0, NULL);
 	if (mqd == -1)
 		wp_critical ("mq_open() failed: %s", strerror (errno));
 
-	mq_getattr (mqd, &attr);
+	wp_mq_getattr (mqd, &attr);
 	wp_message ("max #msgs = %ld, max #bytes/msg = %ld, "
 				"currently on quque = %ld\n",
 				attr.mq_maxmsg, attr.mq_msgsize, attr.mq_curmsgs);
 
-	mq_close (mqd);
+	wp_mq_close (mqd);
 	exit (0);
 }
 
@@ -124,12 +125,12 @@ int mqsend (int argc, char *argv[])
 	len = atoi (argv[2]);
 	prio = atoi (argv[3]);
 
-	mqd = mq_open (argv[1], O_WRONLY);
+	mqd = wp_mq_open (argv[1], O_WRONLY, 0, NULL);
 	if (mqd == -1)
 		wp_critical ("mq_open() failed: %s", strerror (errno));
 
 	char ptr[len];
-	if (mq_send (mqd, ptr, len, prio) == -1)
+	if (wp_mq_send (mqd, ptr, len, prio) == -1)
 		wp_critical ("mq_send() failed: %s", strerror (errno));
 
 	return 0;
@@ -164,17 +165,17 @@ int mqrecv (int argc, char *argv[])
 		return 1;
 	}
 
-	mqd = mq_open (argv[optind], flags);
+	mqd = wp_mq_open (argv[optind], flags, 0, NULL);
 	if (mqd == -1)
 		wp_critical ("mq_open() failed: %s", strerror (errno));
 
-	if (mq_getattr (mqd, &attr) == -1)
+	if (wp_mq_getattr (mqd, &attr) == -1)
 		wp_critical ("mq_getattr() failed: %s", strerror (errno));
 
 	char buff[attr.mq_msgsize];
 
 
-	n = mq_receive (mqd, buff, attr.mq_msgsize, &prio);
+	n = wp_mq_receive (mqd, buff, attr.mq_msgsize, &prio);
 	if (n == -1)
 		wp_critical ("mq_receive() failed: %s", strerror (errno));
 
@@ -199,11 +200,11 @@ int mqnotify (int argc, char *argv[])
 		return 1;
 	}
 
-	mqd = mq_open (argv[1], O_RDONLY | O_NONBLOCK);
+	mqd = wp_mq_open (argv[1], O_RDONLY | O_NONBLOCK, 0, NULL);
 	if (mqd == -1)
 		wp_critical ("mq_open() failed: %s", strerror (errno));
 
-	if (mq_getattr (mqd, &attr) == -1)
+	if (wp_mq_getattr (mqd, &attr) == -1)
 		wp_critical ("mq_getattr() failed: %s", strerror (errno));
 
 	char buff[attr.mq_msgsize];
@@ -214,7 +215,7 @@ int mqnotify (int argc, char *argv[])
 
 	sigev.sigev_notify = SIGEV_SIGNAL;
 	sigev.sigev_signo = SIGUSR1;
-	if (mq_notify (mqd, &sigev) == -1)
+	if (wp_mq_notify (mqd, &sigev) == -1)
 		wp_critical ("mq_notify() failed: %s", strerror (errno));
 
 	while (1)
@@ -222,9 +223,9 @@ int mqnotify (int argc, char *argv[])
 		wp_sigwait (&newmask, &signo);
 		if (signo == SIGUSR1)
 		{
-			if (mq_notify (mqd, &sigev) == -1)
+			if (wp_mq_notify (mqd, &sigev) == -1)
 				wp_critical ("mq_notify() failed: %s", strerror (errno));
-			while ((n = mq_receive (mqd, buff, attr.mq_msgsize, NULL)) >= 0)
+			while ((n = wp_mq_receive (mqd, buff, attr.mq_msgsize, NULL)) >= 0)
 				printf ("read %ld bytes\n", (long) n);
 
 			if (errno != EAGAIN)

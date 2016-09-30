@@ -56,10 +56,10 @@ int semcreate (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((sem = sem_open (argv[optind], flags, FILE_MODE, value)) == SEM_FAILED)
+	if ((sem = wp_sem_open (argv[optind], flags, FILE_MODE, value)) == SEM_FAILED)
 		wp_sys_critical ("sem_open() error");
 
-	if (sem_close (sem) == -1)
+	if (wp_sem_close (sem) == -1)
 		wp_sys_critical ("sem_close() error");
 
 	return 0;
@@ -73,7 +73,7 @@ int semunlink (int argc, char *argv[])
 		return 1;
 	}
 
-	if (sem_unlink (argv[1]) == -1)
+	if (wp_sem_unlink (argv[1]) == -1)
 		wp_sys_critical ("sem_unlink() error");
 	return 0;
 }
@@ -89,10 +89,10 @@ int semgetval (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((sem = sem_open (argv[1], 0)) == SEM_FAILED)
+	if ((sem = wp_sem_open (argv[1], 0, 0, 0)) == SEM_FAILED)
 		wp_sys_critical ("sem_open() error");
 
-	if (sem_getvalue (sem, &val) == -1)
+	if (wp_sem_getvalue (sem, &val) == -1)
 		wp_sys_critical ("sem_getvalue() error");
 
 	printf ("value = %d\n", val);
@@ -110,13 +110,13 @@ int semwait (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((sem = sem_open (argv[1], 0)) == SEM_FAILED)
+	if ((sem = wp_sem_open (argv[1], 0, 0, 0)) == SEM_FAILED)
 		wp_sys_critical ("sem_open() error");
 
-	if (sem_wait (sem) == -1)
+	if (wp_sem_wait (sem) == -1)
 		wp_sys_critical ("sem_wait() error");
 
-	if (sem_getvalue(sem, &val) == -1)
+	if (wp_sem_getvalue(sem, &val) == -1)
 		wp_sys_critical ("sem_getvalue() error");
 
 	printf ("pid %ld has semaphore, value = %d\n", (long) getpid(), val);
@@ -135,13 +135,13 @@ int sempost (int argc, char *argv[])
 		return 1;
 	}
 
-	if ((sem = sem_open (argv[1], 0)) == SEM_FAILED)
+	if ((sem = wp_sem_open (argv[1], 0, 0, 0)) == SEM_FAILED)
 		wp_sys_critical ("sem_open() error");
 
-	if (sem_post (sem) == -1)
+	if (wp_sem_post (sem) == -1)
 		wp_sys_critical ("sem_post() error");
 
-	if (sem_getvalue(sem, &val) == -1)
+	if (wp_sem_getvalue(sem, &val) == -1)
 		wp_sys_critical ("sem_getvalue() error");
 
 	printf ("value = %d\n", val);
