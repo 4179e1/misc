@@ -1,5 +1,5 @@
 BIN = pipe fifo_serv fifo_cli pipe2 spooler semctl signalrt
-RTBIN =  mqselect mqctl 
+RTBIN =  mqselect mqctl shmctl
 THREADBINS = producer_consumer rwlock 1p1c npnc multibuff
 LIBS = util.o
 OTHER = spoolernl

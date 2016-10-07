@@ -22,3 +22,7 @@ POSIX message queues     (bytes, -q) 819200
 # ls -l /dev/shm
 
 - Limites:
+
+* Posix shared memory,
+- view shm
+# ls -l /dev/shm
