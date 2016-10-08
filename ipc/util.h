@@ -39,4 +39,22 @@ void file_server_mymsg (int readfd, int writefd);
 typedef void (*Sigfunc_rt) (int, siginfo_t *, void *);
 Sigfunc_rt signal_rt (int signo, Sigfunc_rt func, sigset_t *mask);
 
+
+#define MESGSIZE 256 /* max #bytes per message, incl. null at end */
+#define NMESG 16 /* max #messages */
+
+struct shmstruct {   /* struct stored in shared memory */
+	sem_t mutex;	/* three posix memory-based semaphores */
+	sem_t nempty;	
+	sem_t nstored;
+	int nput;		/* index into msgoff[] for next put */
+	long noverflow;	 	/* #overflow by senders */
+	sem_t noverflowmutex;	/* mutex for noverflow counter */
+	long msgoff[NMESG];		/* offset in shared memory of each message */
+	char msgdata [NMESG * MESGSIZE]; 	/* the actual messages */
+};
+
+void sleep_us(unsigned int nusecs);
+
+
 #endif /* _UTIL_H */

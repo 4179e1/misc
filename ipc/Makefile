@@ -1,5 +1,5 @@
 BIN = pipe fifo_serv fifo_cli pipe2 spooler semctl signalrt
-RTBIN =  mqselect mqctl shmctl
+RTBIN =  mqselect mqctl shmctl shmcli shmsrv
 THREADBINS = producer_consumer rwlock 1p1c npnc multibuff
 LIBS = util.o
 OTHER = spoolernl
@@ -36,4 +36,4 @@ $(LIBS): %.o : %.c %.h
 .PHONY: clean
 
 clean:
-	$(RM) -rf $(BIN) $(LIBS) $(RTBIN) $(THREADBINS) $(OTHER) 
+	$(RM) -rf $(BIN) $(LIBS) $(RTBIN) $(THREADBINS) $(OTHER) $(RTTHREAD)
