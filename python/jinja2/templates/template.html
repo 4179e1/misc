@@ -1,28 +1,25 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Flask Template Example</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href="{{ url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
-		<style type="text/css">
-			.container {
-				max-width: 500px;
-				padding-top: 100px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<p>My string: {{my_string}}</p>
-			<p>Value from the list: {{my_list[3]}}</p>
-			<p>Loop through the list:</p>
-			<ul>
-				{% for n in my_list %}
-				<li>{{n}}</li>
-				{% endfor %}
-			</ul>
-		</div>
-		<script script src="{{ url_for ('static', filename='jquery-1.10.2.min.js')}}"></script>
-		<script script src="{{ url_for ('static', filename='bootstrap.min.js')}}"></script>
-	</body>
-</html>
+{% extends "layout.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+	{{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+	{{ super() }}
+{% endblock %}
+{% block content %}
+	<h3>This is the start of my child template</h3>
+	<br>
+	<p>My string: {{my_string}}</p>
+	<p>Value from the list: {{my_list[3]}}</p>
+	<p>Loop through the list:</p>
+	<ul>
+		{% for n in my_list %}
+		<li>{{n}}</li>
+		{% endfor %}
+	</ul>
+	<h3>This is the end of my child template</h3>
+	{% block footer %}
+	{{super()}}
+	{% endblock %}
+{% endblock %}
