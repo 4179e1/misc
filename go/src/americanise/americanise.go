@@ -93,7 +93,9 @@ func americanise (inFile io.Reader, outFile io.Writer) (err error) {
             return err
         }
 
+        //fmt.Printf (line)
         line = wordRx.ReplaceAllStringFunc (line, replacer)
+        //fmt.Printf (line)
         if _, err = writer.WriteString (line); err != nil {
             return err
         }
