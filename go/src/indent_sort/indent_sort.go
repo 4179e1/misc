@@ -80,7 +80,8 @@ func computeIndent (slice []string) (string, int){
     for _, item := range slice {
         if len(item) > 0 && (item[0] == ' ' || item[0] == '\t') {
             whitespace := rune(item[0])
-            for i, char := range item[1:] {
+            //for i, char := range item[1:] {
+            for i, char := range item {
                 if char != whitespace {
                     indent := strings.Repeat(string(whitespace), i)
                     return indent,i

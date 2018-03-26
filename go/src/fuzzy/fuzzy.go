@@ -14,7 +14,7 @@ package main
 
 import (
     "fmt"
-    "fuzzybool"
+    "fuzzy/fuzzybool"
 )
 
 func main() {
