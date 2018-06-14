@@ -20,7 +20,7 @@ func main () {
     for {
         i, ok := <- ch
         if !ok {
-            fmt.Println ("ch is not ok")
+            fmt.Printf ("ch is %v\n", ok)
             break
         }
         fmt.Println (i)
