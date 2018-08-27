@@ -1,0 +1,15 @@
+{
+	"GAIA_Y0TSH1000": {
+		"desc": "GAIA Y0-TSH10-00",
+		"machines": [
+		{
+			"desc": "Master",
+			"type": "VSELF",
+			"num": 2,
+			"src_bs3": 12345,
+			"dest_bs2": 12345,
+			"dest_bs3": 12345
+		}
+		]
+	}
+}
