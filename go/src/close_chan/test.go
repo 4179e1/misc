@@ -26,4 +26,12 @@ func main () {
         fmt.Println (i)
         time.Sleep (time.Second * 1)
     }
+
+    // a close channel return immediately
+    for i := 0; i < 4; i++ {
+        _, ok := <- ch
+        if !ok {
+            fmt.Println ("ch is not ok")
+        }
+    }
 }
