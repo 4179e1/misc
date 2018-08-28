@@ -5,7 +5,17 @@
 		{
 			"desc": "Master",
 			"type": "VSELF",
-			"num": 2,
+			"count": 2,
+			"set": 1,
+			"src_bs3": 12345,
+			"dest_bs2": 12345,
+			"dest_bs3": 12345
+		},
+		{
+			"desc": "Cell",
+			"type": "Y0-TSH10-00",
+			"count": 3,
+			"set": 4,
 			"src_bs3": 12345,
 			"dest_bs2": 12345,
 			"dest_bs3": 12345
