@@ -135,6 +135,16 @@ def presets_list ():
 
 	return jsonify (items)
 
+
+def check_preset (preset):
+	if "machines" not in preset:
+		return False
+	
+	machines = preset["machines"]
+	if not isinstance (machines, list):
+		return False
+	return True
+
 @app.route ('/api/v1/presets', methods=['POST'])
 def presets_add ():
 	if not request.json:
@@ -143,8 +153,14 @@ def presets_add ():
 	db = get_db (PRESETS_DB)
 
 	data = request.json
+	if not isinstance (data, dict):
+		abort (400)
+
 
 	for k, v in data.items():
+		if (not isinstance (k, str)) or (not isinstance (v, dict)) or (not check_preset (v)):
+			abort (400)
+		
 		db.Put (k, json.dumps(v))
 
 	return jsonify ({"result": 0})
