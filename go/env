@@ -1,7 +1,0 @@
-cwd=`pwd`
-
-if echo $GOROOT | grep -q $cwd; then
-    :
-else
-    export GOROOT=$cwd:$GOROOT
-fi
