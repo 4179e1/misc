@@ -35,4 +35,31 @@ func main() {
 		log.Fatal ("arith error:", err)
 	}
 	fmt.Printf ("Arith: %d/%d=%d remainder %d\n", args.A, args.B, quot.Quo, quot.Rem)
+
+
+    limit := 6
+    done := make (chan bool, limit)
+
+    sleepTest := func (a, b int) {
+        args := rpctest.Args {
+             A: a,
+             B: b,
+        }
+        var reply int
+        err := client.Call ("Arith.Concurrent", args, &reply)
+        if err != nil {
+            log.Fatal ("Arith Concurrent error:", err)
+            done <- true
+        } else {
+            fmt.Printf ("Arith Concurrent %d\n", reply)
+            done <- false
+        }
+    }
+
+    for i := 1; i < limit; i++ {
+        go sleepTest (1, i)
+    }
+    for i := 1; i < limit; i++ {
+        <- done
+    }
 }

@@ -2,6 +2,7 @@ package rpctest
 
 import (
 	"errors"
+    "time"
 )
 
 type Args struct {
@@ -29,4 +30,8 @@ func (t *Arith) Divide (args *Args, quo *Quotient) error {
 	return nil
 }
 
-
+func (t *Arith) Concurrent (args *Args, reply *int) error {
+    *reply = args.A * args.B
+    time.Sleep (time.Second * time.Duration (*reply))
+    return nil
+}
