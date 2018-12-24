@@ -20,7 +20,7 @@ func main() {
 
 	p.LastUpdated = ptypes.TimestampNow()
 
-	fmt.Printf ("%V\n", p)
+	fmt.Printf ("%v\n", p)
 	fmt.Println (p.GetLastUpdated())
 
 	out, err := proto.Marshal (p)
@@ -35,7 +35,7 @@ func main() {
 		log.Fatalln ("Failed to parse: ", err)
 	}
 
-	fmt.Printf ("%V\n", p2)
+	fmt.Printf ("%v\n", p2)
 
 	// I don't know why they were not equal...
 	if ! reflect.DeepEqual (p, p2) {
