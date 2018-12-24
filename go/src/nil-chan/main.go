@@ -1,3 +1,4 @@
+// https://medium.com/justforfunc/why-are-there-nil-channels-in-go-9877cc0b2308
 package main
 
 import (
