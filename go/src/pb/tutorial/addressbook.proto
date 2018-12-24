@@ -1,0 +1,32 @@
+syntax = "proto3";
+package tutorial;
+
+import "google/protobuf/timestamp.proto";
+
+message Person {
+	string name = 1; 							// 1 -name
+	int32 id = 2;								// 2 - Unique ID for this person.
+	string email = 3;							// 3 - email
+
+	enum PhoneType {
+		MOBILE = 0;
+		HOME = 1;
+		WORK = 2;
+	}
+
+	message PhoneNumber {
+		string number = 1;
+		PhoneType type = 2;
+	}
+
+	repeated PhoneNumber phones = 4; 			// 4 - phones, maybe 0, or more than 1
+
+	google.protobuf.Timestamp last_updated = 5;	// 5 - modify time
+
+	//OUr address book file is just one of these.
+
+	message AddressBook {
+		repeated Person people = 1;
+	}
+}
+
