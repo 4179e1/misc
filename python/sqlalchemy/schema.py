@@ -15,6 +15,8 @@ mysql init:
 
 > create database sqlalchemy
 > GRANT ALL PRIVILEGES ON `sqlalchemy`.* TO 'sqlalchemy'@'%' IDENTIFIED BY 'sqlalchemy';
+> CREATE USER 'sqlalchemy'@'%' IDENTIFIED BY 'sqlalchemy';
+> GRANT ALL ON `sqlalchemy`.* TO 'sqlalchemy'@'%';
 
 '''
 
