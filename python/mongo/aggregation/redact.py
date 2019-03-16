@@ -51,6 +51,7 @@ res = db.things.aggregate(
     ]
 )
 
+print(">>> access check")
 for r in res:
     print(json.dumps(r, indent=2))
 
@@ -87,20 +88,25 @@ db.accounts.insert_one(
     }
 )
 
-
-res = db.accounts.aggregate(
-    [
-        {'$match': {"status": "A"}},
-        {
-            '$redact': {
-                '$cond': [{'$eq': ['$level', 5]}, '$$PRUNE', '$$DESCEND']
-            }
+pipeline = [
+    {'$match': {"status": "A"}},
+    {
+        '$redact': {
+            '$cond': [{'$eq': ['$level', 5]}, '$$PRUNE', '$$DESCEND']
         }
-    ]
-)
+    }
+]
 
+res = db.accounts.aggregate(pipeline)
+
+print(">>> exclude all")
 for r in res:
     print(json.dumps(r, indent=2))
+
+#db.command('aggregate', 'things', pipeline=pipeline, explain=True)
+res = db.command('aggregate', 'accounts', pipeline=pipeline, explain=True)
+print(">>> explain")
+print(json.dumps(res, indent=2))
 
 
 for col in db.collection_names():
