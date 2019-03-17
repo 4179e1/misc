@@ -27,6 +27,7 @@ def create (session):
     print (session.dirty)
     session.commit() # commit !!!!
 
+
     # address
     jack = User (name="jack", fullname="Jack Bean", password='gjffdd')
     jack.addresses = [
@@ -372,6 +373,6 @@ if __name__ == "__main__":
 
     #delete_ (session)
 
-    many(session)
+    #many(session)
 
     session.close()
