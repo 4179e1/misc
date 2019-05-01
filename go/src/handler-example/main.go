@@ -1,9 +1,12 @@
+// https://www.alexedwards.net/blog/a-recap-of-request-handling
 package main
 
 import (
 	"log"
 	"net/http"
 	"time"
+    "fmt"
+    "io/ioutil"
 )
 
 type timeHandler struct {
@@ -56,5 +59,17 @@ func main() {
 
 
 	log.Println ("Listending...")
-	http.ListenAndServe (":3000", mux)
+    //http.ListenAndServe (":3000", mux)
+    http.ListenAndServe (":3000", http.HandlerFunc(func (w http.ResponseWriter, r *http.Request){
+        fmt.Fprintf (w, "Request: %s %s\n", r.Method, r.URL)
+        fmt.Fprintln (w, r)
+
+        fmt.Fprintln (w, "\nRequest Headers:")
+        r.Header.Write (w)
+
+        fmt.Fprintln (w, "\nRequest Body:")
+        body, _ := ioutil.ReadAll (r.Body)
+        fmt.Fprintln (w, string(body))
+        //mux.ServeHTTP(w,r)
+    }))
 }
