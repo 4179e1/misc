@@ -13,6 +13,18 @@ output:
       countIncrementalSlides: false
 ---
 
+## tab page {.tabset}
+
+### By Product
+
+what's that
+
+### By Region
+
+and this?
+
+---
+
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
 
 ```{r setup, include=FALSE}
@@ -456,3 +468,5 @@ class: center, middle
 本幻灯片由 R 包 [**xaringan**](https://github.com/yihui/xaringan) 生成；
 
 查克拉来自于 [remark.js](https://remarkjs.com)、[**knitr**](http://yihui.name/knitr)、以及 [R Markdown](https://rmarkdown.rstudio.com)。
+
+

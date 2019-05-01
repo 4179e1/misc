@@ -47,6 +47,14 @@ class User(Base):
         return "<User(name='%s', fullname='%s', password='%s')>" % (
                                 self.name, self.fullname, self.password)
     
+
+class Tb1 (Base):
+    __tablename__ = 'tb1'
+    id = Column(Integer, Sequence('entity_seq'), primary_key=True)
+    entity = Column(String(32), index=True)
+    attribute = Column(String(32), index=True)
+    value = Column(String(32), index=True)
+
 class Address(Base):
     __tablename__ = 'addresses'
     id = Column(Integer, primary_key=True)
