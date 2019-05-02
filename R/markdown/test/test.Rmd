@@ -3,7 +3,12 @@ title: "test"
 author: "lyre"
 date: "4/30/2019"
 output:
-  pdf_document: default
+  pdf_document: 
+    toc: true
+    toc_depth: 2
+    includes:
+      in_header: header.tex
+    latex_engine: xelatex
   html_document: 
     toc: true
     toc_float:
@@ -15,6 +20,8 @@ output:
     code_folding: show
     # self_contained: false # would better leave it as true, unless we are hosting a website
     # keep_md: true  # the intermediated markdown file
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}
@@ -100,3 +107,8 @@ echo "Hello Bash!"
 ls -lh
 ```
 
+## 中文测试
+
+你好呀，世界
+
+[解决 Debian 中 RStudio 和 Mendeley 下 Fcitx 输入法不能使用的问题 #12](https://github.com/JackieMium/my_blog/issues/12)
