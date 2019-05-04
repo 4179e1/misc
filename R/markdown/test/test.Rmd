@@ -4,6 +4,7 @@ author: "lyre"
 date: "4/30/2019"
 output:
   pdf_document: 
+    number_sections: true
     toc: true
     toc_depth: 2
     includes:

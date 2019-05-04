@@ -6,22 +6,12 @@ date: "2016/12/12"
 output:
   xaringan::moon_reader:
     css: [default, zh-CN.css]
+    #css: [default, metropolis]
     lib_dir: libs
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
----
-
-## tab page {.tabset}
-
-### By Product
-
-what's that
-
-### By Region
-
-and this?
 
 ---
 
@@ -32,7 +22,7 @@ options(htmltools.dir.version = FALSE)
 ```
 
 ???
-
+    
 图片来源：[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
 
 ---

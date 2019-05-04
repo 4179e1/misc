@@ -1,0 +1,76 @@
+---
+title: "中文ioslides"
+author: "lyre"
+date: "5/2/2019"
+output:
+  slidy_presentation: default
+  ioslides_presentation: 
+    widescreen: true
+    incremental: false
+  beamer_presentation:
+    latex_engine: xelatex
+    includes:
+      in_header: ../test/header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
+
+## python 
+
+```{python, echo = TRUE}
+#!/usr/bin/env python
+
+import sys
+print(sys.version)
+
+```
+
+## 中文测试
+
+你好，世界
+
+## Table
+
+col1 | col2
+---- | ----
+a    | b
+c    | d
+
+## Layout {.flexbox .vencter}
+<div class="columns-4">
+
+![](https://mat1.gtimg.com/pingjs/ext2020/qqindex2018/dist/img/qq_logo_2x.png)
+
+- hello world
+- are you ok
+- hello world
+- are you ok
+- hello world
+</div>
