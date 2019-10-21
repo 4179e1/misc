@@ -201,10 +201,22 @@ fmt.Println(utf8.RuneCountInString(s)) // "9"
 
 > A string contains an array of bytes that, once created, is immutable. By contrast, the elements of a byte slice can be freely modified.
 
-```
+```go
 s := "abc"
 b := []byte(s)
 s2 := string(b)
+```
+
+### Conversions between Strings and Numbers
+
+```go
+x := 123
+y := fmt.Sprintf ("%d", x)
+fmt.Println (y, strconv.Itoa(x)) // "123 123"
+
+
+x, err := strconv.Atoi ("123") // x is int
+y, err := strconv.ParseInt("123", 10, 64) // base 10, up to 64 bits
 ```
 
 
