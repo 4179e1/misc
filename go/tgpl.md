@@ -30,6 +30,13 @@
   - [Unicode](#unicode)
   - [UTF-8](#utf-8)
   - [Strings and Byte Slices](#strings-and-byte-slices)
+  - [Conversions between Strings and Numbers](#conversions-between-strings-and-numbers)
+  - [Constants](#constants)
+    - [The Constant Generator iota](#the-constant-generator-iota)
+    - [Untyped Constants](#untyped-constants)
+- [Composite Types](#composite-types)
+  - [Arrays](#arrays)
+  - [Slices](#slices)
 - [fmt](#fmt)
 
 <!-- /code_chunk_output -->
@@ -218,6 +225,87 @@ fmt.Println (y, strconv.Itoa(x)) // "123 123"
 x, err := strconv.Atoi ("123") // x is int
 y, err := strconv.ParseInt("123", 10, 64) // base 10, up to 64 bits
 ```
+
+### Constants
+
+#### The Constant Generator iota
+
+```go
+const (
+    _ = 1 << (1 * iota)
+    KiB  // 1024
+    MiB  // 1024 * 1024
+    GiB  // 1024 * 1024 * 1024
+)
+)
+```
+
+#### Untyped Constants
+
+## Composite Types
+
+- Array:  homogeneous data type, fixed size
+- Slices & Maps: dynamic size
+
+
+### Arrays
+
+```go
+var a [3]int
+fmt.Println(a[0])
+frmt.Println(a[len(a)-1])
+
+// Index and elements
+for i, v := range a {
+
+}
+
+// elements
+for _, v := range a {
+
+}
+
+//auto size
+q := [...]int{1, 2, 3}
+
+type Currency int
+const (
+    USD Currency = iota
+    EUR
+    GBP
+    RMB
+)
+
+symbol := [...]string{USD: "$", EUR: "e", GBP: "f", RMB: "y", 26: 'z'} // 27 elements
+```
+
+> 数组作为参数时是传值的（复制）
+
+### Slices
+
+![](./res/slice.png)
+
+```go
+// array
+a := [...]int{1, 2, 3}
+// slice
+s := []int{1, 2, 3}
+
+var s [] int    // len(s) == 0, s == nil
+s = nil         // len(s) == 0, s == nil
+s = []int(nil)  // len(s) == 0, s == nil
+s = []int{}     // len(s) == 0, s != nil
+
+// not s == nil
+if len(s) == 0 {
+
+}
+
+make ([]T, len)
+make ([]T, len, cap)
+```
+
+
 
 
 ## fmt
