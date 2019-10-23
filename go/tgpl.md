@@ -37,6 +37,8 @@
 - [Composite Types](#composite-types)
   - [Arrays](#arrays)
   - [Slices](#slices)
+    - [The append Function](#the-append-function)
+    - [In-Place Slice Techniques](#in-place-slice-techniques)
 - [fmt](#fmt)
 
 <!-- /code_chunk_output -->
@@ -305,6 +307,47 @@ make ([]T, len)
 make ([]T, len, cap)
 ```
 
+#### The append Function
+
+![](res/slice2.png)
+
+```go
+var x []int
+x = append (x, 1) // assign it back to x
+```
+
+#### In-Place Slice Techniques
+
+```go
+func noempty(strings []string) []string {
+    i := 0
+    for _, s := range strings {
+        if s != "" {
+            strings[i] = s
+            i++
+        }
+    }
+}
+
+// stack
+stack = append(stack, v)
+top := stack[len(stack) - 1]
+// stack shrink
+stack = stack[:len(stack) - 1] // error if stack is empty
+
+
+// preserve order
+func remove(slice []int, i int) []int {
+    copy(slice[i:], slice[i+1:])
+    return slice[:len(slice)-1]
+}
+
+// out of order
+func remove(slice []int, i int) []int {
+    slice[i] = slice[len(i) - 1]
+    return slice[:len(slice)-1]
+}
+```
 
 
 
