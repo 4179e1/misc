@@ -39,6 +39,13 @@
   - [Slices](#slices)
     - [The append Function](#the-append-function)
     - [In-Place Slice Techniques](#in-place-slice-techniques)
+  - [Maps](#maps)
+  - [Structs](#structs)
+    - [Struct Literals](#struct-literals)
+    - [Comparing Structs](#comparing-structs)
+    - [Sturct Embedding and Anonymous fields](#sturct-embedding-and-anonymous-fields)
+    - [Json](#json)
+    - [Text and HTML Templates](#text-and-html-templates)
 - [fmt](#fmt)
 
 <!-- /code_chunk_output -->
@@ -349,7 +356,92 @@ func remove(slice []int, i int) []int {
 }
 ```
 
+### Maps
 
+
+```go
+ages := make(map[string]int)
+// or ages := map[string]int{}
+
+ages["alice"] = 31
+
+delete(ages, "alice")
+
+// no need to init
+ages["bob"] // 0, the default empyt value
+ages["bob"] += 1
+
+// iter
+for name, age := range {
+    // do something
+}
+
+// iter by order
+import "sort"
+names := make ([]string, 0, len(ages))
+for name := range ages {
+    names = append (names, name)
+}
+sort.Strings(names)
+for _, name := range names {
+    fmt.Printf ("%s\t%d\n", name, ages[name])
+}
+
+// exists of not
+age, ok := ages["bob"]
+if !ok { /* error handler */ }
+
+```
+
+### Structs
+
+#### Struct Literals
+
+#### Comparing Structs
+
+If all fields of a struct are comparable, the struct itself is comparable.
+
+#### Sturct Embedding and Anonymous fields
+
+```go
+type Point struct {
+   X, Y int 
+}
+
+type Circle struct {
+    Point
+    Radius int
+}
+
+type Wheel struct {
+    Circle
+    Spokes int
+}
+
+var w Wheel
+w.X = 8
+w.Y = 8
+w.Radius = 5
+w.Spokes = 20
+
+w = Wheel{8, 8, 5, 20} // compile error
+w = Wheel{X: 8, Y: 8, Radius: 5, Spokes: 20} // compile error
+
+w = Wheel {
+    Circle: Circle {
+        Point: Point{X: 8, Y:8},
+        Radius: 5,
+    },
+    Spokes: 20,  // comma is necessary
+}
+
+fmt.Printf("%#v\n", w) // notice the # sign here, it print the field names
+// main.Wheel{Circle:main.Circle{Point:main.Point{X:8, Y:8}, Radius:5}, Spokes:20}
+```
+
+#### Json
+
+#### Text and HTML Templates
 
 ## fmt
 
