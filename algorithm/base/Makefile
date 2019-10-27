@@ -7,3 +7,6 @@ all: $(OBJ)
 
 test:
 	$(CC) test.c -o test -Wall -L. -lbase
+
+clean:
+	$(RM) -rf *.o *.a

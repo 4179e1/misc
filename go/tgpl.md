@@ -443,7 +443,282 @@ fmt.Printf("%#v\n", w) // notice the # sign here, it print the field names
 
 #### Text and HTML Templates
 
+
+## Functions
+
+### Function Declarations 
+
+```
+func name(parameter-list) (return-list) {
+
+}
+```
+
+### Recursion
+
+```go
+func hello (a []string) []string {
+    return append(a, "hello");
+}
+fmt.Println(hello(nil))
+```
+
+### Multiple Return Values
+
+```go
+func CountWordsAndImages(url string) (words, images int, err error) {
+    resp, err := http.Get(url)
+    if err != nil {
+        return
+    }
+    /...
+    return
+```
+
+> Go’s garbage collector recycles unused memory, but do not assume it will release unused operating system resources like open files and network connection s. They should be clos edexplicitly.
+
+### Errors
+
+#### Error-Handling Strategies
+
+
+1. Propagate the errror
+
+```go
+resp, err := http.Get(url)
+if err != nil {
+    return nil, err
+}
+```
+
+2. Retry the operations
+
+
+sleep and retry (exponential backoff)
+
+3. Stop the program
+
+should reserved for main package
+
+```go
+if err {
+    os.Exit(1)
+}
+
+if err {
+    log.Fatalf("desc of error")
+}
+```
+
+4. log and continue
+
+with reduced functionality
+
+5. ignore the error
+
+#### End of File(EOF)
+
+```go
+in := bufio.NewReader(os.Stdin)
+for {
+    r, _, err := in.ReadRune()
+    if err == io.EOF {
+        break // finished reading
+    }
+    if err != nil {
+        return fmt.Errorf ("read failed: %v", err)
+    }
+
+    //
+}
+```
+
+#### Function Values
+
+```go
+func square(n int) int { return n * n }
+func negative(n int) int { return -n }
+func product(m, n int) int { return m * n }
+
+var f func(int) int
+
+f = square
+fmt.Println(f(3)) // "9"
+f = negative
+fmt.Println(f(3))
+// "-3"
+fmt.Printf("%T\n", f) // "func(int) int"
+f = product // compile error: can't assign f(int, int) int to f(int) int
+```
+
+### Anonymous Functions
+
+```go
+strings.Map (func(r rune) rune {return r + 1,  "HAL-9000") // IBM:.111
+```
+
+enclosure
+
+```go
+func squares() (func() int) {
+    var x int
+    return func() int {
+        x++
+        return x * x
+    }
+}
+```
+
+#### Caveat: Capturing Iteration Variables
+
+```go
+var rmdirs []func()
+
+for _, d := range tempDirs() {
+    dir := d                // <=== the workaround, declare a variable in each loop
+    os.MkdirAll (dir, 0755)
+    rmdirs = append 9rmdirs, func() {
+        os.RemovaAll(dir)
+    })
+}
+
+for _, rmdir := range rmdirs {
+    rmdir()
+}
+```
+
+### Variadic Functions
+
+```go
+func sum(vals ...int) int {
+    total := 0
+    for _, val := range vals {
+        total += val
+    }
+    return total
+}
+```
+
+### Defered Function Calls
+
+1. Release resources/locks...
+
+```go
+mu.Lock()
+defer mu.Unlock()
+```
+
+2. on entry/exit pair
+
+```go
+func bigSlowOperation() {
+    defer trace ("bigSlowOperation") () // don't forget the //
+
+    time.Sleep (10 * time.Second)
+}
+
+func trace (msg string) func () {
+    start := time.Now()
+    log.Printf ("enter %s", msg)
+    return func {log.Printf ("exit %s (%s)", msg, time.Since(start)) }
+}
+```
+
+> Deferred functions run after return statments have updated the function's result variables.
+
+```go
+func docuble(x int) (result int) {
+    defer func() {fmt.Printf("double(%d) = %d\n", x, result)}
+    return x + x
+}
+```
+
+> A deferred anonymous function can even change the values that the enclosing function returns to its caller:
+
+```go
+func triple (x int) {
+    defer func() {result += x}()
+    return double(x)
+}
+```
+
+### Panic
+
+```go
+func MustCompile (expr string) *Regexp {
+    re, err := Compile (expr)
+    if err != nil {
+        panic (err)
+    }
+    return re
+}
+```
+
+### Recover
+
+> If the built-in recover function is called within a deferred function and the function containing the defer statement is panicking, recover ends the current state of panic and returns the panic value.
+
+```go
+func Parse(input Stringl) (s *Syntax, err error) {
+    defer func() {
+        if p := recover(); p != nil {
+            err = fmt.Errorf ("internal error: %v", p)
+        }
+    }
+}
+```
+
+```go
+package main
+
+import "fmt"
+
+func f() (err error) {
+	defer func() {
+		if p := recover(); p != nil { // recover() return the panic value
+			fmt.Printf("%T %[1]v\n", p) // string oops
+			err = fmt.Errorf("internal error: %v", p)
+		}
+	}()
+
+	panic("oops")
+
+	return nil
+}
+
+func main() {
+	err := f()
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+> This example does somewhat violate our advice about not using panics for ‘‘expected’’ error s, but it provides a compact illustrat ion of the mechanics.
+
+```go
+func soleTitle(doc *html.Node) (title string, err error) {
+    type bailout struct{}
+    defer func() {
+        switch p := recover(); p {
+            case nil:
+                // no panic
+            case bailout{}:
+                // "expected" panic
+                err = fmt.Errorf("multiple title elements")
+            default:
+                panic(p) // unexpected panic; carry on panicking
+        }
+    }()
+
+    panic (bailout{})
+
+}
+```
+
 ## fmt
+
+
 
 ```go
 ascii := 'a'
