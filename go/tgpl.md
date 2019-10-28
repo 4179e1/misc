@@ -716,6 +716,78 @@ func soleTitle(doc *html.Node) (title string, err error) {
 }
 ```
 
+## Methods
+
+### Method Declarations
+
+```go
+type Point sturct {X, Y float64}
+
+func Distance (p, q Point ) float64 {
+    return mmath.Hypot (q.X-p.X, q.Y-p.Y)
+}
+
+type Path []Point
+func (path Path)Distance() float64 {
+    sum := 0.0
+    for I := range path {
+        if i > 0 {
+            sum += path[i-1].Distance(path[i])
+        }
+    }
+}
+```
+
+### Methods with a Pointer Receiver
+
+> Because calling a function makes a copy of each argument value, if a function needs to update a variable, or if an argument is so large that we wish to avoid copy ing it, we must pass the address of the variable using a pointer.
+
+```go
+func (p *Point) ScapleBy (factor float64) {
+    p.X *= factor
+    p.Y *= factor
+}
+
+p := Point {1, 2}
+pptr = &p
+```
+
+> Either the receiver argument has the same type as the receiver parameters, for example both habe type T or both have type *T
+
+```go
+Point{1, 2}.Distance(q) // Point
+pptr.ScaleBy(2) // *Point
+
+```
+
+> Or the receiver arugment is a bariable of type T nd the receiver parameter has type *T. The compiler implicityly takes the address of the variable.
+
+```go
+p.ScaleBy(2)    // implicit (&p)
+```
+
+> Or the receiver arugment has type *T and the receiver parameter has type T. The compiler implicitly dereferences the receiver, in other words, load the value:
+
+```go
+pptr.Distance (q) // implicit (*pptr)
+```
+
+#### Nil Is a Valid Receiver Value
+
+```go
+type IntList struct {
+    Value int
+    Tail *IntList
+}
+
+func (list *IntList)sum int {
+    if list == nil {    // could be nil
+        return 0
+    }
+    return list.Value + list.Tail.Sum()
+}
+```
+
 ## fmt
 
 
