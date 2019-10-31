@@ -788,6 +788,52 @@ func (list *IntList)sum int {
 }
 ```
 
+### Composing Types by Struct Embedding
+
+
+```go
+import "image/color"
+type Pooint struct {X, Y folat64}
+
+type ColoredPoint struct {
+    Point
+    COlor color.RGBA
+}
+
+red := color.RGBA{255, 0, 0, 255}
+var p = ColoredPoint {Point{1,1}, red}
+var q = ColoredPoint {Point{5,4}, red}
+
+p.Distance (q.Point) // 注意它的参数，是Point
+```
+
+** A struct type may have more than one anonymous field. **
+
+```go
+type ColoredPoint struct {
+    Point
+    color.RGBA
+}
+```
+
+trick to define method for unamed structure
+
+```go
+var cache = struct {            // 定义一个未命名的struct
+    sync.Mutex
+    mapping map[string]string
+} {                             // 实例化一个struct
+    mapping: make (map[string])string, 
+}
+
+func Lookup (key string) string {
+    cache.Lock()                // <=== 直接调用Mutex方法
+    v := cache.maping[key]
+    cache.Unock()
+    return v
+}
+```
+
 ## fmt
 
 
