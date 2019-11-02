@@ -866,7 +866,15 @@ func main() {
 }
 ```
 
-### 
+###  Example: BIt Vector Type
+
+### Encapsulation
+
+benefits
+
+1. Clients cannot directly modify the objet's variables, one need inspect fewer statements to understand the possiblevalues of those variables.
+2. Hiding implementation details prevents cleints from depending on things that might change, which gives the designer greater freedom to evolve te implementation without breaking API compatibility.
+3. It prevents clients from setting an onject's variables arbitrarily.
 
 ## fmt
 
