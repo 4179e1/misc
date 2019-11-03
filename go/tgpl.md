@@ -4,49 +4,81 @@
 
 <!-- code_chunk_output -->
 
-- [Program Sturcture](#program-sturcture)
-  - [Reserved Names](#reserved-names)
-  - [Declarations](#declarations)
-  - [Variables](#variables)
-    - [Short Variable Declarations](#short-variable-declarations)
-    - [Pointers](#pointers)
-    - [The new function](#the-new-function)
-    - [Lifetime of Varianles](#lifetime-of-varianles)
-  - [Assignments](#assignments)
-    - [Tuple Assignments](#tuple-assignments)
-    - [Assignability](#assignability)
-  - [Type Declarations](#type-declarations)
-  - [Packages and Files](#packages-and-files)
-    - [Imports](#imports)
-    - [Package Initialiation](#package-initialiation)
-  - [Scope](#scope)
-- [Basic Data Types](#basic-data-types)
-  - [Intergers](#intergers)
-  - [Floating-Point Numbers](#floating-point-numbers)
-  - [Complex Numbers](#complex-numbers)
-  - [Boolean](#boolean)
-- [Strings](#strings)
-  - [String Literals](#string-literals)
-  - [Unicode](#unicode)
-  - [UTF-8](#utf-8)
-  - [Strings and Byte Slices](#strings-and-byte-slices)
-  - [Conversions between Strings and Numbers](#conversions-between-strings-and-numbers)
-  - [Constants](#constants)
-    - [The Constant Generator iota](#the-constant-generator-iota)
-    - [Untyped Constants](#untyped-constants)
-- [Composite Types](#composite-types)
-  - [Arrays](#arrays)
-  - [Slices](#slices)
-    - [The append Function](#the-append-function)
-    - [In-Place Slice Techniques](#in-place-slice-techniques)
-  - [Maps](#maps)
-  - [Structs](#structs)
-    - [Struct Literals](#struct-literals)
-    - [Comparing Structs](#comparing-structs)
-    - [Sturct Embedding and Anonymous fields](#sturct-embedding-and-anonymous-fields)
-    - [Json](#json)
-    - [Text and HTML Templates](#text-and-html-templates)
-- [fmt](#fmt)
+- [The Go Programming Language](#the-go-programming-language)
+  - [Program Sturcture](#program-sturcture)
+    - [Reserved Names](#reserved-names)
+    - [Declarations](#declarations)
+    - [Variables](#variables)
+      - [Short Variable Declarations](#short-variable-declarations)
+      - [Pointers](#pointers)
+      - [The new function](#the-new-function)
+      - [Lifetime of Varianles](#lifetime-of-varianles)
+    - [Assignments](#assignments)
+      - [Tuple Assignments](#tuple-assignments)
+      - [Assignability](#assignability)
+    - [Type Declarations](#type-declarations)
+    - [Packages and Files](#packages-and-files)
+      - [Imports](#imports)
+      - [Package Initialiation](#package-initialiation)
+    - [Scope](#scope)
+  - [Basic Data Types](#basic-data-types)
+    - [Intergers](#intergers)
+    - [Floating-Point Numbers](#floating-point-numbers)
+    - [Complex Numbers](#complex-numbers)
+    - [Boolean](#boolean)
+  - [Strings](#strings)
+    - [String Literals](#string-literals)
+    - [Unicode](#unicode)
+    - [UTF-8](#utf-8)
+    - [Strings and Byte Slices](#strings-and-byte-slices)
+    - [Conversions between Strings and Numbers](#conversions-between-strings-and-numbers)
+    - [Constants](#constants)
+      - [The Constant Generator iota](#the-constant-generator-iota)
+      - [Untyped Constants](#untyped-constants)
+  - [Composite Types](#composite-types)
+    - [Arrays](#arrays)
+    - [Slices](#slices)
+      - [The append Function](#the-append-function)
+      - [In-Place Slice Techniques](#in-place-slice-techniques)
+    - [Maps](#maps)
+    - [Structs](#structs)
+      - [Struct Literals](#struct-literals)
+      - [Comparing Structs](#comparing-structs)
+      - [Sturct Embedding and Anonymous fields](#sturct-embedding-and-anonymous-fields)
+      - [Json](#json)
+      - [Text and HTML Templates](#text-and-html-templates)
+  - [Functions](#functions)
+    - [Function Declarations](#function-declarations)
+    - [Recursion](#recursion)
+    - [Multiple Return Values](#multiple-return-values)
+    - [Errors](#errors)
+      - [Error-Handling Strategies](#error-handling-strategies)
+      - [End of File(EOF)](#end-of-fileeof)
+      - [Function Values](#function-values)
+    - [Anonymous Functions](#anonymous-functions)
+      - [Caveat: Capturing Iteration Variables](#caveat-capturing-iteration-variables)
+    - [Variadic Functions](#variadic-functions)
+    - [Defered Function Calls](#defered-function-calls)
+    - [Panic](#panic)
+    - [Recover](#recover)
+  - [Methods](#methods)
+    - [Method Declarations](#method-declarations)
+    - [Methods with a Pointer Receiver](#methods-with-a-pointer-receiver)
+      - [Nil Is a Valid Receiver Value](#nil-is-a-valid-receiver-value)
+    - [Composing Types by Struct Embedding](#composing-types-by-struct-embedding)
+    - [Method Values and Expressions](#method-values-and-expressions)
+    - [Example: BIt Vector Type](#example-bit-vector-type)
+    - [Encapsulation](#encapsulation)
+  - [Interfaces](#interfaces)
+    - [Interfaces as Contracts](#interfaces-as-contracts)
+    - [Interface TYpes](#interface-types)
+    - [Interface Satisfaction](#interface-satisfaction)
+    - [Parsing Flags withe flag.Value](#parsing-flags-withe-flagvalue)
+    - [Interface Values](#interface-values)
+      - [Caveat: An Interface Containing a Nil Pointer Is Non-Nil](#caveat-an-interface-containing-a-nil-pointer-is-non-nil)
+    - [Sotring with sort.Interface](#sotring-with-sortinterface)
+    - [The http.Handler Interface](#the-httphandler-interface)
+  - [fmt](#fmt)
 
 <!-- /code_chunk_output -->
 
@@ -195,12 +227,12 @@ Usage:
 
 ### UTF-8
 
-binary | range  | values
--------|--------|---
-0xxxxxx| runes 0−127 | (ASCII)
-11xxxxx 10xxxxxx| 128−2047 |(values <128 unused)
-110xxxx 10xxxxxx 10xxxxxx | 2048−65535 | (values <2048 unused)
-1110xxx 10xxxxxx 10xxxxxx 10xxxxxx | 65536−0x10ffff | (other values unused)
+| binary                             | range          | values                |
+| ---------------------------------- | -------------- | --------------------- |
+| 0xxxxxx                            | runes 0−127    | (ASCII)               |
+| 11xxxxx 10xxxxxx                   | 128−2047       | (values <128 unused)  |
+| 110xxxx 10xxxxxx 10xxxxxx          | 2048−65535     | (values <2048 unused) |
+| 1110xxx 10xxxxxx 10xxxxxx 10xxxxxx | 65536−0x10ffff | (other values unused) |
 
 
 ```go
@@ -875,6 +907,194 @@ benefits
 1. Clients cannot directly modify the objet's variables, one need inspect fewer statements to understand the possiblevalues of those variables.
 2. Hiding implementation details prevents cleints from depending on things that might change, which gives the designer greater freedom to evolve te implementation without breaking API compatibility.
 3. It prevents clients from setting an onject's variables arbitrarily.
+
+
+## Interfaces
+
+### Interfaces as Contracts
+
+### Interface TYpes
+
+```go
+type Reader interface {
+    Read (p []byte) (n int, err error)
+}
+
+type Closer interface {
+    Close() error
+}
+
+type ReadWriter interface {
+    Reader
+    Writer
+}
+type ReadWriteCloser interface {
+    Reader
+    Writer
+}
+```
+
+### Interface Satisfaction
+
+```go
+var w io.Writer
+w = os.Stdout  // ok
+w = new(bytes.Buffer) // ok
+w = time.Second // compile error, lacks Write method
+
+
+type IntSet struct { /* ... */ }
+func (*IntSet) String() string
+
+var s IntSet
+var _ fmt.Stringer = &s // ok
+var _ fmt.Stringer = s // compile error
+
+
+os.Stdout.Wriet([byte("hello")]) // ok
+os.Stdout.Close() // ok
+
+var w io.Writer
+w = os.Stdout
+w.Write([]byte("hello")) // ok
+w.Close() // compile error
+
+
+// here comes empty interface
+var any interface{}
+any = true
+any = 12.34
+any = "hello"
+```
+
+### Parsing Flags withe flag.Value
+
+
+```go
+package flag
+     // Value is the interface to the value stored in a flag.
+     type Value interface {
+         String() string
+         Set(string) error
+}
+```
+
+see gopl.io/ch7/tempflag
+
+
+### Interface Values
+
+> conceptualy, a value of an interface type, or interface value, has two components, a concrete type and a value of that type. These are called the interface's dynamic type and dynamic value.
+
+```go
+var w io.Writer
+```
+
+![](res/7.1.png)
+
+```go
+w = os.Stdout
+
+fmt.Printf ("%T\n", w) // "*os.File"
+```
+
+![](res/7.2.png)
+
+```go
+w = new(bytes.Buffer)
+```
+
+![](res/7.3.png)
+
+
+```go
+var x interface{} = time.Now()
+```
+
+![](res/7.4.png)
+
+
+#### Caveat: An Interface Containing a Nil Pointer Is Non-Nil
+
+```go
+const debug = true
+func main() {
+    var buf *bytes.Buffer
+    if debug {
+        buf = new(bytes.Buffer) // enable collection of output
+    }
+    f(buf) // NOTE: subtly incorrect! it's a non-nil interface containig a nil pointer
+}
+
+// If out is non-nil, output will be written to it.
+func f(out io.Writer) {             // so, it will receive a not nil value
+    // ...do something...
+    if out != nil {
+        out.Write([]byte("done!\n"))
+} }
+```
+
+correction:
+
+```go
+func main() {
+    var buf io.Writer // <======== change it to a interface
+    if debug {
+        buf = new(bytes.Buffer) // enable collection of output
+    }
+    f(buf) // OK
+}
+```
+
+
+### Sotring with sort.Interface
+
+```go
+package sort
+type Interface interface {
+    Len() int
+    Less(i, j int) bool // i,j are the indices
+    Swap(i, j int)
+}
+```
+
+```go
+type StringSlice []strig
+
+func (p StringSlice) Len() int {return len(p)}
+func (p StringSlice) Less(i, j int) bool { return p[i] < p[j]}
+func (p StringSlice) Swap (i, j int) {p[i], p[j] = p[j], p[i]}
+
+sort.Sort(StringSlice(names))
+```
+
+The reverse sort
+
+```go
+package sort
+type reverse struct{ Interface } // that is, sort.Interface
+func (r reverse) Less(i, j int) bool { return r.Interface.Less(j, i) }
+func Reverse(data Interface) Interface { return reverse{data} }
+```
+
+To call the revers sort
+
+```go
+sort.Sort(sort.Reverse(StringSlice(names)))
+```
+
+tabweriter.writer
+
+### The http.Handler Interface
+
+```go
+packag ehttp 
+type Handler interface {
+    ServeHttp (w ResponseWriter, r *Request)
+}
+
+func ListenAndServe(address string, h Handler) error
+```
 
 ## fmt
 

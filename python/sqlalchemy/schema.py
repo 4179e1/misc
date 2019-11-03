@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import sys,os
-from sqlalchemy import create_engine,Sequence,ForeignKey, Table, Text
+import sys
+import os
+from sqlalchemy import create_engine, Sequence, ForeignKey, Table, Text
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import sessionmaker,relationship
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 '''
@@ -21,9 +22,10 @@ mysql init:
 '''
 
 #engine = create_engine('sqlite:///:memory:', echo=True)
-engine = create_engine('mysql+pymysql://sqlalchemy:sqlalchemy@localhost/sqlalchemy', echo=True)
+engine = create_engine(
+    'mysql+pymysql://sqlalchemy:sqlalchemy@localhost/sqlalchemy', echo=True)
 # Create it only once
-Session = sessionmaker (bind=engine)
+Session = sessionmaker(bind=engine)
 
 Base = declarative_base()
 
@@ -36,6 +38,8 @@ CREATE TABLE users (
         PRIMARY KEY (id)
 )
 '''
+
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
@@ -45,8 +49,8 @@ class User(Base):
 
     def __repr__(self):
         return "<User(name='%s', fullname='%s', password='%s')>" % (
-                                self.name, self.fullname, self.password)
-    
+            self.name, self.fullname, self.password)
+
 
 class Tb1 (Base):
     __tablename__ = 'tb1'
@@ -55,17 +59,19 @@ class Tb1 (Base):
     attribute = Column(String(32), index=True)
     value = Column(String(32), index=True)
 
+
 class Address(Base):
     __tablename__ = 'addresses'
     id = Column(Integer, primary_key=True)
-    email_address = Column (String(50), nullable=False)
-    user_id = Column (Integer, ForeignKey ('users.id'))
+    email_address = Column(String(50), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'))
 
     # many to one
-    user = relationship ('User', back_populates="addresses")
+    user = relationship('User', back_populates="addresses")
 
-    def __repr__ (self):
+    def __repr__(self):
         return "<Address(email_address='%s'>" % self.email_address
+
 
 """
 Two end binding
@@ -73,16 +79,20 @@ Two end binding
 by doing so, each relationship() can make intelligent decision about the same relationship as expressed in reverse; 
 on one side, Address.user refers to a User instance, and on the other side, 
 User.addresses refers to a list of Address instances.
-"""    
-User.addresses = relationship ('Address', order_by=Address.id, back_populates="user")
+"""
+User.addresses = relationship(
+    'Address', order_by=Address.id, back_populates="user")
 
 
 # Many to Many
 # association table
 post_keywords = Table('post_keywords', Base.metadata,
-    Column('post_id', ForeignKey('posts.id'), primary_key=True),
-    Column('keyword_id', ForeignKey('keywords.id'), primary_key=True)
-)
+                      Column('post_id', ForeignKey(
+                          'posts.id'), primary_key=True),
+                      Column('keyword_id', ForeignKey(
+                          'keywords.id'), primary_key=True)
+                      )
+
 
 class BlogPost(Base):
     __tablename__ = 'posts'
@@ -118,34 +128,36 @@ class Keyword(Base):
     def __init__(self, keyword):
         self.keyword = keyword
 
+
 BlogPost.author = relationship(User, back_populates="posts")
 User.posts = relationship(BlogPost, back_populates="author", lazy="dynamic")
 
 
-def usage () -> None:
-    sys.stderr.write ("""
+def usage() -> None:
+    sys.stderr.write("""
  {0} <create|drop|delete>    
 
- """.format (sys.argv[0].split('/')[-1]))
+ """.format(sys.argv[0].split('/')[-1]))
 
 
 if __name__ == "__main__":
-    if len (sys.argv) < 2:
+    if len(sys.argv) < 2:
         usage()
-        sys.exit (1)
+        sys.exit(1)
     action = sys.argv[1]
 
     if action.lower() == "create":
         Base.metadata.create_all(engine)
     elif action.lower() == "drop":
-        #User.__table__.drop(engine)
-        Base.metadata.drop_all(bind=engine, tables=[post_keywords, BlogPost.__table__, Keyword.__table__, Address.__table__, User.__table__])
+        # User.__table__.drop(engine)
+        Base.metadata.drop_all(bind=engine, tables=[
+                               post_keywords, BlogPost.__table__, Keyword.__table__, Address.__table__, User.__table__])
         pass
     elif action.lower() == "delete":
         session = Session()
 
         conn = engine.connect()
-        conn.execute (post_keywords.delete())
+        conn.execute(post_keywords.delete())
 
         session.query(BlogPost).delete()
         session.query(Keyword).delete()
