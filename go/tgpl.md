@@ -1096,6 +1096,119 @@ type Handler interface {
 func ListenAndServe(address string, h Handler) error
 ```
 
+
+### The error Interface
+
+```go
+type error interface {
+    Error() string
+}
+```
+
+### Example: Expression Evluator
+
+TODO: 看不懂
+
+### Type Assertions
+
+> A `type assertion` is an operation applied to an interface value.
+
+1. If the asserted type T is a concrete type, then the type assertion checks whetehr x's dynamic type is identical to T.
+
+```go
+var w io.Writer
+w = os.Stdout
+f := w.(*os.File) // ok
+c := w.(*btes.Buffer) // panic
+```
+
+2. if instead the asserted t;ype T is an interface type, then the type assertion checks whetehr x's dynamic type satisfies T.
+
+```go
+var w io.Writer
+w = os.Stdout
+rw := w.(io.ReadWriter) // ok
+
+w = new(ByteCounnter)
+rw = w.(io.ReadWriter) // panic, no Read method
+
+```
+
+To test dynamic type
+
+```go
+var w io.Writer = os.Stdout
+f, ok := w.(*os.File) // success: ok, f == os.Stdout
+b, ok := w.(*byte.Buffer) // failure: !ok, b == nil
+```
+
+
+### Discriminating Errors with Type Assertions
+
+```go
+import (
+    "errors"
+    "syscall"
+)
+var ErrNotExist = errors.New("file does not exist")
+// IsNotExist returns a boolean indicating whether the error is known to
+// report that a file or directory does not exist. It is satisfied by
+// ErrNotExist as well as some syscall errors.
+func IsNotExist(err error) bool {
+    if pe, ok := err.(*PathError); ok {
+        err = pe.Err
+    }
+    return err == syscall.ENOENT || err == ErrNotExist
+}
+```
+
+### Querying Behabiors with Interface Type Assertions
+
+```go
+// writeString writes s to w.
+// If w has a WriteString method, it is invoked instead of w.Write.
+func writeString(w io.Writer, s string) (n int, err error) {
+    type stringWriter interface { // <==== 定义了一个interface
+        WriteString(string) (n int, err error)
+    }
+    if sw, ok := w.(stringWriter); ok {
+        return sw.WriteString(s) // avoid a copy
+    }
+    return w.Write([]byte(s)) // allocate temporary copy
+}
+```
+
+### Type Switches
+
+```go
+func sqlQuote(x interface{}) string {
+    switch x := x.(type) { // reuseevariablle name
+    case nil:
+        return "NULL"
+    case int, uint:
+        return fmt.Sprintf("%d", x) // x has type interface{} here.
+    case bool:
+        if x {
+            return "TRUE"
+        }
+            return "FALSE"
+    case string:
+        return sqlQuoteString(x) // (not shown)
+    default:
+        panic(fmt.Sprintf("unexpected type %T: %v", x, x))
+    }
+}
+```
+
+### Example:Tken-Based XMLl Decoding
+
+### A Few Words of Advice
+
+避免先定义interface再实现方法，这通常是不需要的.
+
+> We make an exception to this rule when an interface is satisfied by a single concrete type but tat type cannot live in the same package as the interface because of its dependencies.
+
+
 ## fmt
 
 
