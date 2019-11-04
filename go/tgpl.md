@@ -1209,6 +1209,18 @@ func sqlQuote(x interface{}) string {
 > We make an exception to this rule when an interface is satisfied by a single concrete type but tat type cannot live in the same package as the interface because of its dependencies.
 
 
+## Goroutines and Channels
+
+goroutines and channels support `communicating sequential processes`(CSP)
+
+### Goroutines
+
+When main function returns, all goroutines are abruptly terminated.
+
+### Example: Concurrent Clock Server
+
+
+
 ## fmt
 
 
@@ -1217,3 +1229,7 @@ func sqlQuote(x interface{}) string {
 ascii := 'a'
 fmt.Printf ("%d %[1]c %[1]q\n", ascii) // 97 a 'a'
 ```
+
+## Interface 
+
+io.WriteString (w io.Writer, s string)
