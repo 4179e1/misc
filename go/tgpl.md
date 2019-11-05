@@ -1219,7 +1219,75 @@ When main function returns, all goroutines are abruptly terminated.
 
 ### Example: Concurrent Clock Server
 
+### Example: Concurrent Echo Server
 
+We had to consider carefully that it is safe to call methods of net.Conn concurrently.
+
+### Channels
+
+#### Unbuffered CHannels
+
+```go
+ch := make (chan int)
+ch := make (chan int, 0)
+```
+
+> Conmmunication over an unbuffered channel causes the sending and receing goroutines to synchronize.
+
+#### Pipelines
+
+```go
+for {
+    x, ok := <- ch
+    if !ok {
+        break
+    }
+    // do something
+}
+
+// that's the same
+for x := range {
+    // do something
+}
+```
+
+#### Unidirectional Channel Types
+
+```go
+func counter(out chan<- int) {
+    for x := 0; x < 100; x++ {
+        out <- x
+    }
+    close(out)
+}
+
+func squarer(out chan<- int, in <-chan int) {
+    for v := range in {
+        out <- v * v
+    }
+    close(out)
+}
+
+func printer(in <-chan int) {
+    for v := range in {
+        fmt.Println(v)
+    }
+}
+
+func main() {
+    naturals := make(chan int)
+    squares := make(chan int)
+    go counter(naturals)
+    go squarer(squares, naturals)
+    printer(squares)
+}
+```
+
+#### Buffered Channels
+
+```go
+ch := make (chan int, 3)
+```
 
 ## fmt
 
