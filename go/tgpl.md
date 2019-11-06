@@ -1289,6 +1289,42 @@ func main() {
 ch := make (chan int, 3)
 ```
 
+### Looping in Parallel
+
+```go
+func makeThumbnails6(filenames <-chan string) int64 {
+    size := make (chan int64)   // 1. here's a unbuffered channel, cuz we don't know the size of filenames
+    var wg sync.WaitGroup       // counter for number of working goroutines
+
+    for f := range filenames {
+        wg.Add(1)
+        // worker
+        go func (f string)  {// note that it have a parameter
+            defer wg.Done()
+            thumb, err := thumbnail.ImageFile(f)
+            if err != nil {
+                log.Println(err)
+                return
+            }
+            info, _ := os.Stat (thumb)
+            sizes <- info.Size()
+        }(f) // note the parameter f to capture itervation variables (gopl 5.6.1)
+
+        // closer
+        go func() { // it have to be parallel, for the channel were **unbuffered**
+            wg.Wait()
+            close(sizes)
+        }()
+
+        var total int64
+        for size := range sizes {   // drain the *unbuffered* channel, otherwise all worker will block
+            total += size
+        }
+        return total
+    }
+}
+```
+
 ## fmt
 
 
