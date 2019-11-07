@@ -1293,7 +1293,7 @@ ch := make (chan int, 3)
 
 ```go
 func makeThumbnails6(filenames <-chan string) int64 {
-    size := make (chan int64)   // 1. here's a unbuffered channel, cuz we don't know the size of filenames
+    sizes := make (chan int64)   // 1. here's a unbuffered channel, cuz we don't know the size of filenames
     var wg sync.WaitGroup       // counter for number of working goroutines
 
     for f := range filenames {
@@ -1324,6 +1324,22 @@ func makeThumbnails6(filenames <-chan string) int64 {
     }
 }
 ```
+
+### Example: concurrent Web Crawler
+
+use buffered channel to control the # of workers.
+or 'fork' the # of long-lived goroutines
+
+
+### Multiplexing with select
+
+> A select with no cases, select{}, wait forever.
+
+> A select may have a default, which specifies what to do when none of the other communications can proceed immediately.
+
+> Because send and receive operations on a nil channel block forever, a case in a selec statement whose channel is nil is never selected.
+
+### Example: Concurrent Directory Traversal
 
 ## fmt
 
