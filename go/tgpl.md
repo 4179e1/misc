@@ -1412,6 +1412,109 @@ func Withdraw (amount int) bool {
 }
 ```
 
+### Read/Write Mutexes: sync.RWMutex
+
+### Memory Synchronization
+
+Synchronization primitives like channel communicateions and mutex operations cause the processor to flush out and commit all its accumulated writes.
+
+TODO: 这个例子是为啥？
+
+### Lazy Initialization: sync.Once
+
+```go
+var loadIconsOnce sync.Once
+var icons map[string]image.Image
+
+func Icon(name string) image.Image {
+    loadIconsOnce.Do(loadIcons)
+    return icons[name]
+}
+```
+
+### The Race Detector
+
+go <build|run|test> -race
+
+### Example: Concurrent Non-Blocking Cache
+
+duplicate suppression
+
+lock (memo4) vs csp (memo5)
+
+### Goroutines and Threads
+
+#### Growable Stacks
+
+OS thread stack: fixed 2MB
+goroutine stack: 2KB to 1GB
+
+#### Goroutine Scheduling
+
+m:n scheduling: multiplexs m goroutines on n OS threads
+
+#### GOMAXPROCS
+
+```
+GOMAXPROCS=1 go run xxx
+```
+
+#### Goroutines Have No Identity
+
+## Packages and the Go Tool
+
+### Introduction
+
+### Import Paths
+
+### The Package Declaration
+
+### Import Declarations
+
+```go
+import (
+    "crypto/rand"
+    mrand "math/rand" // avoids conflict
+)
+```
+
+### Blank Imports
+
+### Packages and Naming
+
+### The Go Tool
+
+#### Workspace Organization
+
+#### Downloading Packages
+
+TODO: go vendor
+
+#### Building Packages
+
+#### Documenting Packages
+
+```
+go doc time
+go doc time.Since
+```
+
+#### Internal Packages
+
+```
+net/http
+net/http/internal/chunked
+net/http/httputil
+net/url
+```
+
+> net/http/internal/chunked can be imported from net/http, or net/http/httputil, but not from net/url
+
+#### Querying Packages
+
+```
+go list github
+```
 
 ## fmt
 
