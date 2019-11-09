@@ -1325,6 +1325,7 @@ func makeThumbnails6(filenames <-chan string) int64 {
 }
 ```
 
+
 ### Example: concurrent Web Crawler
 
 use buffered channel to control the # of workers.
@@ -1340,6 +1341,77 @@ or 'fork' the # of long-lived goroutines
 > Because send and receive operations on a nil channel block forever, a case in a selec statement whose channel is nil is never selected.
 
 ### Example: Concurrent Directory Traversal
+
+### Cancellation
+
+```go
+var done = make(chan struct{})
+
+func cancelled() bool {
+    select {
+        case <-done:
+            return true
+        default:
+            return false
+    }
+}
+```
+
+> if instead of returning from main in the event of cancellation, we execute a call to panic, then the runtime will dump the stack of every goroutine in the program.
+
+### Example: Chat Server
+
+## Concurrency with Shared Variables
+
+### Race Conditions
+
+- data race
+- undefined behavior
+
+
+How to avoid data race?
+1. not to write the variable (init once)
+2. avoid  accessing the variable from multiple goroutines.
+  (Do not communicate by sharing memory; instead, share memory by communicating)
+  alternatively, pipeline
+3. Mutual Exclusion
+
+### Mutual Exclusion:sync.Mutex
+
+```go
+import "sync"
+
+var (
+    mu sync.Mutex // guards balance
+    balance int
+)
+
+func deposit (amount int){ balance += amount}
+
+func Deposit(amount int) {
+    mu.Lock()
+    defer mu.Unlock()
+    deposit (amount)
+}
+
+func Balance() int {
+    mu.Lock()
+    defer mu.Unlock()
+    return balance
+}
+
+func Withdraw (amount int) bool {
+    mu.Lock()
+    defer mu.Unlock()
+    deposit(-amount)
+    if blanace < 0 {
+        deposit(amount)
+        return false
+    }
+    return true
+}
+```
+
 
 ## fmt
 
