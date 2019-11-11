@@ -1,16 +1,11 @@
-package main
+package hello
 
-import (
-        "fmt"
-        "os"
-        "strings"
-)
+import "rsc.io/quote/v3"
 
-func main() {
-    who := "World!"
-    if len (os.Args) > 1 {
-        who = strings.Join (os.Args[1:], " ")
-    }
-    
-    fmt.Println ("Hello", who)
+func Hello() string {
+    return quote.HelloV3()
+}
+
+func Proverb() string {
+    return quote.Concurrency()
 }
