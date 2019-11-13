@@ -41,3 +41,14 @@ Invalid utf8 char `\uFFFD`
 ## ioutil
 
 `ioutil.ReadFile(filename)` 读取整个文件的内容`
+
+## io
+`io.WriteString` 直接往 `io.Writer` 接口写入string
+
+`Write`方法本来接受的参数是`[]byte`
+
+```go
+type Writer interface {
+    Write(p []byte) (n int, err error)
+}
+```

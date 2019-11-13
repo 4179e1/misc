@@ -51,6 +51,7 @@ func Search (ctx context.Context, query string) (Results, error) {
 	// cancels the request if ctx.Done is closed.
 	var results Results 
 	err = httpDo (ctx, req, func (resp *http.Response, err error) error {
+		// this function get called even if cancelled
 		if err != nil {
 			return err
 		}
@@ -89,13 +90,15 @@ func httpDo (ctx context.Context, req *http.Request, f func (*http.Response, err
 	req = req.WithContext (ctx)
 	go func() {
 		time.Sleep (time.Second * time.Duration (2))
-		c <- fmt.Errorf ("Intendtion timeout")
-		//c <- f (http.DefaultClient.Do (req))
+		fmt.Println ("before timeout")
+		c <- f (http.DefaultClient.Do (req)) // 发起请求
+		fmt.Println ("after timeout")
 	} ()
 
 	select {
 		case <- ctx.Done():
 			<-c // Wait for f to return
+			fmt.Println ("timed out")
 			return ctx.Err()
 		case err := <-c:
 			return err

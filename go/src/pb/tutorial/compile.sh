@@ -1,1 +1,1 @@
-protoc --go_out=/home/lyre/workspace/misc/go/src/pb/tutorial addressbook.proto
+protoc --go_out=${HOME}/workspace/misc/go/src/pb/tutorial addressbook.proto

@@ -12,6 +12,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"context"
 	"html/template"
@@ -37,6 +38,7 @@ func handleSearch (w http.ResponseWriter, req *http.Request) {
 	)
 
 	timeout, err := time.ParseDuration (req.FormValue ("timeout"))
+	fmt.Println(timeout)
 	if err == nil {
 		// The request has a timeout, so create a context that is 
 		// canceled automatically when the timeout expires
