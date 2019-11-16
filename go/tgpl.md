@@ -1461,6 +1461,7 @@ GOMAXPROCS=1 go run xxx
 
 #### Goroutines Have No Identity
 
+
 ## Packages and the Go Tool
 
 ### Introduction
@@ -1516,15 +1517,71 @@ net/url
 go list github
 ```
 
-## fmt
+## Testing
 
+### The go test Tool
 
+- tests
+- benchmark
+- examples
 
-```go
-ascii := 'a'
-fmt.Printf ("%d %[1]c %[1]q\n", ascii) // 97 a 'a'
+#### Test Functions
+
+```
+go run -v --run="French|Cancal"
 ```
 
-## Interface 
+#### Randomized Testing
 
-io.WriteString (w io.Writer, s string)
+Stratages
+
+- use a less efficient but simpler and clearer algorithm, and check that both implementations give the same result
+- create input values  according to a patttern so that we know what to expect
+
+#### Testing a Command
+
+#### White-Box Testing
+
+subsitute functions/global variable in test case
+
+#### External Test Packages
+
+- GoFIles is the list of files that contain the production code (go build)
+- TestGoFiles is the list of files that also belong to fmt, but tessst files, whos names all end in _test.go, are included only when building tests
+- XTestGoFiles is the list of files that consitute the external test package
+
+
+#### Writing Effective Tests
+
+#### Aboiding Brittle Tests
+
+e.g. don't check for exact string matches, but look for relevant substrings that will remain unchanged.
+
+### Coverage
+
+```go
+go test -run=Coverage -coverprofile=c.out
+PASS
+coverage: 63.8% of statements
+ok      gopl.io/ch7/eval        0.003s
+```
+
+alternatively
+```go
+go test -run=Coverage -cover
+go test -run=Coverage -covermode=count -coverprofile=c.out:w
+```
+
+```go
+go tool cover -html=c.out
+```
+
+### Benchmark Functions
+
+```
+ go test -bench=. -benchmem
+```
+
+### Profiling
+
+### Example Functions
