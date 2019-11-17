@@ -1,0 +1,3 @@
+[name = 'lyre']
+[email = 'nosuch@mail.com']
+[language = 'python']

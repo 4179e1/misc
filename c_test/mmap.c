@@ -32,6 +32,7 @@ int main (int argc, char *argv[])
 		munmap (ptr, size);
 	}
 
+	getchar();
 	close (fd);
 	return 0;
 }
