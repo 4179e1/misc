@@ -8,7 +8,7 @@
 - 这些默认值可以在的配置文件(/etc/ssh/ssh_config)中修改
 - 每个配置项都可以通过命令行参数临时覆盖
 
-一直以来我都像在自己的项目中实现类似的功能，但是毫无疑问，这些东西做起来是相当费工夫的。在研究Golang周边生态时，我发现了viper(https://github.com/spf13/viper)这个全面的配置解决方案，它提供的比我能想到的还要多：
+一直以来笔者都希望在自己的项目中实现类似的功能，但是毫无疑问，这些东西做起来是相当费工夫的。在研究Golang周边生态时，我发现了viper（https://github.com/spf13/viper）这个全面的配置解决方案，它提供的比我能想到的还要多：
 
 - 支持多种配置文件格式，包括 JSON,TOML,YAML,HECL,envfile，甚至还包括Java properties
 - 支持为配置项设置默认值
@@ -24,7 +24,7 @@ viper按照这个优先级（从高到低）获取配置项的取值：
 - key/value store：etcd或者consul
 - default：默认值
 
-下面通过一个myapp的例子来简单介绍这些特性。
+下面通过一个myapp（https://github.com/4179e1/misc/tree/master/go/src/viper）的例子来简单介绍这些特性。
 
 ## 配置文件
 
@@ -48,13 +48,13 @@ Client:
     - "192.168.1.1"
 ```
 
-直接运行./myapp 会尝试从以下路径寻找名为config.<ext>的配置文件
+直接运行./myapp 会尝试从以下路径寻找名为config.**ext**的配置文件
 
 - /etc/maypp/
 - ~/.myapp/
 - . (当前目录)
 
-其中.<ext>表示配置文件的后缀如yaml，我们甚至不用指定这个后缀，viper会找自己支持的格式。如果想要指定配置文件路径，可以使用./myapp --config /path/to/config.yaml
+其中.**ext**表示配置文件的后缀如yaml，我们甚至不用指定这个后缀，viper会找自己支持的格式。如果想要指定配置文件路径，可以使用./myapp --config /path/to/config.yaml
 
 ```go
 	if configVar != "" {
@@ -75,7 +75,7 @@ Client:
     fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
 ```
 
-这里要执行viper.ReadInConfig()之后，viper.ReadInConfig()才能确定到底用了哪个文件，viper按照上面的ConfigPath搜索，找到第一个名为config.<ext>的文件后即停止。如果有多个名为config的文件，按照以下顺序搜索
+这里要执行viper.ReadInConfig()之后，viper.ReadInConfig()才能确定到底用了哪个文件，viper按照上面的ConfigPath搜索，找到第一个名为config.**ext**的文件后即停止。如果有多个名为config的文件，按照以下顺序搜索
 
 - config.json
 - config.toml
@@ -89,11 +89,11 @@ Client:
 运行这个程序可以看到它正确的读取了globla.source的值，并且它是大小写不敏感的
 
 ```bash
-$ go run main.go 
+$ go run main.go
 Using configuration file '/Users/lyre/workspace/misc/go/src/viper/config.yaml'
 Global.Source: 'config(local)'
 
-$ go run main.go  --config ./config.yaml 
+$ go run main.go  --config ./config.yaml
 Using configuration file './config.yaml'
 Global.Source: 'config(local)'
 ```
@@ -162,7 +162,6 @@ func main() {
 
 - `viper.SetDefault()`的优先级更高，只要设置了这个，它会忽略pflag的默认值，除非运行时显式指定了命令行参数的值
 - 如果pflag设置了默认值而viper没有，viper取pflag的值
-
 
 ## Remote KV Store
 
@@ -243,17 +242,22 @@ go func(){
 }()
 ```
 
-# Bugfix
+## Bugfix
 
 如果你启用了go mod，在从etcd读取配置的时候可能会遇到这个错误
 
-```
+```raw
 panic: codecgen version mismatch: current: 8, need 10. Re-generate file: /Users/lyre/go/pkg/mod/github.com/coreos/etcd@v3.3.10+incompatible/client/keys.generated.go
 ```
 
 解决办法是：
 
-```
+```bash
 go get github.com/ugorji/go@v1.1.1
 go get github.com/ugorji/go/codec@none
 ```
+
+## Links
+
+- viper（https://github.com/spf13/viper）
+- myapp（https://github.com/4179e1/misc/tree/master/go/src/viper）
