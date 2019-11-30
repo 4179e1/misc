@@ -36,4 +36,14 @@ func main () {
 		"backoff", time.Second,
 	)
 	sugar.Infof ("Failed to fetch URL: %s", url)
+
+	// In the unusual situations where every microsecond matters, use the
+	// Logger. It's even faster than the SugaredLogger, but only supports
+	// structured logging.
+	logger.Info("Failed to fetch URL.",
+		// Structured context as strongly typed fields.
+		zap.String("url", url),
+		zap.Int("attempt", 3),
+		zap.Duration("backoff", time.Second),
+	)
 }
