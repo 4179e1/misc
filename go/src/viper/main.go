@@ -8,6 +8,7 @@ package main
 */
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"path/filepath"
@@ -18,6 +19,8 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote" // enabble viper remote config
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var globalSource = pflag.String("global.source", "default(flag)", "identify the source of configuration")
@@ -123,6 +126,34 @@ func watchRemoteConf() {
 	}
 }
 
+func zapLogConfig() []byte {
+	log := viper.Sub("Log")
+	logConfig, err := json.Marshal(log.AllSettings())
+	if err != nil {
+		panic(fmt.Errorf("error marshalling log config %s", err))
+	}
+	return logConfig
+}
+
+func initLogger() *zap.Logger {
+	var cfg zap.Config
+	if err := json.Unmarshal(zapLogConfig(), &cfg); err != nil {
+		panic(err)
+	}
+	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	cfg.EncoderConfig.LineEnding = zapcore.DefaultLineEnding
+	cfg.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	cfg.EncoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
+	cfg.EncoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
+	cfg.EncoderConfig.EncodeName = zapcore.FullNameEncoder
+	logger, err := cfg.Build()
+	if err != nil {
+		panic(err)
+	}
+
+	return logger
+}
+
 func main() {
 
 	// 假设--config参数指向本地文件
@@ -205,25 +236,38 @@ func main() {
 
 	}
 
-	// where does it from
-	fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
-	fmt.Printf("Global.ChangeMe: '%s'\n", viper.GetString("Global.ChangeMe"))
-	// prints 'default(viper)'
-	fmt.Printf("viper.GetString(\"Global.Unset\") = '%s'\n", viper.GetString("global.unset"))
-	fmt.Printf("Var GlobalUnset = '%s'\n", *globalUnset)
+	logger := initLogger()
+	defer logger.Sync()
+	logger.Info("logger construction succeeded")
 
-	// from config file
-	fmt.Println("client.servers: ", viper.GetStringSlice("client.servers"))
-	fmt.Println("Server.Address: ", viper.GetString("Server.Address"))
-	// it can be changed... but when to do that?
-	viper.Set("Server.Address", "0.0.0.0")
-	// case *insensitive*
-	fmt.Println("Server.Address: ", viper.GetString("server.address"))
+	sugar := logger.Sugar()
+	defer sugar.Desugar()
+	sugar.Info("sugar consturction succeeded")
 
-	// from env
-	fmt.Println("client.foo:", viper.GetString("client.foo"))
-	fmt.Println("client.echo:", viper.GetBool("client.echo"))
+	sugar.Infow("Conf", "Global.Source", viper.GetString("global.source"))
+	sugar.Errorf("error")
 
-	// block for watch test
-	time.Sleep(3600 * time.Second)
+	/*
+		// where does it from
+		fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
+		fmt.Printf("Global.ChangeMe: '%s'\n", viper.GetString("Global.ChangeMe"))
+		// prints 'default(viper)'
+		fmt.Printf("viper.GetString(\"Global.Unset\") = '%s'\n", viper.GetString("global.unset"))
+		fmt.Printf("Var GlobalUnset = '%s'\n", *globalUnset)
+
+		// from config file
+		fmt.Println("client.servers: ", viper.GetStringSlice("client.servers"))
+		fmt.Println("Server.Address: ", viper.GetString("Server.Address"))
+		// it can be changed... but when to do that?
+		viper.Set("Server.Address", "0.0.0.0")
+		// case *insensitive*
+		fmt.Println("Server.Address: ", viper.GetString("server.address"))
+
+		// from env
+		fmt.Println("client.foo:", viper.GetString("client.foo"))
+		fmt.Println("client.echo:", viper.GetBool("client.echo"))
+
+		// block for watch test
+		time.Sleep(3600 * time.Second)
+	*/
 }

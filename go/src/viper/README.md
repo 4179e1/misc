@@ -1,14 +1,18 @@
 # Golang生态：使用viper管理配置
 
+作者：李勇
+
+原文发布于微信公众号 - 云服务与SRE架构师社区（ai-cloud-ops）
+
 ## 配置管理
 
 通过配置，我们可以动态地改变程序的行为，常用的方式包括配置文件，命令行参数，环境变量等。我原来一直很欣赏ssh的配置管理方式:
 
 - 每一个配置项都有一个默认值
-- 这些默认值可以在的配置文件(/etc/ssh/ssh_config)中修改
+- 这些默认值可以配置文件(/etc/ssh/ssh_config)中修改
 - 每个配置项都可以通过命令行参数临时覆盖
 
-一直以来笔者都希望在自己的项目中实现类似的功能，但是毫无疑问，这些东西做起来是相当费工夫的。在研究Golang周边生态时，我发现了viper（https://github.com/spf13/viper）这个全面的配置解决方案，它提供的比我能想到的还要多：
+一直以来笔者都希望在自己的项目中实现类似的功能，但是毫无疑问，这些东西做起来是相当费工夫的。在研究Golang周边生态时，我发现了viper（https://github.com/spf14/viper）这个全面的配置解决方案，它提供的比我能想到的还要多：
 
 - 支持多种配置文件格式，包括 JSON,TOML,YAML,HECL,envfile，甚至还包括Java properties
 - 支持为配置项设置默认值
@@ -57,20 +61,20 @@ Client:
 其中.**ext**表示配置文件的后缀如yaml，我们甚至不用指定这个后缀，viper会找自己支持的格式。如果想要指定配置文件路径，可以使用./myapp --config /path/to/config.yaml
 
 ```go
-	if configVar != "" {
-			viper.SetConfigFile(configVar)
-	} else {
-		viper.SetConfigName("config") //name of config file (without extension)
-		viper.AddConfigPath("/etc/myapp")
-		viper.AddConfigPath("$HOME/.myapp/")
-		viper.AddConfigPath(".")
+    if configVar != "" {
+        viper.SetConfigFile(configVar)
+    } else {
+        viper.SetConfigName("config") //name of config file (without extension)
+        viper.AddConfigPath("/etc/myapp")
+        viper.AddConfigPath("$HOME/.myapp/")
+        viper.AddConfigPath(".")
     }
     
     err = viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("error reading config: %s", err))
-	}
-	fmt.Printf("Using configuration file '%s'\n", viper.ConfigFileUsed())
+    if err != nil {
+        panic(fmt.Errorf("error reading config: %s", err))
+    }
+    fmt.Printf("Using configuration file '%s'\n", viper.ConfigFileUsed())
 
     fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
 ```
@@ -103,9 +107,9 @@ Global.Source: 'config(local)'
 云原生的12要素里面有一条是“在环境中存储配置“， 在配置文件的基础上，我们还可以用环境变量来覆盖，甚至是完全代替配置文件，下面的代码中，viper会自动捕获所有以MYAPP_开头的环境变量，比如Global.Source这个参数映射到了MYAPP_GLOBAL_SOURCE
 
 ```go
-	viper.AutomaticEnv()
-	viper.SetEnvPrefix("MYAPP")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_")
+    viper.AutomaticEnv()
+    viper.SetEnvPrefix("MYAPP")
+    viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_")
 ```
 
 尽管配置文件中指定了Global.Source，但是它的值被环境变量覆盖了
@@ -129,8 +133,8 @@ var serverPort = pflag.Int("server.port", 8080, "server listen port"
 
 func main() {
     /* ... */
-	pflag.Parse()
-	viper.BindPFlags(pflag.CommandLine)
+    pflag.Parse()
+    viper.BindPFlags(pflag.CommandLine)
     /* ... */
 }
 ```
@@ -154,7 +158,7 @@ var globalUnset = pflag.String("global.unset", "default(flag)", "this parameter 
 
 func main() {
     pflag.Parse()
-	viper.BindPFlags(pflag.CommandLine)
+    viper.BindPFlags(pflag.CommandLine)
     viper.SetDefault("global.unset", "default(viper)")
     fmt.Println (viper.GetString("global.unset")) // ???
 }
@@ -215,30 +219,31 @@ Global.Source: 'etcd'
 viper还有一个重要特性是能够监控配置文件的修改，对于本地文件，是通过ionotify实现的，然后通过一个回调函数去通知应用来reload：
 
 ```go
-		viper.WatchConfig()
-		viper.OnConfigChange(func(e fsnotify.Event) {
-			fmt.Println("Config file changed:", e.Name)
-		})
+        viper.WatchConfig()
+        viper.OnConfigChange(func(e fsnotify.Event) {
+            fmt.Println("Config file changed:", e.Name)
+        })
 ```
 
-对于Remote KV Store，目前只支持etcd，但是做法就比较ugly了，居然是用轮询的，没用上watch api
+对于Remote KV Store，目前只支持etcd，但是做法就比较ugly了，用的是轮询而不是watch api：
+
 ```go
 // open a goroutine to watch remote changes forever
 go func(){
-	for {
-	    time.Sleep(time.Second * 5) // delay after each request
+    for {
+        time.Sleep(time.Second * 5) // delay after each request
 
-	    // currently, only tested with etcd support
-	    err := runtime_viper.WatchRemoteConfig()
-	    if err != nil {
-	        log.Errorf("unable to read remote config: %v", err)
-	        continue
-	    }
+        // currently, only tested with etcd support
+        err := runtime_viper.WatchRemoteConfig()
+        if err != nil {
+            log.Errorf("unable to read remote config: %v", err)
+            continue
+        }
 
-	    // unmarshal new config into our runtime config struct. you can also use channel
-	    // to implement a signal to notify the system of the changes
-	    runtime_viper.Unmarshal(&runtime_conf)
-	}
+        // unmarshal new config into our runtime config struct. you can also use channel
+        // to implement a signal to notify the system of the changes
+        runtime_viper.Unmarshal(&runtime_conf)
+    }
 }()
 ```
 
@@ -261,3 +266,7 @@ go get github.com/ugorji/go/codec@none
 
 - viper（https://github.com/spf13/viper）
 - myapp（https://github.com/4179e1/misc/tree/master/go/src/viper）
+
+## 关于作者
+
+不怎么务正业的程序员，BUG制造者、CPU0杀手。从事过开发、运维、SRE、技术支持等多个岗位。原Oracle系统架构和性能服务团队成员，目前在腾讯从事运营系统开发。

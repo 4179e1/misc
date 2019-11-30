@@ -78,7 +78,69 @@
       - [Caveat: An Interface Containing a Nil Pointer Is Non-Nil](#caveat-an-interface-containing-a-nil-pointer-is-non-nil)
     - [Sotring with sort.Interface](#sotring-with-sortinterface)
     - [The http.Handler Interface](#the-httphandler-interface)
-  - [fmt](#fmt)
+    - [The error Interface](#the-error-interface)
+    - [Example: Expression Evluator](#example-expression-evluator)
+    - [Type Assertions](#type-assertions)
+    - [Discriminating Errors with Type Assertions](#discriminating-errors-with-type-assertions)
+    - [Querying Behabiors with Interface Type Assertions](#querying-behabiors-with-interface-type-assertions)
+    - [Type Switches](#type-switches)
+    - [Example:Tken-Based XMLl Decoding](#exampletken-based-xmll-decoding)
+    - [A Few Words of Advice](#a-few-words-of-advice)
+  - [Goroutines and Channels](#goroutines-and-channels)
+    - [Goroutines](#goroutines)
+    - [Example: Concurrent Clock Server](#example-concurrent-clock-server)
+    - [Example: Concurrent Echo Server](#example-concurrent-echo-server)
+    - [Channels](#channels)
+      - [Unbuffered CHannels](#unbuffered-channels)
+      - [Pipelines](#pipelines)
+      - [Unidirectional Channel Types](#unidirectional-channel-types)
+      - [Buffered Channels](#buffered-channels)
+    - [Looping in Parallel](#looping-in-parallel)
+    - [Example: concurrent Web Crawler](#example-concurrent-web-crawler)
+    - [Multiplexing with select](#multiplexing-with-select)
+    - [Example: Concurrent Directory Traversal](#example-concurrent-directory-traversal)
+    - [Cancellation](#cancellation)
+    - [Example: Chat Server](#example-chat-server)
+  - [Concurrency with Shared Variables](#concurrency-with-shared-variables)
+    - [Race Conditions](#race-conditions)
+    - [Mutual Exclusion:sync.Mutex](#mutual-exclusionsyncmutex)
+    - [Read/Write Mutexes: sync.RWMutex](#readwrite-mutexes-syncrwmutex)
+    - [Memory Synchronization](#memory-synchronization)
+    - [Lazy Initialization: sync.Once](#lazy-initialization-synconce)
+    - [The Race Detector](#the-race-detector)
+    - [Example: Concurrent Non-Blocking Cache](#example-concurrent-non-blocking-cache)
+    - [Goroutines and Threads](#goroutines-and-threads)
+      - [Growable Stacks](#growable-stacks)
+      - [Goroutine Scheduling](#goroutine-scheduling)
+      - [GOMAXPROCS](#gomaxprocs)
+      - [Goroutines Have No Identity](#goroutines-have-no-identity)
+  - [Packages and the Go Tool](#packages-and-the-go-tool)
+    - [Introduction](#introduction)
+    - [Import Paths](#import-paths)
+    - [The Package Declaration](#the-package-declaration)
+    - [Import Declarations](#import-declarations)
+    - [Blank Imports](#blank-imports)
+    - [Packages and Naming](#packages-and-naming)
+    - [The Go Tool](#the-go-tool)
+      - [Workspace Organization](#workspace-organization)
+      - [Downloading Packages](#downloading-packages)
+      - [Building Packages](#building-packages)
+      - [Documenting Packages](#documenting-packages)
+      - [Internal Packages](#internal-packages)
+      - [Querying Packages](#querying-packages)
+  - [Testing](#testing)
+    - [The go test Tool](#the-go-test-tool)
+      - [Test Functions](#test-functions)
+      - [Randomized Testing](#randomized-testing)
+      - [Testing a Command](#testing-a-command)
+      - [White-Box Testing](#white-box-testing)
+      - [External Test Packages](#external-test-packages)
+      - [Writing Effective Tests](#writing-effective-tests)
+      - [Aboiding Brittle Tests](#aboiding-brittle-tests)
+    - [Coverage](#coverage)
+    - [Benchmark Functions](#benchmark-functions)
+    - [Profiling](#profiling)
+    - [Example Functions](#example-functions)
 
 <!-- /code_chunk_output -->
 
@@ -1310,19 +1372,19 @@ func makeThumbnails6(filenames <-chan string) int64 {
             sizes <- info.Size()
         }(f) // note the parameter f to capture itervation variables (gopl 5.6.1)
 
-        // closer
-        go func() { // it have to be parallel, for the channel were **unbuffered**
-            wg.Wait()
-            close(sizes)
-        }()
-
-        var total int64
-        for size := range sizes {   // drain the *unbuffered* channel, otherwise all worker will block
-            total += size
-        }
-        return total
     }
-}
+    // closer
+    go func() { // it have to be parallel, for the channel were **unbuffered**
+        wg.Wait()
+        close(sizes)
+    }()
+
+    var total int64
+    for size := range sizes {   // drain the *unbuffered* channel, otherwise all worker will block
+        total += size
+    }
+    return total
+    }
 ```
 
 
