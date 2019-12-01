@@ -245,29 +245,27 @@ func main() {
 	sugar.Info("sugar consturction succeeded")
 
 	sugar.Infow("Conf", "Global.Source", viper.GetString("global.source"))
-	sugar.Errorf("error")
+	// sugar.Errorf("error")
 
-	/*
-		// where does it from
-		fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
-		fmt.Printf("Global.ChangeMe: '%s'\n", viper.GetString("Global.ChangeMe"))
-		// prints 'default(viper)'
-		fmt.Printf("viper.GetString(\"Global.Unset\") = '%s'\n", viper.GetString("global.unset"))
-		fmt.Printf("Var GlobalUnset = '%s'\n", *globalUnset)
+	// where does it from
+	fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
+	fmt.Printf("Global.ChangeMe: '%s'\n", viper.GetString("Global.ChangeMe"))
+	// prints 'default(viper)'
+	fmt.Printf("viper.GetString(\"Global.Unset\") = '%s'\n", viper.GetString("global.unset"))
+	fmt.Printf("Var GlobalUnset = '%s'\n", *globalUnset)
 
-		// from config file
-		fmt.Println("client.servers: ", viper.GetStringSlice("client.servers"))
-		fmt.Println("Server.Address: ", viper.GetString("Server.Address"))
-		// it can be changed... but when to do that?
-		viper.Set("Server.Address", "0.0.0.0")
-		// case *insensitive*
-		fmt.Println("Server.Address: ", viper.GetString("server.address"))
+	// from config file
+	fmt.Println("client.servers: ", viper.GetStringSlice("client.servers"))
+	fmt.Println("Server.Address: ", viper.GetString("Server.Address"))
+	// it can be changed... but when to do that?
+	viper.Set("Server.Address", "0.0.0.0")
+	// case *insensitive*
+	fmt.Println("Server.Address: ", viper.GetString("server.address"))
 
-		// from env
-		fmt.Println("client.foo:", viper.GetString("client.foo"))
-		fmt.Println("client.echo:", viper.GetBool("client.echo"))
+	// from env
+	fmt.Println("client.foo:", viper.GetString("client.foo"))
+	fmt.Println("client.echo:", viper.GetBool("client.echo"))
 
-		// block for watch test
-		time.Sleep(3600 * time.Second)
-	*/
+	// block for watch test
+	time.Sleep(3600 * time.Second)
 }
