@@ -24,6 +24,11 @@ import (
 
 var useJSON bool
 
+var infoMap = map[string]string{
+	"version": "0.0.1",
+	"aurthor": "lyre",
+}
+
 // infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
@@ -34,14 +39,10 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("info called")
-
-		for _, x := range headers {
-			fmt.Println(x)
+		for k, v := range infoMap {
+			fmt.Printf("%s: %s\n", k, v)
 		}
 
-		//fmt.Println(useJson)
-		fmt.Println(viper.GetBool("info.useJSON"))
 	},
 }
 
