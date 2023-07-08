@@ -1,4 +1,4 @@
-OBJ = 1 2 3
+OBJ = hello check_sum sum reverse
 ASM=nasm
 
 .PHONY: all clean
